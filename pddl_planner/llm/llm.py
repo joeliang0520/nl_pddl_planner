@@ -52,8 +52,7 @@ class LLM:
             # currently this is a very simple prompt, but we can improve it by using a more complex prompt or rating
             prompt = f"is the predicate {predicate} entailed or share the same meaning as the {pred_name}? return 'yes' if it is, 'no' if it is not."
             response = self.client.chat.completions.create(model=self.model_name, messages=[{"role": "user", "content": prompt}])
-            print(f'predicate {predicate} is entailed by {pred_name}? {response.choices[0].message.content}')
-            if response.choices[0].message.content == 'yes':
+            if 'yes' in response.choices[0].message.content.lower():
                 # if the predicate is entailed, update the cache
                 print(f"Success: Predicate {predicate} is entailed by {pred_name} from LLM")
                 self._update_cache_entailment(predicate, pred)
