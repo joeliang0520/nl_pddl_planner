@@ -1,6 +1,7 @@
 from typing import Any, Union, List, Dict
 from pddl_planner.logic.parser import Parser
 from pddl_planner.logic.formula import ConjunctiveFormula, DisjunctiveFormula, Predicate, Variable, Constant, Term
+from pddl_planner.logic.nl_formula import NLPredicate
 
 # Parser class to convert NL to logic fromulas
 class NLParser(Parser):
@@ -32,10 +33,17 @@ class NLParser(Parser):
         if not type_tags == {}: # check if the type tags is empty (no variables or constants)
             terms = tuple(self.parse_term(term, type_tags) for term in type_tags.keys())
             term_type_dict = {term: set(type_tags[f'?{term._name}' if isinstance(term, Variable) else term.name]) for term in terms}
+            # 3. remove the variable terms from the predicate name
+            for term in terms:
+                if isinstance(term, Variable):
+                    predicate_name = predicate_name.replace(f'?{term._name}', '')
+                else:
+                    predicate_name = predicate_name.replace(term.name, '')
+            predicate_name = predicate_name.strip()
         else: 
             terms = tuple()
             term_type_dict = {}
-        return Predicate(predicate_name, is_neg, *terms, term_type_dict=term_type_dict)
+        return NLPredicate(predicate_name, NL_predicate[0], is_neg, *terms, term_type_dict=term_type_dict)
 
     def parse_term(self, NL_term: str, type_tags: Dict[str, str] = None) -> Union[Variable, Constant]:
         """

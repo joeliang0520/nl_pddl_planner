@@ -24,6 +24,7 @@ pddl_solver/
 │   │   ├── parser.py       # PDDL→logic parser
 │   │   ├── nl_parser.py       # NL→logic parser (*new*)
 │   │   ├── formula.py      # Formula classes (Conjunctive, Disjunctive, Predicate, Equality), main file for logic
+│   │   ├── NL_formula.py      # Formula classes (Predicate) with additional field for NL representation
 │   │   └── operation.py    # Unification & standardization operations
 │   ├── pddl_core/
 │   │   ├── domain.py       # PDDL Domain parser (types, predicates, actions)

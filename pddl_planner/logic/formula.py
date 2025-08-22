@@ -1116,8 +1116,9 @@ class Predicate(Atomic):
         Returns:
             str: The string representation.
         """
-        terms_str = ", ".join(str(term) for term in self._terms)
-        return f"{self.name}({terms_str})" if not self._is_neg else f"¬{self.name}({terms_str})"
+        terms_str = ", ".join(str(term) for term in self._terms if isinstance(term, Variable))
+
+        return f"{self.name}({terms_str})" if not self._is_neg else f"{self.name}({terms_str})"
 
     def __hash__(self) -> int:
         """Compute the hash of the predicate.
@@ -1129,7 +1130,6 @@ class Predicate(Atomic):
 
     def __len__(self):
         return len(str(self))
-
 
 class   Substitution(dict):
     """Represents a set of substitutions mapping Variables to Terms.

@@ -29,16 +29,17 @@ all_blocks = load_goal_blocks("files/NL_goals.txt")
 
 # initialize the planner
 planner = NLFOLRegressionPlanner(domain.copy(), all_blocks[0].copy(), max_depth=3)
-#regress the goal blocks
-regressed_plans = planner.regress_plan()
+print(str(planner._instance._goal._clauses[0]))
+# #regress the goal blocks
+# regressed_plans = planner.regress_plan()
 
-# print the regressed plans
-print("Regressed goals:")
-for plan in regressed_plans:
-    print("Subgoal: ")
-    print(plan[0])
-    reversed_plan = plan[1]
-    reversed_plan.reverse()
-    print("Action: ", reversed_plan)
-    print("Substitution: ", plan[2])
-    print("--------------------")
+# # print the regressed plans
+# print("Regressed goals:")
+# for plan in regressed_plans:
+#     print("Subgoal: ")
+#     print(plan[0])
+#     reversed_plan = plan[1]
+#     reversed_plan.reverse()
+#     print("Action: ", reversed_plan)
+#     print("Substitution: ", plan[2])
+#     print("--------------------")

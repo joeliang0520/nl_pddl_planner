@@ -1,6 +1,7 @@
 # Class to interact with the LLM
 import openai
 from pddl_planner.logic.formula import Predicate
+from pddl_planner.logic.nl_formula import NLPredicate
 from typing import List, Dict, Tuple
 import json
 import copy
@@ -25,7 +26,7 @@ class LLM:
         self._cache = self._load_cache()
         self.client = openai.OpenAI(api_key=api_key)
 
-    def entailment(self, predicate: Predicate, predicates: List[Predicate]) -> Predicate|None:
+    def entailment(self, predicate: NLPredicate, predicates: List[NLPredicate]) -> Predicate|None:
         """
         Check if the predicate can be entailed as a one of the list of predicates.
 
@@ -52,7 +53,10 @@ class LLM:
             # currently this is a very simple prompt, but we can improve it by using a more complex prompt or rating
             prompt = f"is the predicate {predicate} entailed or share the same meaning as the {pred_name}? return 'yes' if it is, 'no' if it is not."
             response = self.client.chat.completions.create(model=self.model_name, messages=[{"role": "user", "content": prompt}])
-            if 'yes' in response.choices[0].message.content.lower():
+            # obtain the last sentence of the response
+            last_sentence = response.choices[0].message.content.split('.')[-1].strip()
+            print(f'predicate {predicate} is entailed by {pred_name}? {last_sentence}')
+            if 'yes' in last_sentence.lower():
                 # if the predicate is entailed, update the cache
                 print(f"Success: Predicate {predicate} is entailed by {pred_name} from LLM")
                 self._update_cache_entailment(predicate, pred)
