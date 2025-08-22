@@ -1,0 +1,29 @@
+[("the agent’s hand is empty", {}),
+  ("goal_obj is an tomato", {"goal_obj": "object"}),
+  ("goal_recep is a fridge", {"goal_recep": "object"}),
+  ("goal_obj is inside goal_recep", {"goal_obj": "object", "goal_recep": "object"})]
+
+[
+  ("the agent’s hand is empty", {}),
+  ("goal_obj is a spatula", {"goal_obj": "object"}),
+  ("goal_recep is a drawer", {"goal_recep": "object"}),
+  ("goal_obj is washed", {"goal_obj": "object"}),
+  ("goal_obj is in goal_recep", {"goal_obj": "object", "goal_recep": "object"})
+]
+
+
+[
+  ("the agent’s hand is empty", {}),
+  ("goal_obj is a potato", {"goal_obj": "object"}),
+  ("goal_recep is a plate", {"goal_recep": "object"}),
+  ("goal_obj is heated", {"goal_obj": "object"}),
+  ("goal_obj is in goal_recep", {"goal_obj": "object", "goal_recep": "object"})
+]
+
+[
+  ("the agent’s hand is empty", {}),
+  ("goal_obj is an egg", {"goal_obj": "object"}),
+  ("goal_recep is a drawer", {"goal_recep": "object"}),
+  ("goal_obj is chilled", {"goal_obj": "object"}),
+  ("goal_obj is inside goal_recep", {"goal_obj": "object", "goal_recep": "object"})
+]
