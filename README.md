@@ -34,7 +34,7 @@ pddl_solver/
 │       └── planner.py      # PDDL RegressionPlanner & PDDL FOLRegressionPlanner
 │       └── nl_planner.py      # NL FOLRegressionPlanner (*new*)
 │   └── llm/
-│       └── llm.py          #Interface for entailment from both cache and LLM  
+│       └── llm.py          #Interface for entailment from both cache and LLM  (*new*)
 ├── test/
 │   ├── alfworldtext.py # Example of alfworldtext problem with NL actions and goals
 ├── file/
