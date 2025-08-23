@@ -28,6 +28,39 @@ class LLM:
         self.client = openai.OpenAI(api_key=api_key)
         self._operations = Operations()
 
+    def replace_predicate_name(self, target_predicate: NLPredicate, entailed_predicate: NLPredicate) -> NLPredicate:
+        """
+        Replace the name of the target predicate with the name of the entailed predicate,
+        while keeping all terms the same as the original target predicate.
+        
+        Args:
+            target_predicate (NLPredicate): The target predicate whose name will be replaced.
+            entailed_predicate (NLPredicate): The entailed predicate whose name will be used.
+            
+        Returns:
+            NLPredicate: A new predicate with the entailed predicate's name but target predicate's terms.
+        """
+        # Create a deep copy of the target predicate to avoid modifying the original
+        target_copy = copy.deepcopy(target_predicate)
+        
+        # Get the original string representation
+        original_str_rep = str(target_copy)
+        
+        # Replace the target predicate name with the entailed predicate name in the string representation
+        # This handles cases where the name might appear multiple times or in different contexts
+        updated_str_rep = original_str_rep.replace(target_copy.name, entailed_predicate.name)
+        
+        # Create a new NLPredicate with the entailed predicate's name but target predicate's terms
+        new_predicate = NLPredicate(
+            entailed_predicate.name,
+            updated_str_rep,
+            target_copy._is_neg,
+            *target_copy.terms,
+            term_type_dict=target_copy.term_type_dict
+        )
+        
+        return new_predicate
+
     def entailment(self, predicate: NLPredicate, predicates: List[NLPredicate]) -> NLPredicate|None:
         """
         Check if the predicate can be entailed as a one of the list of predicates.
@@ -48,9 +81,13 @@ class LLM:
             # if the predicate is in the cache, return the entailed predicate
             if entailed_predicate is not None:
                 print(f"[Success] Predicate {str(predicate)} is entailed by {entailed_predicate.name} from cache")
+                # Replace the target predicate's name with the entailed predicate's name
+                normalized_predicate = self.replace_predicate_name(predicate, entailed_predicate)
+                print(f"[Info] Normalized predicate: {str(normalized_predicate)}")
+                return normalized_predicate
             else:
                 print(f"[Warning] Predicate {str(predicate)} is not entailed by any of the predicates based on the cache")
-            return entailed_predicate
+            return None
         
         # if the cache is not loaded, or the predicate is not in the cache, or none of input predicates matches the entailed predicates in the cache
         # check if the predicate can be entailed by any of the predicates
@@ -94,7 +131,12 @@ class LLM:
                     # if the predicate is entailed, update the cache
                     print(f"[Success] Predicate {str(predicate)} is entailed by {pred.name} from LLM")
                     self._update_cache_entailment(predicate, pred)
-                    return copy.deepcopy(pred)
+                    
+                    # Replace the target predicate's name with the entailed predicate's name
+                    normalized_predicate = self.replace_predicate_name(predicate, pred)
+                    print(f"[Info] Normalized predicate: {str(normalized_predicate)}")
+                    
+                    return normalized_predicate
         
         # if the predicate is not entailed by any of the predicates, and not in the cache, return None  
         print(f"[warning] Failed: Predicate {str(predicate)} is not entailed by any of the predicates")
@@ -168,3 +210,4 @@ class LLM:
         with open(self._cache_path, 'w') as f:
             json.dump(self._cache, f)
 
+    

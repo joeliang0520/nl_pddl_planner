@@ -198,7 +198,6 @@ class NLFOLRegressionPlanner(NLPlanner):
                     ssa = ConjunctiveFormula(negative_effect_axiom.get_negation(), pred).simplify().distribute_and_over_or()
                 else:
                     # No effect exists
-                    # SSA = pred
                     ssa = DisjunctiveFormula(pred).distribute_and_over_or()
 
                 pred_ssa[standardized_action.name] = NLFOLRegressionPlanner.SSA_Node(
@@ -229,19 +228,20 @@ class NLFOLRegressionPlanner(NLPlanner):
         Returns:
             DisjunctiveFormula: The regressed formula with variables substituted according to the SSA_Node.
         """
-        # check if the predicate is in the ssa of domain predicates
+        # check if the predicate is in domain predicates
         if predicate.name in self._ssa:
-            print(f'found the ssa node for the predicate "{str(predicate)}"')
+            print(f'found the ssa node for the predicate "{str(predicate)}" for action "{action.name}"')
             ssa_node = self._ssa[predicate.name][action.name]
         else:
             # check if the predicate can be entailed as a domain predicate
-            print(f'fail to find the ssa node for the predicate, attempting to entail the "{str(predicate)}" as a domain predicate')
-            matched_pred = self._llm.entailment(predicate, self._domain.predicates)
-            if matched_pred is not None:
-                ssa_node = self._ssa[matched_pred.name][action.name]
+            print(f'Failing to find "{str(predicate)}" in domain predicates, attempting to entail it to a domain predicate')
+            entailed_pred = self._llm.entailment(predicate, self._domain.predicates)
+            if entailed_pred is not None:
+                ssa_node = self._ssa[entailed_pred.name][action.name]
+                # update the predicate names and string representation as the entailed predicate
+                predicate = entailed_pred
             else:
                 # create a new ssa node with postive and negative effects as none
-                print(f'fail to entail the goal predicate "{predicate.name}" as a domain predicate, creating a new ssa node')
                 self._ssa[predicate.name] = self.create_SSA([predicate])[predicate.name]
                 ssa_node = self._ssa[predicate.name][action.name]
         # Build a substitution:
@@ -257,7 +257,10 @@ class NLFOLRegressionPlanner(NLPlanner):
         # if predicate.term_type_dict is not None and ssa_node.ssa.term_type_dict is not None:
         #     returned_ssa.term_type_dict.update(predicate.term_type_dict)
         # Substitute over the stored SSA formula
-        return returned_ssa
+        print(f'substitution: {substitution}')
+        print(f'returned_ssa: {ssa_node.ssa.clauses}')
+        print(f'returned_ssa.substitute(substitution): {returned_ssa.substitute(substitution)}')
+        return returned_ssa.substitute(substitution), predicate
 
     def regress(self, goal: DisjunctiveFormula, action: Action) -> DisjunctiveFormula:
         """
@@ -287,10 +290,12 @@ class NLFOLRegressionPlanner(NLPlanner):
             for clause in conjunct.clauses:
                 if isinstance(clause, Predicate):
                     # Regress the predicate clause using regress_pred
-                    regressed_clause = self.regress_pred(clause, action)
+                    regressed_clause, clause = self.regress_pred(clause, action)
                 else:
                     regressed_clause = clause
-                print('regressed_clause', regressed_clause)
+                if regressed_clause == None:
+                    regressed_conjunct_list = [FalseFormula()]
+                    return DisjunctiveFormula(*regressed_conjunct_list).distribute_and_over_or()
                 regressed_conjunct_list.append(regressed_clause)
             # Combine the regressed clauses and convert to DNF
             regressed_disjunct_list.append(ConjunctiveFormula(*regressed_conjunct_list).distribute_and_over_or())
