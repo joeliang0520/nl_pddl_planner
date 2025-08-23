@@ -1,7 +1,8 @@
 # Class to interact with the LLM
 import openai
-from pddl_planner.logic.formula import Predicate
+from pddl_planner.logic.formula import Predicate, Substitution
 from pddl_planner.logic.nl_formula import NLPredicate
+from pddl_planner.logic.operation import Operations
 from typing import List, Dict, Tuple
 import json
 import copy
@@ -11,7 +12,7 @@ class LLM:
     A class to intilize and interact with the LLM for various task in the regression planner.
     """
     
-    def __init__(self, model_name: str, api_key: str, cache_path: str|None = None):
+    def __init__(self, model_name: str, api_key: str, cache_path: str|None ='cache.json'):
         """
         Initialize the LLM.
 
@@ -25,8 +26,9 @@ class LLM:
         self._cache_path = cache_path
         self._cache = self._load_cache()
         self.client = openai.OpenAI(api_key=api_key)
+        self._operations = Operations()
 
-    def entailment(self, predicate: NLPredicate, predicates: List[NLPredicate]) -> Predicate|None:
+    def entailment(self, predicate: NLPredicate, predicates: List[NLPredicate]) -> NLPredicate|None:
         """
         Check if the predicate can be entailed as a one of the list of predicates.
 
@@ -44,25 +46,58 @@ class LLM:
         status, entailed_predicate = self._load_cache_entailment(predicate, predicates)
         if status:
             # if the predicate is in the cache, return the entailed predicate
-            print(f"Success: Predicate {predicate} is entailed by {entailed_predicate.name} from cache")
+            if entailed_predicate is not None:
+                print(f"[Success] Predicate {str(predicate)} is entailed by {entailed_predicate.name} from cache")
+            else:
+                print(f"[Warning] Predicate {str(predicate)} is not entailed by any of the predicates based on the cache")
             return entailed_predicate
-        # if the cache is not loaded, or the predicate is not in the cache, or non of input predicates matches the enitaled predicates in the cache
+        
+        # if the cache is not loaded, or the predicate is not in the cache, or none of input predicates matches the entailed predicates in the cache
         # check if the predicate can be entailed by any of the predicates
+        print(f'[Warning] fail to find the predicate "{str(predicate)}" in the cache, checking via LLM')
         for pred in predicates:
-            pred_name = pred.name
-            # currently this is a very simple prompt, but we can improve it by using a more complex prompt or rating
-            prompt = f"is the predicate {predicate} entailed or share the same meaning as the {pred_name}? return 'yes' if it is, 'no' if it is not."
-            response = self.client.chat.completions.create(model=self.model_name, messages=[{"role": "user", "content": prompt}])
-            # obtain the last sentence of the response
-            last_sentence = response.choices[0].message.content.split('.')[-1].strip()
-            print(f'predicate {predicate} is entailed by {pred_name}? {last_sentence}')
-            if 'yes' in last_sentence.lower():
-                # if the predicate is entailed, update the cache
-                print(f"Success: Predicate {predicate} is entailed by {pred_name} from LLM")
-                self._update_cache_entailment(predicate, pred)
-                return copy.deepcopy(pred)
+            # Create deep copies to prevent modifications to original objects
+            predicate_copy = copy.deepcopy(predicate)
+            pred_copy = copy.deepcopy(pred)
+            
+            # Find proper substitution between the target predicate and the current predicate
+            # Use unify_with_different_name for entailment tasks to allow different predicate names
+            substitution = self._operations.unify_with_different_name(predicate_copy, pred_copy, Substitution())
+            if substitution is not None:
+                print(f'[Success] Existing substitution: {substitution} between "{str(predicate_copy)}" and "{str(pred_copy)}"')
+                # Apply substitution to both predicates to get their substituted string representations
+                substituted_target = predicate_copy.substitute(substitution)
+                substituted_pred = pred_copy.substitute(substitution)
+                
+                # Conduct entailment between the substituted string representations
+                target_str = str(substituted_target)
+                pred_str = str(substituted_pred)
+                
+                # Professional prompt for entailment checking
+                prompt = f"""Task: Determine if two predicates are logically equivalent or if one entails the other.
+
+                        Predicate 1: "{target_str}"
+                        Predicate 2: "{pred_str}"
+
+                        Instructions:
+                        - Analyze if Predicate 1 is logically entailed by Predicate 2
+                        - Consider semantic meaning, logical structure, and variable mappings
+                        - Respond with exactly "YES" if Predicate 1 is entailed by Predicate 2
+                        - Respond with exactly "NO" if Predicate 1 is not entailed by Predicate 2
+
+                        Response:"""
+                response = self.client.chat.completions.create(model=self.model_name, messages=[{"role": "user", "content": prompt}])
+                # extract the response content
+                response_content = response.choices[0].message.content.strip()
+                print(f'[LLM Response] predicate "{target_str}" is entailed by "{pred_str}" ?:  {response_content}')
+                if 'YES' in response_content.upper():
+                    # if the predicate is entailed, update the cache
+                    print(f"[Success] Predicate {str(predicate)} is entailed by {pred.name} from LLM")
+                    self._update_cache_entailment(predicate, pred)
+                    return copy.deepcopy(pred)
+        
         # if the predicate is not entailed by any of the predicates, and not in the cache, return None  
-        print(f"Failed: Predicate {predicate} is not entailed by any of the predicates")
+        print(f"[warning] Failed: Predicate {str(predicate)} is not entailed by any of the predicates")
         self._update_cache_entailment(predicate, None)
         return None
     
@@ -74,6 +109,7 @@ class LLM:
             Dict[str, str]: The cache of previous entailments.
         """
         if self._cache_path is not None:
+            # if the cache path is provided, load the cache from the file
             try:
                 with open(self._cache_path, 'r') as f:
                     self._cache = json.load(f)
@@ -83,6 +119,7 @@ class LLM:
                 self._cache_path = 'cache.json'
                 self._save_cache()
         else:
+            # if the cache path is not provided, create a new cache
             self._cache = {}
             self._cache_path = 'cache.json'
             self._save_cache()
@@ -94,16 +131,18 @@ class LLM:
         """
         #check if cache is loaded
         if self._cache is not None:
-            # check if the predicate is in the cache of previous entailments
-            if predicate.name in self._cache:
+            # check if the predicate string representation is in the cache of previous entailments
+            predicate_str = str(predicate)
+            if predicate_str in self._cache:
+                print(f'found the predicate "{predicate_str}" in the cache')
                 # obtained the name of the entailed predicate from the cache
-                entailed_pred = self._cache[predicate.name]
-                if entailed_pred is None:
+                entailed_pred_name = self._cache[predicate_str]
+                if entailed_pred_name is None:
                     # if no entailment is found in the cache, return True and None
                     return True, None 
                 for pred in predicates:
                     # check the entailed predicate name with input list of predicates and return the predicate if it is found
-                    if pred.name == entailed_pred:
+                    if pred.name == entailed_pred_name:
                         # if the entailment is found, return True and the entailed predicate
                         return True, copy.deepcopy(pred)
         # if the cache is not loaded, return False and None
@@ -117,7 +156,9 @@ class LLM:
             target_predicate (Predicate): The target predicate to be updated in the cache.
             entailed_predicate (Predicate): The entailed predicate that is used to update the cache.
         """
-        self._cache[target_predicate.name] = entailed_predicate.name if entailed_predicate is not None else None
+        target_str = str(target_predicate)
+        entailed_name = entailed_predicate.name if entailed_predicate is not None else None
+        self._cache[target_str] = entailed_name
         self._save_cache()
     
     def _save_cache(self) -> None:

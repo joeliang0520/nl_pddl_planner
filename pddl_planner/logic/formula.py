@@ -485,7 +485,6 @@ class ConjunctiveFormula(Formula):
         Returns:
             ConjunctiveFormula: A new ConjunctiveFormula with substitutions applied.
         """
-        print('conjunctive formula subsitution')
         # combine the term_type_dict from the substitution with the term_type_dict of the predicate
         if self.term_type_dict is not None:
             for term1, term2 in substitution.items():
@@ -687,7 +686,6 @@ class DisjunctiveFormula(Formula):
         Returns:
             DisjunctiveFormula: A new DisjunctiveFormula with substitutions applied.
         """
-        print('disjunctive formula subsitution')
         # combine the term_type_dict from the substitution with the term_type_dict of the predicate
         if self.term_type_dict is not None:
             for term1, term2 in substitution.items():
@@ -964,7 +962,6 @@ class Predicate(Atomic):
             Predicate: A new Predicate with substitutions applied.
         """
         # combine the term_type_dict from the substitution with the term_type_dict of the predicate
-        print('performing predicate subsitution')
         if self.term_type_dict is not None:
             for term1, term2 in substitution.items():
                 if term1 in self.term_type_dict and term2 in self.term_type_dict:

@@ -1,9 +1,5 @@
-from tkinter import Variable
-import textwrap, warnings, re, copy
-from typing import List, Set, Dict, Union, Any, Tuple
-import pddl_planner.logic.formula as formula
-from pddl_planner.logic.formula import Predicate, Term
-from pddl_planner.logic.formula import Substitution
+from typing import Set, Dict
+from pddl_planner.logic.formula import Predicate, Term, Substitution, Variable
 
 class NLPredicate(Predicate):
     def __init__(self, name: str, str_representation: str, is_neg: bool, *terms: "Term", term_type_dict: Dict["Term", Set[str]] = None) -> None:
@@ -23,19 +19,18 @@ class NLPredicate(Predicate):
             Predicate: A new Predicate with substitutions applied.
         """
         # combine the term_type_dict from the substitution with the term_type_dict of the predicate
-        print('performing predicate subsitution')
         if self.term_type_dict is not None:
             for term1, term2 in substitution.items():
                 if term1 in self.term_type_dict and term2 in self.term_type_dict:
                     self.term_type_dict[term2].update(self.term_type_dict[term1])
         # update the str_representation of the predicate
-        self._str_represntation = self._str_represntation.replace('?', '').replace(' ', '_')
         for term in self.terms:
             sub_term = substitution.get(term, term).name
             if isinstance(term, Variable):
-                self._str_represntation = self._str_represntation.replace(f'?{term._name}', sub_term)
+                self._str_represntation = self._str_represntation.replace(f' ?{term._name}', f' {sub_term}').replace(f'?{term._name} ', f'{sub_term} ')
             else:
-                self._str_represntation = self._str_represntation.replace(term.name, sub_term)
+                self._str_represntation = self._str_represntation.replace(f' {term.name}', f' {sub_term}').replace(f'{term.name} ', f'{sub_term} ')
+
         self._str_represntation = self._str_represntation.strip()
         return NLPredicate(self.name, self._str_represntation, self._is_neg, *[substitution.get(term, term) for term in self.terms], 
         term_type_dict={substitution.get(term, term): types for term, types in self.term_type_dict.items()} if self.term_type_dict is not None else None)
@@ -47,4 +42,3 @@ class NLPredicate(Predicate):
             Predicate: A new Predicate with the negation flag toggled.
         """
         return NLPredicate(self.name, self._str_represntation, not self._is_neg, *self.terms)
-        

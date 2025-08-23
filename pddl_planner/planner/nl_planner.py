@@ -231,16 +231,17 @@ class NLFOLRegressionPlanner(NLPlanner):
         """
         # check if the predicate is in the ssa of domain predicates
         if predicate.name in self._ssa:
+            print(f'found the ssa node for the predicate "{str(predicate)}"')
             ssa_node = self._ssa[predicate.name][action.name]
         else:
             # check if the predicate can be entailed as a domain predicate
-            print(f'fail to find the ssa node for the predicate, attempting to entail the {predicate.name} as a domain predicate')
+            print(f'fail to find the ssa node for the predicate, attempting to entail the "{str(predicate)}" as a domain predicate')
             matched_pred = self._llm.entailment(predicate, self._domain.predicates)
             if matched_pred is not None:
                 ssa_node = self._ssa[matched_pred.name][action.name]
             else:
                 # create a new ssa node with postive and negative effects as none
-                print(f'fail to entail the goal predicate {predicate.name} as a domain predicate, creating a new ssa node')
+                print(f'fail to entail the goal predicate "{predicate.name}" as a domain predicate, creating a new ssa node')
                 self._ssa[predicate.name] = self.create_SSA([predicate])[predicate.name]
                 ssa_node = self._ssa[predicate.name][action.name]
         # Build a substitution:
@@ -256,8 +257,6 @@ class NLFOLRegressionPlanner(NLPlanner):
         # if predicate.term_type_dict is not None and ssa_node.ssa.term_type_dict is not None:
         #     returned_ssa.term_type_dict.update(predicate.term_type_dict)
         # Substitute over the stored SSA formula
-        print('performing substitution')
-        print('ssa',returned_ssa.substitute(substitution))
         return returned_ssa
 
     def regress(self, goal: DisjunctiveFormula, action: Action) -> DisjunctiveFormula:
@@ -286,7 +285,6 @@ class NLFOLRegressionPlanner(NLPlanner):
             
             regressed_conjunct_list = []
             for clause in conjunct.clauses:
-                print('clause', clause)
                 if isinstance(clause, Predicate):
                     # Regress the predicate clause using regress_pred
                     regressed_clause = self.regress_pred(clause, action)

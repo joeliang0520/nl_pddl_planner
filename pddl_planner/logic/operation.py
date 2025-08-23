@@ -24,6 +24,7 @@ class Operations(Logic):
         
         elif isinstance(y, Variable):
             return self.unify_var(y, x, substitution)
+            
 
         elif isinstance(x, Predicate) and isinstance(y, Predicate):
             return self.unify(x.collect_terms(), y.collect_terms(), self.unify(x.collect_preds_name(), y.collect_preds_name(), substitution))
@@ -37,6 +38,46 @@ class Operations(Logic):
             x_first = x_copy.pop()
             y_first = y_copy.pop()
             return self.unify(x_copy, y_copy, self.unify(x_first, y_first, substitution))
+        
+        else:
+            return None
+
+    def unify_with_different_name(self, x: "Formula", y: "Formula", substitution: "Substitution") -> "Substitution":
+        """Unify two formulas without requiring them to have the same name.
+        This is specifically designed for entailment tasks where predicates with different names
+        might have similar structures that can be unified.
+        """
+        if substitution is None:
+            # failure
+            return substitution
+
+        elif x == y:
+            return substitution
+        
+        elif isinstance(x, Variable):
+            return self.unify_var(x, y, substitution)
+        
+        elif isinstance(y, Variable):
+            return self.unify_var(y, x, substitution)
+            
+        elif isinstance(x, Predicate) and isinstance(y, Predicate):
+            # Skip name unification and only unify terms
+            return self.unify_with_different_name(x.collect_terms(), y.collect_terms(), substitution)
+        
+        elif (isinstance(x, ConjunctiveFormula) and isinstance(y, ConjunctiveFormula)) or (isinstance(x, DisjunctiveFormula) and isinstance(y, DisjunctiveFormula)):
+            return self.unify_with_different_name(x.clauses, y.clauses, substitution)
+
+        elif (isinstance(x, set) and isinstance(y, set)) or (isinstance(x, list) and isinstance(y, list)):
+            x_copy = copy.deepcopy(x)
+            y_copy = copy.deepcopy(y)
+            # Handle empty lists/sets
+            if len(x_copy) == 0 and len(y_copy) == 0:
+                return substitution
+            elif len(x_copy) == 0 or len(y_copy) == 0:
+                return None
+            x_first = x_copy.pop()
+            y_first = y_copy.pop()
+            return self.unify_with_different_name(x_copy, y_copy, self.unify_with_different_name(x_first, y_first, substitution))
         
         else:
             return None
