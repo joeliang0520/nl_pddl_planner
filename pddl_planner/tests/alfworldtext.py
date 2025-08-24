@@ -28,8 +28,9 @@ with open('files/alfworldtext_domain.json', 'r') as f:
 all_blocks = load_goal_blocks("files/NL_goals.txt")
 
 # initialize the planner
-planner = NLFOLRegressionPlanner(domain.copy(), all_blocks[0].copy(), max_depth=3)
+planner = NLFOLRegressionPlanner(domain.copy(), all_blocks[0].copy(), max_depth=10)
 # #regress the goal blocks
+print('before regress =========================================')
 regressed_plans = planner.regress_plan()
 
 # print the regressed plans

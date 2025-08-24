@@ -132,8 +132,8 @@ class Domain:
                             connected_types.append(term_type)
                             connected_types.append(other_type)
                 if len(connected_types) != len(types):
+                    print(f'type conflict: {formula.term_type_dict}')
                     return True
-                    
         return False
 
     @property

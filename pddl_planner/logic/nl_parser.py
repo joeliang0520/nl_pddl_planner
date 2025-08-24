@@ -32,13 +32,11 @@ class NLParser(Parser):
         # 2. parse the terms (constants and variables) within the predicate's dictionary
         if not type_tags == {}: # check if the type tags is empty (no variables or constants)
             terms = tuple(self.parse_term(term, type_tags) for term in type_tags.keys())
-            term_type_dict = {term: set(type_tags[f'?{term._name}' if isinstance(term, Variable) else term.name]) for term in terms}
+            # Create term_type_dict using the original term names as keys
+            term_type_dict = {term: set([type_tags[str(term)]]) for term in terms}
             # 3. remove the variable terms from the predicate name
             for term in terms:
-                if isinstance(term, Variable):
-                    predicate_name = predicate_name.replace(f'?{term._name}', '')
-                else:
-                    predicate_name = predicate_name.replace(term.name, '')
+                predicate_name = predicate_name.replace(f' {term}', ' ').replace(f'{term} ', ' ')
             predicate_name = predicate_name.strip()
         else: 
             terms = tuple()
@@ -52,7 +50,7 @@ class NLParser(Parser):
         This function converts a NL term (either a variable or a constant) into its logic representation.
         For a NL variable, a corresponding Variable instance is returned; similarly, a Constant instance is 
         returned for a NL constant.
-        
+    
         Args:
             NL_term (str): The NL term to parse.
             type_tags (Dict[str, str]): The type tags for all terms in the predicate
@@ -67,7 +65,7 @@ class NLParser(Parser):
             term_type = type_tags[NL_term] if type_tags is not None else None
 
             if NL_term.startswith("?"):
-                return Variable(NL_term.replace("?", ""), term_type)
+                return Variable(NL_term.replace("?",""), term_type)
             else:
                 return Constant(NL_term, term_type)
 
@@ -126,7 +124,7 @@ class NLParser(Parser):
             self.parse_formula(operand) for operand in nl_formula
         ]
         terms = [term for operand in operands for term in operand.collect_terms()]
-        relevant_type_term_dict = {term: set(term_type_dict[term]) for term in terms if term in term_type_dict} if term_type_dict is not None else None
+        relevant_type_term_dict = {term: set([term_type_dict[term]]) for term in terms if term in term_type_dict} if term_type_dict is not None else None
 
         return ConjunctiveFormula(*operands, term_type_dict=relevant_type_term_dict)
 

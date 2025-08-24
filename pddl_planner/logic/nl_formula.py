@@ -1,13 +1,15 @@
 from typing import Set, Dict
 from pddl_planner.logic.formula import Predicate, Term, Substitution, Variable
-
+import copy
 class NLPredicate(Predicate):
-    def __init__(self, name: str, str_representation: str, is_neg: bool, *terms: "Term", term_type_dict: Dict["Term", Set[str]] = None) -> None:
+    def __init__(self, name: str, str_representation: str, is_neg: bool, *terms: "Term",
+     term_type_dict: Dict["Term", Set[str]] = None, entailed_by: "NLPredicate" = None) -> None:
         super().__init__(name, is_neg, *terms, term_type_dict=term_type_dict)
         self._str_represntation = str_representation
+        self._entailed_by = entailed_by if entailed_by is not None else self
 
     def __str__(self) -> str:
-        return self._str_represntation
+        return f'{self._str_represntation}({", ".join(f"{str(term)}" for term in self.terms)})' if not self._is_neg else f'not {self._str_represntation}({", ".join(f"{str(term)}" for term in self.terms)})'
 
     def substitute(self, substitution: "Substitution") -> "NLPredicate":
         """Substitute the variables in the predicate using the provided substitution.
@@ -25,14 +27,9 @@ class NLPredicate(Predicate):
                     self.term_type_dict[term2].update(self.term_type_dict[term1])
         # update the str_representation of the predicate
         for term in self.terms:
-            sub_term = substitution.get(term, term).name
-            if isinstance(term, Variable):
-                self._str_represntation = self._str_represntation.replace(f' ?{term._name}', f' {sub_term}').replace(f'?{term._name} ', f'{sub_term} ')
-            else:
-                self._str_represntation = self._str_represntation.replace(f' {term.name}', f' {sub_term}').replace(f'{term.name} ', f'{sub_term} ')
-
+            self._str_represntation = self._str_represntation.replace(f' {str(term)}', f' {substitution.get(term, term)}').replace(f'{str(term)} ', f'{substitution.get(term, term)} ')
         self._str_represntation = self._str_represntation.strip()
-        return NLPredicate(self.name, self._str_represntation, self._is_neg, *[substitution.get(term, term) for term in self.terms], 
+        return NLPredicate(self.name, copy.deepcopy(self._str_represntation), self._is_neg, *[substitution.get(term, term) for term in self.terms], 
         term_type_dict={substitution.get(term, term): types for term, types in self.term_type_dict.items()} if self.term_type_dict is not None else None)
 
     def get_negation(self) -> "NLPredicate":
@@ -42,3 +39,12 @@ class NLPredicate(Predicate):
             Predicate: A new Predicate with the negation flag toggled.
         """
         return NLPredicate(self.name, self._str_represntation, not self._is_neg, *self.terms)
+
+    @property
+    def entailed(self) -> "NLPredicate":
+        """Get the predicate that the predicate is entailed by.
+
+        Returns:
+            Predicate: The predicate that the predicate is entailed by.
+        """
+        return self._entailed_by

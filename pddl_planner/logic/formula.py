@@ -217,6 +217,7 @@ class Formula(Logic):
         Returns:
             Formula: A new formula with variables replaced.
         """
+        raise NotImplementedError(f'no implementation of substitute for {self}')
         pass
 
     def get_negation(self) -> "Formula":
@@ -757,7 +758,6 @@ class Equality(Operator):
         return Equality(self._term1, self._term2, not self._is_neq)
 
     def substitute(self, substitution: "Substitution") -> "Equality":
-        print('performing equality subsitution')
         new_term1 = substitution.get(self._term1, self._term1)
         new_term2 = substitution.get(self._term2, self._term2)
         return Equality(new_term1, new_term2, self._is_neq)
@@ -826,10 +826,10 @@ class Atomic(Formula):
 class FalseFormula(Atomic):
     """Represents a formula that is always false."""
     def __str__(self) -> str:
-        return "FALSE"
+        return "FalseFormula"
 
     def __repr__(self) -> str:
-        return "FALSE"
+        return "FalseFormula"
 
     def simplify(self) -> "FalseFormula":
         return self
@@ -844,6 +844,9 @@ class FalseFormula(Atomic):
     
     def __hash__(self):
         return hash(FalseFormula)
+    
+    def substitute(self, substitution: Dict["Term", "Term"]) -> "FalseFormula":
+        return self
 
 class Term(Logic):
     """Term in a formula"""
@@ -878,7 +881,7 @@ class Variable(Term):
         """Compare with another object."""
         return (
             isinstance(other, Variable)
-            and self._name == other._name
+            and self._name.replace("?", "") == other._name.replace("?", "")
         )
     
     def __hash__(self):
@@ -962,12 +965,14 @@ class Predicate(Atomic):
             Predicate: A new Predicate with substitutions applied.
         """
         # combine the term_type_dict from the substitution with the term_type_dict of the predicate
+        print(f'sub pred name: {self.name} substitution: {substitution}')
         if self.term_type_dict is not None:
             for term1, term2 in substitution.items():
                 if term1 in self.term_type_dict and term2 in self.term_type_dict:
                     self.term_type_dict[term2].update(self.term_type_dict[term1])
         # term_type_dict={substitution.get(term, term): types for term, types in self.term_type_dict.items()}
-        return Predicate(self.name, self._is_neg, *[substitution.get(term, term) for term in self.terms], term_type_dict={substitution.get(term, term): types for term, types in self.term_type_dict.items()} if self.term_type_dict is not None else None)
+        return Predicate(self.name, self._is_neg, *[substitution.get(term, term) for term in self.terms], 
+        term_type_dict={substitution.get(term, term): types for term, types in self.term_type_dict.items()} if self.term_type_dict is not None else None)
 
     def get_negation(self) -> "Predicate":
         """Get the negation of the predicate.
@@ -1115,7 +1120,7 @@ class Predicate(Atomic):
         """
         terms_str = ", ".join(str(term) for term in self._terms if isinstance(term, Variable))
 
-        return f"{self.name}({terms_str})" if not self._is_neg else f"{self.name}({terms_str})"
+        return f"{self.name}({terms_str})" if not self._is_neg else f"not {self.name}({terms_str})"
 
     def __hash__(self) -> int:
         """Compute the hash of the predicate.

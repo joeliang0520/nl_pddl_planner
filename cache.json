@@ -1,1 +1,1 @@
-{"goal_recep is a fridge": "is a cooling device", "goal_obj is an tomato": null, "goal_obj is inside goal_recep": "is in"}
+{"goal_recep is a fridge": "is a cooling device", "goal_obj is an tomato": null, "goal_obj is inside goal_recep": "is in", "goal_recep is a fridge(goal_recep)": null, "goal_obj is an tomato(goal_obj)": null, "goal_obj is inside goal_recep(goal_obj, goal_recep)": null}

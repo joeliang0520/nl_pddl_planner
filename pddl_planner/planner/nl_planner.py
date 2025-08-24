@@ -6,6 +6,7 @@ from typing import Dict, List, Tuple, Optional, Union
 from pddl_planner.pddl_core.nl_domain import NLDomain
 from pddl_planner.pddl_core.nl_instance import NLInstance
 from pddl_planner.logic.operation import Operations
+from pddl_planner.logic.nl_formula import NLPredicate
 from pddl_planner.logic.formula import Substitution, Formula, Predicate, DisjunctiveFormula, ConjunctiveFormula, Term, Equality, FalseFormula
 from pddl_planner.pddl_core.action import Action         
 from pddl_planner.llm.llm import LLM
@@ -73,7 +74,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         ssa: Union[Predicate, DisjunctiveFormula]
 
     class PlanNode():
-        def __init__(self, action: Action, sub_goal: Formula, parent: Optional["RegressionPlanner.PlanNode"] = None, depth: int = 0, substitution: Substitution = Substitution()) -> None:
+        def __init__(self, action: Action, sub_goal: Formula, parent: Optional["NLFOLRegressionPlanner.PlanNode"] = None, depth: int = 0, substitution: Substitution = Substitution()) -> None:
             """
             Initializes a PlanNode. PlanNode is used to represent the planning tree.
 
@@ -90,11 +91,11 @@ class NLFOLRegressionPlanner(NLPlanner):
             self.action = action
             self.sub_goal = copy.deepcopy(sub_goal)
             self.parent = parent
-            self.children: List["FOLRegressionPlanner.PlanNode"] = []
+            self.children: List["NLFOLRegressionPlanner.PlanNode"] = []
             self.depth = depth
             self.substitution = substitution
         
-        def add_child(self, child_node: "FOLRegressionPlanner.PlanNode") -> None:
+        def add_child(self, child_node: "NLFOLRegressionPlanner.PlanNode") -> None:
             """
             Adds a child node.
 
@@ -106,7 +107,7 @@ class NLFOLRegressionPlanner(NLPlanner):
             """
             self.children.append(child_node)
 
-    def extract_plan(self, node: "FOLRegressionPlanner.PlanNode") -> List[Action]:
+    def extract_plan(self, node: "NLFOLRegressionPlanner.PlanNode") -> List[Action]:
         """
         Extract the plan from the plan tree.
 
@@ -174,8 +175,6 @@ class NLFOLRegressionPlanner(NLPlanner):
         all_ssa: Dict[str, Dict[str, NLFOLRegressionPlanner.SSA_Node]] = {}
         if predicates is None:
             predicates = self._domain.predicates
-        print("Predicates: ", predicates)
-        print("Actions: ", self._domain.actions)
         for pred in predicates:
             print(f"Processing predicate: {pred.name}")
             pred_ssa: Dict[str, NLFOLRegressionPlanner.SSA_Node] = {}
@@ -210,7 +209,7 @@ class NLFOLRegressionPlanner(NLPlanner):
             all_ssa[pred.name] = pred_ssa
         return all_ssa
     
-    def regress_pred(self, predicate: Predicate, action: Action) -> DisjunctiveFormula:
+    def regress_pred(self, predicate: NLPredicate, action: Action) -> DisjunctiveFormula:
         """
         Regress a predicate through an action via the stored SSA substitution.
 
@@ -229,19 +228,19 @@ class NLFOLRegressionPlanner(NLPlanner):
             DisjunctiveFormula: The regressed formula with variables substituted according to the SSA_Node.
         """
         # check if the predicate is in domain predicates
-        if predicate.name in self._ssa:
-            print(f'found the ssa node for the predicate "{str(predicate)}" for action "{action.name}"')
-            ssa_node = self._ssa[predicate.name][action.name]
+        if predicate.entailed.name in self._ssa:
+            ssa_node = self._ssa[predicate.entailed.name][action.name]
         else:
             # check if the predicate can be entailed as a domain predicate
-            print(f'Failing to find "{str(predicate)}" in domain predicates, attempting to entail it to a domain predicate')
+            print(f'Failing to find "{predicate.entailed.name}" in domain predicates, attempting to entail it to a domain predicate')
             entailed_pred = self._llm.entailment(predicate, self._domain.predicates)
             if entailed_pred is not None:
-                ssa_node = self._ssa[entailed_pred.name][action.name]
+                ssa_node = self._ssa[entailed_pred.entailed.name][action.name]
                 # update the predicate names and string representation as the entailed predicate
                 predicate = entailed_pred
             else:
                 # create a new ssa node with postive and negative effects as none
+                print(f'Failing to entail "{predicate.entailed.name}" in domain predicates, creating a new ssa node with postive and negative effects as none')
                 self._ssa[predicate.name] = self.create_SSA([predicate])[predicate.name]
                 ssa_node = self._ssa[predicate.name][action.name]
         # Build a substitution:
@@ -257,9 +256,9 @@ class NLFOLRegressionPlanner(NLPlanner):
         # if predicate.term_type_dict is not None and ssa_node.ssa.term_type_dict is not None:
         #     returned_ssa.term_type_dict.update(predicate.term_type_dict)
         # Substitute over the stored SSA formula
-        print(f'substitution: {substitution}')
-        print(f'returned_ssa: {ssa_node.ssa.clauses}')
-        print(f'returned_ssa.substitute(substitution): {returned_ssa.substitute(substitution)}')
+        # print(f'ssa_node: {ssa_node.predicate_params} action: {ssa_node.action_params} predicate: {predicate.terms}')
+        # print(f'substitution: {substitution}')
+        # print(f'returned_ssa: {ssa_node.ssa.clauses} for action "{action.name}" and predicate "{predicate.name}"')
         return returned_ssa.substitute(substitution), predicate
 
     def regress(self, goal: DisjunctiveFormula, action: Action) -> DisjunctiveFormula:
@@ -291,16 +290,14 @@ class NLFOLRegressionPlanner(NLPlanner):
                 if isinstance(clause, Predicate):
                     # Regress the predicate clause using regress_pred
                     regressed_clause, clause = self.regress_pred(clause, action)
+                    # regressed_clause = FalseFormula() if regressed_clause is None else regressed_clause
                 else:
                     regressed_clause = clause
-                if regressed_clause == None:
-                    regressed_conjunct_list = [FalseFormula()]
-                    return DisjunctiveFormula(*regressed_conjunct_list).distribute_and_over_or()
                 regressed_conjunct_list.append(regressed_clause)
             # Combine the regressed clauses and convert to DNF
             regressed_disjunct_list.append(ConjunctiveFormula(*regressed_conjunct_list).distribute_and_over_or())
         # Return a flattened regressed goal  in DNF
-        return DisjunctiveFormula(*regressed_disjunct_list).distribute_and_over_or()
+        return DisjunctiveFormula(*regressed_disjunct_list).distribute_and_over_or(), goal
     
     def regress_plan(self, simplify_equality: bool = True, simplify_contradiction: bool = True, simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True) -> List[Tuple[Formula, List[Action]]]:
         """
@@ -333,11 +330,14 @@ class NLFOLRegressionPlanner(NLPlanner):
             current_goal: Formula = current_node.sub_goal
             if current_node.depth >= self._max_depth:
                 # exit if max depth is reached
+                print(f'max depth reached: {current_node.depth}')
                 continue
                 
             for action in self._domain.actions:
                 standardized_action = action.standardize(self._operations)
-                regressed_goal = self.regress(current_goal, standardized_action).simplify() if simplify_contradiction else self.regress(current_goal, standardized_action)
+                regressed_goal, goal = self.regress(current_goal, standardized_action)
+                if simplify_contradiction:
+                    regressed_goal = regressed_goal.simplify()
                 simplified_goals = []
                 substitution = Substitution()
                 if isinstance(regressed_goal, Predicate):
@@ -365,7 +365,6 @@ class NLFOLRegressionPlanner(NLPlanner):
                                 regressed_goal_list.append(conjunct)
                                 visited_goal.append(conjunct)
                     regressed_goal = DisjunctiveFormula(*regressed_goal_list).simplify().distribute_and_over_or() if simplify_contradiction else DisjunctiveFormula(*regressed_goal_list).distribute_and_over_or()
-                      
                 child_node = NLFOLRegressionPlanner.PlanNode(standardized_action, regressed_goal, current_node, current_node.depth + 1, {**current_node.substitution, **substitution})
                 # add to the frontier and plan if the subgoal hasn't visited before
                 if not isinstance(child_node.sub_goal, FalseFormula):

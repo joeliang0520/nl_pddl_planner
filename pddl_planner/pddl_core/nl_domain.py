@@ -49,7 +49,9 @@ class NLDomain(Domain):
             preconditions = self._parser.parse_formula(nl_action['Preconditions'], term_type_dict=term_type_dict)
 
             #parse the positive effects
-            effects =  self._parser.parse_formula(nl_action["Effects"]["Positive"], term_type_dict=term_type_dict)
+            effects = Formula()
+            if "Positive" in nl_action["Effects"].keys():
+                effects =  self._parser.parse_formula(nl_action["Effects"]["Positive"], term_type_dict=term_type_dict)
             #for negative effects, we need to negate the formula
             if "Negative" in nl_action["Effects"].keys():
                 negative_effects =  self._parser.parse_formula(nl_action["Effects"]["Negative"], term_type_dict=term_type_dict).get_negation()
