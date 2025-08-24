@@ -259,7 +259,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         # print(f'ssa_node: {ssa_node.predicate_params} action: {ssa_node.action_params} predicate: {predicate.terms}')
         # print(f'substitution: {substitution}')
         # print(f'returned_ssa: {ssa_node.ssa.clauses} for action "{action.name}" and predicate "{predicate.name}"')
-        return returned_ssa.substitute(substitution), predicate
+        return returned_ssa.substitute(substitution)
 
     def regress(self, goal: DisjunctiveFormula, action: Action) -> DisjunctiveFormula:
         """
@@ -289,7 +289,7 @@ class NLFOLRegressionPlanner(NLPlanner):
             for clause in conjunct.clauses:
                 if isinstance(clause, Predicate):
                     # Regress the predicate clause using regress_pred
-                    regressed_clause, clause = self.regress_pred(clause, action)
+                    regressed_clause = self.regress_pred(clause, action)
                     # regressed_clause = FalseFormula() if regressed_clause is None else regressed_clause
                 else:
                     regressed_clause = clause

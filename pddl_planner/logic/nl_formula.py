@@ -5,7 +5,7 @@ class NLPredicate(Predicate):
     def __init__(self, name: str, str_representation: str, is_neg: bool, *terms: "Term",
      term_type_dict: Dict["Term", Set[str]] = None, entailed_by: "NLPredicate" = None) -> None:
         super().__init__(name, is_neg, *terms, term_type_dict=term_type_dict)
-        self._str_represntation = str_representation
+        self._str_represntation = str_representation 
         self._entailed_by = entailed_by if entailed_by is not None else self
 
     def __str__(self) -> str:
@@ -26,10 +26,13 @@ class NLPredicate(Predicate):
                 if term1 in self.term_type_dict and term2 in self.term_type_dict:
                     self.term_type_dict[term2].update(self.term_type_dict[term1])
         # update the str_representation of the predicate
+
         for term in self.terms:
             self._str_represntation = self._str_represntation.replace(f' {str(term)}', f' {substitution.get(term, term)}').replace(f'{str(term)} ', f'{substitution.get(term, term)} ')
         self._str_represntation = self._str_represntation.strip()
-        return NLPredicate(self.name, copy.deepcopy(self._str_represntation), self._is_neg, *[substitution.get(term, term) for term in self.terms], 
+
+        # return a new predicate with the updated str_representation
+        return NLPredicate(self.name, self._str_represntation, self._is_neg, *[substitution.get(term, term) for term in self.terms], 
         term_type_dict={substitution.get(term, term): types for term, types in self.term_type_dict.items()} if self.term_type_dict is not None else None)
 
     def get_negation(self) -> "NLPredicate":

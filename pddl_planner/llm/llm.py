@@ -58,9 +58,9 @@ class LLM:
         
         # Create a new NLPredicate with the entailed predicate's name but target predicate's terms
         new_predicate = NLPredicate(
-            target_copy.name,
-            original_str_rep,
-            target_copy._is_neg,
+            target_predicate.name,
+            str(target_predicate),
+            target_predicate._is_neg,
             *target_copy.terms,
             term_type_dict=target_copy.term_type_dict,
             entailed_by=entailed_predicate_copy
@@ -163,7 +163,6 @@ class LLM:
                 with open(self._cache_path, 'r') as f:
                     self._cache = json.load(f)
             except FileNotFoundError:
-                print(f"Cache file not found at {self._cache_path}, creating new cache") if self._verbose else None
                 self._cache = {}
                 self._cache_path = 'cache.json'
                 self._save_cache()
@@ -205,7 +204,7 @@ class LLM:
             target_predicate (Predicate): The target predicate to be updated in the cache.
             entailed_predicate (Predicate): The entailed predicate that is used to update the cache.
         """
-        target_str = str(target_predicate)
+        target_str = str(target_predicate).split("(")[0]
         entailed_name = entailed_predicate.name if entailed_predicate is not None else None
         self._cache[target_str] = entailed_name
         self._save_cache()

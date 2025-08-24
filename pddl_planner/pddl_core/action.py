@@ -35,7 +35,7 @@ class Action:
     
     def standardize(self, operations: Operations) -> "Action":
         """Standardize the variables in the action and return a new action.
-        The variables in the preconditions and effects are standardized (new variables are created).
+        The variables in the preconditions and effe cts are standardized (new variables are created).
         
         Args:
             operations (Operations): The operations to use for standardizing.
