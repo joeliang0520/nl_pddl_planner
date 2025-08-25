@@ -58,11 +58,11 @@ class LLM:
         
         # Create a new NLPredicate with the entailed predicate's name but target predicate's terms
         new_predicate = NLPredicate(
-            target_predicate.name,
-            str(target_predicate),
-            target_predicate._is_neg,
+            entailed_predicate_copy.name,
+            updated_str_rep,
+            target_copy._is_neg,
             *target_copy.terms,
-            term_type_dict=target_copy.term_type_dict,
+            term_type_dict=entailed_predicate_copy.term_type_dict,
             entailed_by=entailed_predicate_copy
         )
         
@@ -89,9 +89,8 @@ class LLM:
             if entailed_predicate is not None:
                 print(f"[Success] Predicate {str(predicate)} is entailed by {entailed_predicate.name} from cache") if self._verbose else None
                 # Replace the target predicate's name with the entailed predicate's name
-                normalized_predicate = self.replace_predicate_name(predicate, entailed_predicate)
-                print(f"[Info] Normalized predicate: {str(normalized_predicate)}") if self._verbose else None
-                return normalized_predicate
+                predicate.entailed = entailed_predicate
+                return predicate
             else:
                 print(f"[Warning] Predicate {str(predicate)} is not entailed by any of the predicates based on the cache")
             return None
@@ -140,10 +139,9 @@ class LLM:
                     self._update_cache_entailment(predicate, pred)
                     
                     # Replace the target predicate's name with the entailed predicate's name
-                    normalized_predicate = self.replace_predicate_name(predicate, pred)
-                    print(f"[Info] Normalized predicate: {str(normalized_predicate)}") if self._verbose else None
+                    predicate.entailed = pred
                     
-                    return normalized_predicate
+                    return predicate
         
         # if the predicate is not entailed by any of the predicates, and not in the cache, return None  
         print(f"[warning] Failed: Predicate {str(predicate)} is not entailed by any of the predicates") if self._verbose else None

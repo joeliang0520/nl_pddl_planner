@@ -8,7 +8,6 @@ class NLInstance():
         self._domain = domain
         self._parser = NLParser()
         self._predicates = None
-        self._init = None
         self._goal = None
         self._objects = None
         self._parse_problem(pddl_problem)

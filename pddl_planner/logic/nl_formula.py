@@ -51,3 +51,12 @@ class NLPredicate(Predicate):
             Predicate: The predicate that the predicate is entailed by.
         """
         return self._entailed_by
+        
+    @entailed.setter
+    def entailed(self, entailed_predicate: "NLPredicate") -> None:
+        """Set the predicate that the predicate is entailed by.
+
+        Args:
+            entailed_predicate (Predicate): The predicate that the predicate is entailed by.
+        """
+        self._entailed_by = entailed_predicate
