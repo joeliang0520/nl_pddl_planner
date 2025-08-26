@@ -1,11 +1,13 @@
 # Class to interact with the LLM
 import openai
-from pddl_planner.logic.formula import Predicate, Substitution
+from pddl_planner.logic.formula import Substitution
 from pddl_planner.logic.nl_formula import NLPredicate
 from pddl_planner.logic.operation import Operations
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional
 import json
 import copy
+import time
+import random
 
 class LLM:
     """
@@ -102,51 +104,125 @@ class LLM:
             # Create deep copies to prevent modifications to original objects
             predicate_copy = copy.deepcopy(predicate)
             pred_copy = copy.deepcopy(pred)
-            
+
             # Find proper substitution between the target predicate and the current predicate
             # Use unify_with_different_name for entailment tasks to allow different predicate names
             substitution = self._operations.unify_with_different_name(predicate_copy, pred_copy, Substitution())
-            if substitution is not None:
-                print(f'[Success] Existing substitution: {substitution} between "{str(predicate_copy)}" and "{str(pred_copy)}"') if self._verbose else None
-                # Apply substitution to both predicates to get their substituted string representations
-                substituted_target = predicate_copy.substitute(substitution)
-                substituted_pred = pred_copy.substitute(substitution)
-                
-                # Conduct entailment between the substituted string representations
-                target_str = str(substituted_target).split("(")[0]
-                pred_str = str(substituted_pred).split("(")[0]
-                
-                # Professional prompt for entailment checking
-                prompt = f"""Task: Determine if two predicates are logically equivalent or if one entails the other.
+            if substitution is None:
+                continue
 
-                        Predicate 1: "{target_str}"
-                        Predicate 2: "{pred_str}"
+            print(f'[Success] Existing substitution: {substitution} between "{str(predicate_copy)}" and "{str(pred_copy)}"') if self._verbose else None
+            # Apply substitution to both predicates to get their substituted string representations
+            substituted_target = predicate_copy.substitute(substitution)
+            substituted_pred = pred_copy.substitute(substitution)
 
-                        Instructions:
-                        - Analyze if Predicate 1 is logically entailed by Predicate 2
-                        - Consider semantic meaning, logical structure, and variable mappings
-                        - Respond with exactly "YES" if Predicate 1 is entailed by Predicate 2
-                        - Respond with exactly "NO" if Predicate 1 is not entailed by Predicate 2
+            # Conduct entailment between the substituted string representations
+            target_str = substituted_target.nl_description
+            pred_str = substituted_pred.nl_description
 
-                        Response:"""
-                response = self.client.chat.completions.create(model=self.model_name, messages=[{"role": "user", "content": prompt}])
-                # extract the response content
-                response_content = response.choices[0].message.content.strip()
-                print(f'[LLM Response] predicate "{target_str}" is entailed by "{pred_str}" ?:  {response_content}') if self._verbose else None
-                if 'YES' in response_content.upper():
-                    # if the predicate is entailed, update the cache
-                    print(f"[Success] Predicate {str(predicate)} is entailed by {pred.name} from LLM") if self._verbose else None
-                    self._update_cache_entailment(predicate, pred)
-                    
-                    # Replace the target predicate's name with the entailed predicate's name
-                    predicate.entailed = pred
-                    
-                    return predicate
-        
-        # if the predicate is not entailed by any of the predicates, and not in the cache, return None  
-        print(f"[warning] Failed: Predicate {str(predicate)} is not entailed by any of the predicates") if self._verbose else None
+            if predicate_copy._is_neg:
+                # reverse the entailment check for negative predicates
+                entailment_result = self._entailment_check(pred_str, target_str)
+            else:
+                # conduct entailment check
+                entailment_result = self._entailment_check(target_str, pred_str)
+
+            if entailment_result:
+                # if the predicate is entailed, update the cache
+                print(f"[Success] Predicate {str(predicate)} is entailed by {pred.name} from LLM") if self._verbose else None
+                self._update_cache_entailment(predicate, pred)
+
+                # Replace the target predicate's name with the entailed predicate's name
+                predicate.entailed = pred
+
+                return predicate
+            else:
+                print(f"[Info] Predicate {str(predicate)} is not entailed by {pred.name} from LLM") if self._verbose else None
+
+        # if none of the predicates entailed the target, update cache with None and return
+        print(f"[Warning] Failed: Predicate {str(predicate)} is not entailed by any of the predicates") if self._verbose else None
         self._update_cache_entailment(predicate, None)
         return None
+
+    def _entailment_check(self, target_str: str, pred_str: str) -> bool:
+        # Professional prompt for entailment checking
+        prompt = f"""Task: Determine if two predicates are logically equivalent or if one entails the other.
+
+                Predicate 1: "{target_str}"
+                Predicate 2: "{pred_str}"
+
+                Instructions:
+                - Analyze if Predicate 1 is logically entailed by Predicate 2
+                - Consider semantic meaning, logical structure, and variable mappings
+                - Respond with exactly "YES" if Predicate 1 is entailed by Predicate 2
+                - Respond with exactly "NO" if Predicate 1 is not entailed by Predicate 2
+
+                Response:"""
+
+        response_text = self._call_llm_with_retries(prompt)
+        decision = self._parse_yes_no_response(response_text)
+        print(f'[LLM Response] predicate "{target_str}" is entailed by "{pred_str}" ?:  {response_text}') if self._verbose else None
+
+        if decision is not None:
+            return decision
+
+        # Last attempt: ask for a strictly formatted answer if parsing failed
+        strict_prompt = (
+            prompt
+            + "\n\nAnswer strictly with ONLY YES or NO, no punctuation, no explanation."
+        )
+        response_text = self._call_llm_with_retries(strict_prompt)
+        decision = self._parse_yes_no_response(response_text)
+        print(f'[LLM Strict Response] predicate "{target_str}" by "{pred_str}" -> {response_text}') if self._verbose else None
+
+        # Default to False if still ambiguous
+        return bool(decision) if decision is not None else False
+
+    def _parse_yes_no_response(self, text: str) -> Optional[bool]:
+        """
+        Parse a free-form model response and extract a YES/NO decision.
+
+        Returns True for YES, False for NO, or None if undecidable.
+        """
+        if text is None:
+            return None
+        normalized = text.strip().upper()
+        if not normalized:
+            return None
+        # Check the first token/word primarily
+        first_token = normalized.split()[0].strip().strip(":,.!;()[]{}\n\t")
+        if first_token == 'YES':
+            return True
+        if first_token == 'NO':
+            return False
+        # Fallback: substring search if first token parsing fails
+        if 'YES' in normalized and 'NO' not in normalized:
+            return True
+        if 'NO' in normalized and 'YES' not in normalized:
+            return False
+        return None
+
+    def _call_llm_with_retries(self, prompt: str, max_retries: int = 3, timeout: float = 30.0) -> str:
+        """
+        Call the chat completion API with retries, exponential backoff, and jitter.
+        """
+        last_error: Optional[Exception] = None
+        for attempt in range(max_retries):
+            try:
+                client = self.client.with_options(timeout=timeout)
+                response = client.chat.completions.create(
+                    model=self.model_name,
+                    messages=[{"role": "user", "content": prompt}],
+                )
+                return response.choices[0].message.content.strip()
+            except Exception as err:  # Broad catch to keep planner robust
+                last_error = err
+                wait_seconds = (2 ** attempt) + random.uniform(0, 0.5)
+                print(f"[Retry] LLM call failed (attempt {attempt + 1}/{max_retries}): {err}. Waiting {wait_seconds:.2f}s") if self._verbose else None
+                time.sleep(wait_seconds)
+        # After retries, surface a best-effort empty string to be handled by parser
+        print(f"[Error] LLM call failed after {max_retries} attempts: {last_error}") if self._verbose else None
+        return ""
     
     def _load_cache(self) -> Dict[str, str]:
         """
@@ -170,8 +246,9 @@ class LLM:
             self._cache_path = 'cache.json'
             self._save_cache()
         return self._cache
+        
 
-    def _load_cache_entailment(self, predicate: Predicate, predicates: List[Predicate]) -> Tuple[bool, Predicate|None]:
+    def _load_cache_entailment(self, predicate: NLPredicate, predicates: List[NLPredicate]) -> Tuple[bool, NLPredicate|None]:
         """
         Cache the entailment of the predicate by the predicates.
         """
@@ -194,7 +271,7 @@ class LLM:
         # if the cache is not loaded, return False and None
         return False, None
 
-    def _update_cache_entailment(self, target_predicate: Predicate, entailed_predicate: Predicate|None) -> None:
+    def _update_cache_entailment(self, target_predicate: NLPredicate, entailed_predicate: NLPredicate|None) -> None:
         """
         Update the cache with the entailment of the target predicate by the entailed predicate.
 

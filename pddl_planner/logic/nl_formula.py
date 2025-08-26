@@ -1,5 +1,5 @@
 from typing import Set, Dict
-from pddl_planner.logic.formula import Predicate, Term, Substitution, Variable
+from pddl_planner.logic.formula import Predicate, Term, Substitution
 import copy
 class NLPredicate(Predicate):
     def __init__(self, name: str, str_representation: str, is_neg: bool, *terms: "Term",
@@ -8,8 +8,8 @@ class NLPredicate(Predicate):
         self._str_represntation = str_representation 
         self._entailed_by = entailed_by if entailed_by is not None else self
 
-    def __str__(self) -> str:
-        return f'{self._str_represntation}({", ".join(f"{str(term)}" for term in self.terms)})' if not self._is_neg else f'not {self._str_represntation}({", ".join(f"{str(term)}" for term in self.terms)})'
+    # def __str__(self) -> str:
+    #     return f'{self._str_represntation}({", ".join(f"{str(term)}" for term in self.terms)})' if not self._is_neg else f'not {self._str_represntation}({", ".join(f"{str(term)}" for term in self.terms)})'
 
     def substitute(self, substitution: "Substitution") -> "NLPredicate":
         """Substitute the variables in the predicate using the provided substitution.
@@ -60,3 +60,22 @@ class NLPredicate(Predicate):
             entailed_predicate (Predicate): The predicate that the predicate is entailed by.
         """
         self._entailed_by = entailed_predicate
+    
+    @property
+    def nl_description(self) -> str:
+        """Get the NL description of the predicate.
+
+        Returns:
+            str: The NL description of the predicate.
+        """
+        return self._str_represntation
+
+    @nl_description.setter
+    def nl_description(self, nl_description: str) -> None:
+        """Set the NL description of the predicate.
+
+        Args:
+            nl_description (str): The NL description of the predicate.
+        """
+        self._str_represntation = nl_description
+

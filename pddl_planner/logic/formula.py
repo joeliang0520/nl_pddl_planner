@@ -571,7 +571,7 @@ class ConjunctiveFormula(Formula):
         equality_subst = Substitution()
         for clause in simplified_clauses:
             if isinstance(clause, Equality) and not clause.is_neq:
-                if isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
+                if isinstance(clause.term1, Variable):
                     equality_subst[clause.term2] = clause.term1
         
         substituted_clauses = set()
@@ -583,7 +583,7 @@ class ConjunctiveFormula(Formula):
         final_clauses = []
         for clause in substituted_clauses:
             if isinstance(clause, Equality) and not clause.is_neq:
-                if isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
+                if isinstance(clause.term1, Variable):
                     continue
             final_clauses.append(clause)
         
@@ -613,7 +613,6 @@ class ConjunctiveFormula(Formula):
         for other_clause in other.clauses:
             if other_clause not in self.clauses:
                 return False
-
         return True
 
 
@@ -1118,7 +1117,7 @@ class Predicate(Atomic):
         Returns:
             str: The string representation.
         """
-        terms_str = ", ".join(str(term) for term in self._terms if isinstance(term, Variable))
+        terms_str = ", ".join(str(term) for term in self._terms)
 
         return f"{self.name}({terms_str})" if not self._is_neg else f"not {self.name}({terms_str})"
 

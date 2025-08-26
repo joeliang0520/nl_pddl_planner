@@ -1,11 +1,10 @@
 from typing import Any, Union, List, Dict
-from pddl_planner.logic.parser import Parser
 from pddl_planner.logic.formula import ConjunctiveFormula, DisjunctiveFormula, Predicate, Variable, Constant, Term
 from pddl_planner.logic.nl_formula import NLPredicate
 
 # Parser class to convert NL to logic fromulas
-class NLParser(Parser):
-    def parse_predicate(self, NL_predicate: tuple[str, Dict[str, str]]) -> Predicate:
+class NLParser():
+    def parse_predicate(self, NL_predicate: tuple[str, Dict[str, str]]) -> NLPredicate:
         """
         Parses a NL predicate into a logic predicate. Example of NL predicate: "("goal_obj is an tomato", {"goal_obj": "object"})"
         
@@ -28,7 +27,7 @@ class NLParser(Parser):
         # pareser 
         #1. extract possible terms and type tags from the predicate's dictionary
         type_tags = NL_predicate[1]
-        predicate_name = NL_predicate[0]
+        predicate_name = NL_predicate[0].strip().lower()
         # 2. parse the terms (constants and variables) within the predicate's dictionary
         if not type_tags == {}: # check if the type tags is empty (no variables or constants)
             terms = tuple(self.parse_term(term, type_tags) for term in type_tags.keys())
@@ -36,12 +35,12 @@ class NLParser(Parser):
             term_type_dict = {term: set([type_tags[str(term)]]) for term in terms}
             # 3. remove the variable terms from the predicate name
             for term in terms:
-                predicate_name = predicate_name.replace(f' {term}', ' ').replace(f'{term} ', ' ')
+                predicate_name = predicate_name.replace(f' {term}', ' ').replace(f'{term} ', ' ').strip()
             predicate_name = predicate_name.strip()
         else: 
             terms = tuple()
             term_type_dict = {}
-        return NLPredicate(predicate_name, NL_predicate[0], is_neg, *terms, term_type_dict=term_type_dict)
+        return NLPredicate(predicate_name, NL_predicate[0].strip().lower(), is_neg, *terms, term_type_dict=term_type_dict)
 
     def parse_term(self, NL_term: str, type_tags: Dict[str, str] = None) -> Union[Variable, Constant]:
         """
@@ -65,9 +64,9 @@ class NLParser(Parser):
             term_type = type_tags[NL_term] if type_tags is not None else None
 
             if NL_term.startswith("?"):
-                return Variable(NL_term.replace("?",""), term_type)
+                return Variable(NL_term.replace("?","").strip().lower(), term_type)
             else:
-                return Constant(NL_term, term_type)
+                return Constant(NL_term.strip().lower(), term_type)
 
         except KeyError:
             raise NotImplementedError(f"Term is type {type(NL_term)}, which is not available in the provided type tags")

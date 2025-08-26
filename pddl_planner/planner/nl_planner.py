@@ -237,6 +237,7 @@ class NLFOLRegressionPlanner(NLPlanner):
             if entailed_pred is not None:
                 ssa_node = self._ssa[entailed_pred.entailed.name][action.name]
                 # update the predicate names and string representation as the entailed predicate
+                predicate = entailed_pred
             else:
                 # create a new ssa node with postive and negative effects as none
                 print(f'Failing to entail "{predicate.entailed.name}" in domain predicates, creating a new ssa node with postive and negative effects as none')
@@ -244,13 +245,13 @@ class NLFOLRegressionPlanner(NLPlanner):
                 ssa_node = self._ssa[predicate.name][action.name]
         # Build a substitution:
         # Map the stored predicate parameters to the input predicate's terms.
-        substitution = ssa_node.substitutions
+        substitution = Substitution()
         for stored_pred_var, input_pred_var in zip(ssa_node.predicate_params, predicate.terms):
             substitution[stored_pred_var] = input_pred_var
         # Map the stored action parameters to the input action's parameters.
         for stored_act_var, input_act_var in zip(ssa_node.action_params, action.parameters):
             substitution[stored_act_var] = input_act_var
-        #print(f'substitution: {substitution} for action "{action.name}" and predicate "{predicate.name}"')
+        print(f'ssa: {ssa_node.ssa} for action: {action.name} and predicate: {predicate.name}')
         returned_ssa = copy.deepcopy(ssa_node.ssa)
         
         # if predicate.term_type_dict is not None and ssa_node.ssa.term_type_dict is not None:
@@ -281,25 +282,25 @@ class NLFOLRegressionPlanner(NLPlanner):
         if not isinstance(goal, DisjunctiveFormula):
             raise ValueError(f"Goal must be a DisjunctiveFormula, but got {type(goal)}")
         regressed_disjunct_list = []
+
         for conjunct in goal.clauses:
             if not isinstance(conjunct, ConjunctiveFormula):
                 raise ValueError(f"Each conjunct must be a ConjunctiveFormula, but got {type(conjunct)}")
             
             regressed_conjunct_list = []
             for clause in conjunct.clauses:
-                if isinstance(clause, Predicate):
+                if isinstance(clause, NLPredicate):
                     # Regress the predicate clause using regress_pred
                     regressed_clause = self.regress_pred(clause, action)
-                    # regressed_clause = FalseFormula() if regressed_clause is None else regressed_clause
                 else:
                     regressed_clause = clause
                 regressed_conjunct_list.append(regressed_clause)
-            # Combine the regressed clauses and convert to DNF
+            # Combine the regressed clauses and convert to DN
             regressed_disjunct_list.append(ConjunctiveFormula(*regressed_conjunct_list).distribute_and_over_or())
         # Return a flattened regressed goal  in DNF
-        return DisjunctiveFormula(*regressed_disjunct_list).distribute_and_over_or(), goal
+        return DisjunctiveFormula(*regressed_disjunct_list).distribute_and_over_or()
     
-    def regress_plan(self, simplify_equality: bool = True, simplify_contradiction: bool = True, simplify_typing: bool = True, simplify_dnf: bool = False, dup_detection: bool = True) -> List[Tuple[Formula, List[Action]]]:
+    def regress_plan(self, simplify_equality: bool = True, simplify_contradiction: bool = True, simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True) -> List[Tuple[Formula, List[Action]]]:
         """
         Generate a regressed plan by iteratively regressing the goal through applicable actions.
 
@@ -335,7 +336,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                 
             for action in self._domain.actions:
                 standardized_action = action.standardize(self._operations)
-                regressed_goal, goal = self.regress(current_goal, standardized_action)
+                regressed_goal = self.regress(current_goal, standardized_action)
                 if simplify_contradiction:
                     regressed_goal = regressed_goal.simplify()
                 simplified_goals = []

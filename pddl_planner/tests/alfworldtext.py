@@ -25,12 +25,13 @@ with open('files/alfworldtext_domain.json', 'r') as f:
     domain = json.load(f)
 
 # load the goal blocks from the file    
-all_blocks = load_goal_blocks("files/NL_goals.txt")
+with open('files/alfworldtext_goal.json', 'r') as f:
+    all_blocks = json.load(f)
 
 # initialize the planner
-for block in all_blocks:
+for block in [all_blocks[1]]:
     print(f'Problem {block} =========================================')
-    planner = NLFOLRegressionPlanner(domain.copy(), block.copy(), max_depth=10)
+    planner = NLFOLRegressionPlanner(domain.copy(), block.copy(), max_depth=3)
     regressed_plans = planner.regress_plan()
 
 # print the regressed plans
@@ -43,4 +44,3 @@ for block in all_blocks:
         print("Action: ", reversed_plan)
         print("Substitution: ", plan[2])
         print("--------------------")
-    break
