@@ -14,7 +14,7 @@ class LLM:
     A class to intilize and interact with the LLM for various task in the regression planner.
     """
     
-    def __init__(self, model_name: str, api_key: str, cache_path: str|None ='cache.json', verbose: bool = False):
+    def __init__(self, model_name: str, api_key: str, cache_path: str|None ='cache.json', verbose: bool = True):
         """
         Initialize the LLM.
 
@@ -89,17 +89,18 @@ class LLM:
         if status:
             # if the predicate is in the cache, return the entailed predicate
             if entailed_predicate is not None:
-                print(f"[Success] Predicate {str(predicate)} is entailed by {entailed_predicate.name} from cache") if self._verbose else None
+                print(f"[Success] Predicate {predicate.nl_description} is entailed by {entailed_predicate.nl_description} from cache") if self._verbose else None
                 # Replace the target predicate's name with the entailed predicate's name
                 predicate.entailed = entailed_predicate
                 return predicate
             else:
-                print(f"[Warning] Predicate {str(predicate)} is not entailed by any of the predicates based on the cache")
+                print(f"[No Entailment] Predicate {predicate.nl_description} is not entailed by any of the predicates based on the cache") if self._verbose else None
             return None
         
         # if the cache is not loaded, or the predicate is not in the cache, or none of input predicates matches the entailed predicates in the cache
         # check if the predicate can be entailed by any of the predicates
-        print(f'[Warning] fail to find the predicate "{str(predicate)}" in the cache, checking via LLM')
+        print(f'[Not Found] Failed to find the predicate "{predicate.nl_description}" in the cache, checking via LLM') if self._verbose else None
+        entailed_preds = []
         for pred in predicates:
             # Create deep copies to prevent modifications to original objects
             predicate_copy = copy.deepcopy(predicate)
@@ -111,7 +112,7 @@ class LLM:
             if substitution is None:
                 continue
 
-            print(f'[Success] Existing substitution: {substitution} between "{str(predicate_copy)}" and "{str(pred_copy)}"') if self._verbose else None
+            print(f'[Substitution] Existing substitution: {substitution} between "{str(predicate_copy)}" and "{str(pred_copy)}"') if self._verbose else None
             # Apply substitution to both predicates to get their substituted string representations
             substituted_target = predicate_copy.substitute(substitution)
             substituted_pred = pred_copy.substitute(substitution)
@@ -130,19 +131,22 @@ class LLM:
             if entailment_result:
                 # if the predicate is entailed, update the cache
                 print(f"[Success] Predicate {str(predicate)} is entailed by {pred.name} from LLM") if self._verbose else None
-                self._update_cache_entailment(predicate, pred)
-
-                # Replace the target predicate's name with the entailed predicate's name
-                predicate.entailed = pred
-
-                return predicate
-            else:
-                print(f"[Info] Predicate {str(predicate)} is not entailed by {pred.name} from LLM") if self._verbose else None
-
-        # if none of the predicates entailed the target, update cache with None and return
-        print(f"[Warning] Failed: Predicate {str(predicate)} is not entailed by any of the predicates") if self._verbose else None
-        self._update_cache_entailment(predicate, None)
-        return None
+                entailed_preds.append(pred)
+        if len(entailed_preds) == 1:
+            # if there is only one entailed predicate, overwrite the original predicate's entailment with the entailed predicate
+            predicate.entailed = entailed_preds[0]
+            self._update_cache_entailment(predicate, entailed_preds[0])
+            return predicate
+        elif len(entailed_preds) > 1:
+            # if there are multiple entailed predicates, return the list of entailed predicates
+            predicate.entailed = entailed_preds
+            self._update_cache_entailment(predicate, entailed_preds)
+            return predicate
+        else:
+            # if there are no entailed predicates, return None
+            print(f"[No Entailment] Failed: Predicate {predicate.nl_description} is not entailed by any of the predicates") if self._verbose else None
+            self._update_cache_entailment(predicate, None)
+            return None
 
     def _entailment_check(self, target_str: str, pred_str: str) -> bool:
         # Professional prompt for entailment checking
@@ -159,21 +163,19 @@ class LLM:
 
                 Response:"""
 
-        response_text = self._call_llm_with_retries(prompt)
-        decision = self._parse_yes_no_response(response_text)
-        print(f'[LLM Response] predicate "{target_str}" is entailed by "{pred_str}" ?:  {response_text}') if self._verbose else None
-
+        decision = self._call_llm_with_retries(prompt)
         if decision is not None:
+            print(f'[LLM Response] predicate "{target_str}" is entailed by "{pred_str}" ?:  {decision}') if self._verbose else None
             return decision
 
         # Last attempt: ask for a strictly formatted answer if parsing failed
+        print('[Strict Response]: Failed to parse the response, asking for a strictly formatted answer') if self._verbose else None
         strict_prompt = (
             prompt
             + "\n\nAnswer strictly with ONLY YES or NO, no punctuation, no explanation."
         )
-        response_text = self._call_llm_with_retries(strict_prompt)
-        decision = self._parse_yes_no_response(response_text)
-        print(f'[LLM Strict Response] predicate "{target_str}" by "{pred_str}" -> {response_text}') if self._verbose else None
+        decision = self._call_llm_with_retries(strict_prompt)
+        print(f'[LLM Response] predicate "{target_str}" is entailed by "{pred_str}" ?:  {decision}') if self._verbose else None
 
         # Default to False if still ambiguous
         return bool(decision) if decision is not None else False
@@ -200,7 +202,7 @@ class LLM:
             return True
         if 'NO' in normalized and 'YES' not in normalized:
             return False
-        return None
+        raise ValueError(f"Invalid response: {text}")
 
     def _call_llm_with_retries(self, prompt: str, max_retries: int = 3, timeout: float = 30.0) -> str:
         """
@@ -214,7 +216,7 @@ class LLM:
                     model=self.model_name,
                     messages=[{"role": "user", "content": prompt}],
                 )
-                return response.choices[0].message.content.strip()
+                return self._parse_yes_no_response(response.choices[0].message.content.strip())
             except Exception as err:  # Broad catch to keep planner robust
                 last_error = err
                 wait_seconds = (2 ** attempt) + random.uniform(0, 0.5)
@@ -222,7 +224,7 @@ class LLM:
                 time.sleep(wait_seconds)
         # After retries, surface a best-effort empty string to be handled by parser
         print(f"[Error] LLM call failed after {max_retries} attempts: {last_error}") if self._verbose else None
-        return ""
+        return None
     
     def _load_cache(self) -> Dict[str, str]:
         """
@@ -255,23 +257,29 @@ class LLM:
         #check if cache is loaded
         if self._cache is not None:
             # check if the predicate string representation is in the cache of previous entailments
-            predicate_str = str(predicate).split("(")[0]
+            predicate_str = predicate.nl_description
             if predicate_str in self._cache:
                 print(f'found the predicate "{predicate_str}" in the cache') if self._verbose else None
                 # obtained the name of the entailed predicate from the cache
                 entailed_pred_name = self._cache[predicate_str]
                 if entailed_pred_name is None:
                     # if no entailment is found in the cache, return True and None
-                    return True, None 
-                for pred in predicates:
-                    # check the entailed predicate name with input list of predicates and return the predicate if it is found
-                    if pred.name == entailed_pred_name:
-                        # if the entailment is found, return True and the entailed predicate
-                        return True, copy.deepcopy(pred)
+                    return True, None
+                if isinstance(entailed_pred_name, list):
+                    entailed_preds = []
+                    for entailed_pred in entailed_pred_name:
+                        for pred in predicates:
+                            if pred.name == entailed_pred:
+                                entailed_preds.append(copy.deepcopy(pred))
+                    return True, entailed_preds
+                else:
+                    for pred in predicates:
+                        if pred.name == entailed_pred_name:
+                            return True, copy.deepcopy(pred)
         # if the cache is not loaded, return False and None
         return False, None
 
-    def _update_cache_entailment(self, target_predicate: NLPredicate, entailed_predicate: NLPredicate|None) -> None:
+    def _update_cache_entailment(self, target_predicate: NLPredicate, entailed_predicate: NLPredicate|List[NLPredicate]|None) -> None:
         """
         Update the cache with the entailment of the target predicate by the entailed predicate.
 
@@ -279,7 +287,7 @@ class LLM:
             target_predicate (Predicate): The target predicate to be updated in the cache.
             entailed_predicate (Predicate): The entailed predicate that is used to update the cache.
         """
-        target_str = str(target_predicate).split("(")[0]
+        target_str = target_predicate.nl_description
         entailed_name = entailed_predicate.name if entailed_predicate is not None else None
         self._cache[target_str] = entailed_name
         self._save_cache()

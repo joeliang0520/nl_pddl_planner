@@ -1,12 +1,24 @@
-from typing import Set, Dict
+from typing import Set, Dict, List
 from pddl_planner.logic.formula import Predicate, Term, Substitution
 import copy
 class NLPredicate(Predicate):
     def __init__(self, name: str, str_representation: str, is_neg: bool, *terms: "Term",
      term_type_dict: Dict["Term", Set[str]] = None, entailed_by: "NLPredicate" = None) -> None:
+        """
+        A class that represents a NL predicate.
+
+        Attributes:
+            name (str): The name of the predicate.
+            str_representation (str): The string representation of the predicate.
+            is_neg (bool): Whether the predicate is negative.
+            terms (List[Term]): The terms of the predicate.
+            term_type_dict (Dict[Term, Set[str]]): The type of the terms.
+            entailed_by (NLPredicate|List[NLPredicate]): The predicate that the predicate is entailed by.
+        """
+
         super().__init__(name, is_neg, *terms, term_type_dict=term_type_dict)
         self._str_represntation = str_representation 
-        self._entailed_by = entailed_by if entailed_by is not None else self
+        self._entailed_by: "NLPredicate"|List["NLPredicate"] = entailed_by if entailed_by is not None else self
 
     # def __str__(self) -> str:
     #     return f'{self._str_represntation}({", ".join(f"{str(term)}" for term in self.terms)})' if not self._is_neg else f'not {self._str_represntation}({", ".join(f"{str(term)}" for term in self.terms)})'
@@ -50,7 +62,9 @@ class NLPredicate(Predicate):
         Returns:
             Predicate: The predicate that the predicate is entailed by.
         """
-        return self._entailed_by
+        if isinstance(self._entailed_by, list):
+            return copy.deepcopy(self._entailed_by[-1])
+        return copy.deepcopy(self._entailed_by)
         
     @entailed.setter
     def entailed(self, entailed_predicate: "NLPredicate") -> None:
@@ -59,7 +73,10 @@ class NLPredicate(Predicate):
         Args:
             entailed_predicate (Predicate): The predicate that the predicate is entailed by.
         """
-        self._entailed_by = entailed_predicate
+        if isinstance(self._entailed_by, list):
+            self._entailed_by.append(entailed_predicate)
+        else:
+            self._entailed_by = [self._entailed_by, entailed_predicate]
     
     @property
     def nl_description(self) -> str:

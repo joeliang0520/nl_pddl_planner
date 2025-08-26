@@ -251,7 +251,6 @@ class NLFOLRegressionPlanner(NLPlanner):
         # Map the stored action parameters to the input action's parameters.
         for stored_act_var, input_act_var in zip(ssa_node.action_params, action.parameters):
             substitution[stored_act_var] = input_act_var
-        print(f'ssa: {ssa_node.ssa} for action: {action.name} and predicate: {predicate.name}')
         returned_ssa = copy.deepcopy(ssa_node.ssa)
         
         # if predicate.term_type_dict is not None and ssa_node.ssa.term_type_dict is not None:

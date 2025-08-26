@@ -136,49 +136,49 @@ Each goal set is a list of predicate instances that must hold at the end.
 ## Example of LLM entailment:
 ### Example 1: goal: goal_obj is inside goal_recep |- action: ?o is in ?r
 
-fail to find the ssa node for the predicate, attempting to entail the "goal_obj is inside goal_recep" as a domain predicate
+### Predicate Entailment Handling
 
-[Warning] fail to find the predicate "goal_obj is inside goal_recep" in the cache, checking via LLM
+If a predicate cannot be found in the **domain predicates**, the `llm.llm.entailment` function is invoked.  
+This function attempts to determine whether the new predicate in the goal can be logically entailed by any domain predicate.  
 
-[Success] Existing substitution: {?o: goal_recep, ?r: goal_obj} between "goal_obj is inside goal_recep" and "?r can contain ?o"
-
-[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj can contain goal_recep" ?:  NO
-
-[Success] Existing substitution: {?r: goal_recep, ?o: goal_obj} between "goal_obj is inside goal_recep" and "?o is in ?r"
-
-[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj is in goal_recep" ?:  YES
-
-[Success] Predicate goal_obj is inside goal_recep is entailed by is in from LLM
+The process works as follows:
+1. Extract all domain predicates from the actions.
+2. Apply substitutions on constant terms appearing in the goal.
+3. Check possible entailments with each domain predicate.
+4. Retrieve all predicates that are entailed.
 
 ---
-### Example 2: goal_recep is a fridge |- action: ?r is a cooling device
 
-fail to find the ssa node for the predicate, attempting to entail the "goal_recep is a fridge" as a domain predicate
+#### Example (Verbose Log)
 
-[Warning] fail to find the predicate "goal_recep is a fridge" in the cache, checking via LLM
+Below is the printed log from the `llm.llm.entailment('is inside')` function with `verbose=True` enabled:
 
-[Success] Existing substitution: {?o: goal_recep} between "goal_recep is a fridge" and "the agent is holding ?o"
 
-[LLM Response] predicate "goal_recep is a fridge" is entailed by "the agent is holding goal_recep" ?:  NO
 
-[Success] Existing substitution: {?r: goal_recep} between "goal_recep is a fridge" and "?r is a heating device"
+```{text}
+Failing to find "is inside" in domain predicates, attempting to entail it to a domain predicate
 
-[LLM Response] predicate "goal_recep is a fridge" is entailed by "goal_recep is a heating device" ?:  NO
+[Not Found] Failed to find the predicate "goal_obj is inside goal_recep" in the cache, checking via LLM
 
-[Success] Existing substitution: {?o: goal_recep} between "goal_recep is a fridge" and "?o is hot"
+[Substitution] Existing substitution: {?o: goal_recep, ?r: goal_obj} between "is inside(goal_obj, goal_recep)" and "can contain(?r, ?o)"
 
-[LLM Response] predicate "goal_recep is a fridge" is entailed by "goal_recep is hot" ?:  NO
+[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj can contain goal_recep" ?:  False
 
-[Success] Existing substitution: {?r: goal_recep} between "goal_recep is a fridge" and "?r is a cleaning device"
+[Substitution] Existing substitution: {?r: goal_recep, ?o: goal_obj} between "is inside(goal_obj, goal_recep)" and "is in(?o, ?r)"
 
-[LLM Response] predicate "goal_recep is a fridge" is entailed by "goal_recep is a cleaning device" ?:  NO
+[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj is in goal_recep" ?:  True
 
-[Success] Existing substitution: {?o: goal_recep} between "goal_recep is a fridge" and "?o is clean"
+[Success] Predicate is inside(goal_obj, goal_recep) is entailed by is in from LLM
 
-[LLM Response] predicate "goal_recep is a fridge" is entailed by "goal_recep is clean" ?:  NO
+[Substitution] Existing substitution: {?o: goal_recep, ?r: goal_obj} between "is inside(goal_obj, goal_recep)" and "can heat(?r, ?o)"
 
-[Success] Existing substitution: {?r: goal_recep} between "goal_recep is a fridge" and "?r is a cooling device"
+[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj can heat goal_recep" ?:  False
 
-[LLM Response] predicate "goal_recep is a fridge" is entailed by "goal_recep is a cooling device" ?:  YES
+[Substitution] Existing substitution: {?o: goal_recep, ?r: goal_obj} between "is inside(goal_obj, goal_recep)" and "can clean(?r, ?o)"
 
-[Success] Predicate goal_recep is a fridge is entailed by is a cooling device from LLM
+[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj can clean goal_recep" ?:  False
+
+[Substitution] Existing substitution: {?o: goal_recep, ?r: goal_obj} between "is inside(goal_obj, goal_recep)" and "can cool(?r, ?o)"
+
+[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj can cool goal_recep" ?:  False
+```
