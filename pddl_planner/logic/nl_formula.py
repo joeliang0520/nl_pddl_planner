@@ -1,4 +1,4 @@
-from typing import Set, Dict, List
+from typing import Set, Dict, List, Any, Optional, Callable
 from pddl_planner.logic.formula import Predicate, Term, Substitution
 import copy
 class NLPredicate(Predicate):
@@ -19,6 +19,13 @@ class NLPredicate(Predicate):
         super().__init__(name, is_neg, *terms, term_type_dict=term_type_dict)
         self._str_represntation = str_representation 
         self._entailed_by: "NLPredicate"|List["NLPredicate"] = entailed_by if entailed_by is not None else self
+        
+    # Optional, planner-injected entailment checker: (a, b) -> bool if a is entailed by b or vice versa
+    _entailment_checker: Optional[Callable[["NLPredicate", "NLPredicate"], bool]] = None
+
+    @classmethod
+    def set_entailment_checker(cls, checker: Callable[["NLPredicate", "NLPredicate"], bool]) -> None:
+        cls._entailment_checker = checker
 
     # def __str__(self) -> str:
     #     return f'{self._str_represntation}({", ".join(f"{str(term)}" for term in self.terms)})' if not self._is_neg else f'not {self._str_represntation}({", ".join(f"{str(term)}" for term in self.terms)})'
@@ -55,6 +62,39 @@ class NLPredicate(Predicate):
         """
         return NLPredicate(self.name, self._str_represntation, not self._is_neg, *self.terms)
 
+    def _equals_helper_with_entailment(self, other: "NLPredicate") -> bool:
+        print(f'checking if {other.nl_description} and {self.nl_description} are equal with terms {self.terms} and {other.terms}')
+        """Predicate equality that is aware of entailment computed by the LLM.
+
+        Two predicates are considered equal if:
+        - One's entailed set (from LLM) contains the other's name and negations match
+        """
+        # type check
+        if not isinstance(other, NLPredicate):
+            print('not a NLPredicate')
+            return False
+        # get the entailed names of the predicate
+
+        # Negation must match to be considered equal via entailment
+        if self._is_neg != other.is_neg:
+            print('negations do not match')
+            return False
+
+        # If other's name is in self's entailed names, consider equal (debug-safe print)
+        if other.name in self.entailed_names():
+            return True
+        if NLPredicate._entailment_checker(self, other):
+            return True
+        return False
+
+    def __hash__(self) -> int:
+        """Use structural hash so instances remain hashable for sets/dicts.
+
+        Note: Hash is intentionally structural and does not incorporate dynamic
+        LLM entailment results to keep hashing stable.
+        """
+        return super().__hash__()
+
     @property
     def entailed(self) -> "NLPredicate":
         """Get the predicate that the predicate is entailed by.
@@ -77,6 +117,21 @@ class NLPredicate(Predicate):
             self._entailed_by.append(entailed_predicate)
         else:
             self._entailed_by = [self._entailed_by, entailed_predicate]
+
+    def entailed_names(self) -> Set[str]:
+        """
+        Get the names of the predicates that the predicate is entailed by.
+
+        Returns:
+            Set[str]: The names of the predicates that the predicate is entailed by.
+        """
+        entailed_list: List[NLPredicate] = []
+        if isinstance(self._entailed_by, List):
+            entailed_list = [p for p in self._entailed_by if isinstance(p, NLPredicate)]
+        elif isinstance(self._entailed_by, NLPredicate):
+            entailed_list = [self._entailed_by]
+        # Exclude self-name to avoid trivial equality
+        return {p.name for p in entailed_list if p.name != self.name}
     
     @property
     def nl_description(self) -> str:

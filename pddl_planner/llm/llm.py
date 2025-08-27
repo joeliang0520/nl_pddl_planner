@@ -202,6 +202,7 @@ class LLM:
             return True
         if 'NO' in normalized and 'YES' not in normalized:
             return False
+        print(f'invalid response: {text}')
         raise ValueError(f"Invalid response: {text}")
 
     def _call_llm_with_retries(self, prompt: str, max_retries: int = 3, timeout: float = 30.0) -> str:
@@ -288,8 +289,13 @@ class LLM:
             entailed_predicate (Predicate): The entailed predicate that is used to update the cache.
         """
         target_str = target_predicate.nl_description
-        entailed_name = entailed_predicate.name if entailed_predicate is not None else None
-        self._cache[target_str] = entailed_name
+        print(f'updating cache with {target_str} and {entailed_predicate}')
+        if entailed_predicate is None:
+            self._cache[target_str] = None
+        elif isinstance(entailed_predicate, list):
+            self._cache[target_str] = [p.name for p in entailed_predicate]
+        else:
+            self._cache[target_str] = entailed_predicate.name
         self._save_cache()
     
     def _save_cache(self) -> None:

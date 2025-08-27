@@ -53,6 +53,20 @@ class NLFOLRegressionPlanner(NLPlanner):
         self._max_depth = max_depth
         self._ssa = self.create_SSA()
         self._llm = LLM(model_name=llm_model, api_key=llm_api_key)
+        # Inject LLM-backed entailment checker for NLPredicate equality
+        def _entailment_checker(target: NLPredicate, pred: NLPredicate) -> bool:
+            try:
+                # Check if a is entailed by b
+                a_by_b = self._llm.entailment(copy.deepcopy(target), [copy.deepcopy(pred)])
+                if a_by_b is not None:
+                    return True
+                b_by_a = self._llm.entailment(copy.deepcopy(pred), [copy.deepcopy(target)])
+                if b_by_a is not None:
+                    return True
+            except Exception:
+                return False
+
+        NLPredicate.set_entailment_checker(_entailment_checker)
     
     @dataclass
     class SSA_Node:

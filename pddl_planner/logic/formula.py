@@ -383,9 +383,17 @@ class Formula(Logic):
         Returns:
             bool: True if formulas are equivalent, False otherwise.
         """
+
         if isinstance(self, Predicate) and isinstance(other, Predicate):
-            if self.name != other.name or len(self.terms) != len(other.terms) or self.is_neg != other.is_neg:
+            if len(self.terms) != len(other.terms) or self.is_neg != other.is_neg:
                 return False
+            if self.name != other.name:
+                # if the entailment checker is injected, use it to check if the predicates are equal
+                if hasattr(self, '_equals_helper_with_entailment'):
+                    if not self._equals_helper_with_entailment(other):
+                        return False
+                else:
+                    return False
             for term1, term2 in zip(self.terms, other.terms):
                 if isinstance(term1, Variable) and isinstance(term2, Variable):
                     if term1 in mapping:
@@ -393,12 +401,13 @@ class Formula(Logic):
                             return False
                     else:
                         mapping[term1] = term2
-                else:
-                    if term1 != term2:
+                elif isinstance(term1, Constant) and isinstance(term2, Constant):
+                    if term1.name != term2.name:
                         return False
             if len(mapping) != len(set(mapping.values())):
                 return False
             return True
+
 
         elif isinstance(self, Equality) and isinstance(other, Equality):
             if self.is_neq != other.is_neq:

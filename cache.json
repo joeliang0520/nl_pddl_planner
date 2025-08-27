@@ -1,1 +1,1 @@
-{"is a coffeemachine": null, "is an mug": null, "is washed": null, "is inside": "is in", "goal_recep is a coffeemachine": null, "goal_obj is an mug": null, "goal_obj is inside goal_recep": "is in", "goal_obj is washed": null}
+{"goal_recep is a coffeemachine": null, "goal_obj is an mug": null, "goal_obj is inside goal_recep": "is in", "goal_obj is washed": null, "goal_obj is in goal_recep": null, "?goal_recep is a coffeemachine": null, "?goal_obj is an mug": null, "?goal_obj is heated": null, "goal_obj is heated": null, "?V191 is in ?V192": null}
