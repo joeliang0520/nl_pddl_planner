@@ -289,7 +289,6 @@ class LLM:
             entailed_predicate (Predicate): The entailed predicate that is used to update the cache.
         """
         target_str = target_predicate.nl_description
-        print(f'updating cache with {target_str} and {entailed_predicate}')
         if entailed_predicate is None:
             self._cache[target_str] = None
         elif isinstance(entailed_predicate, list):
