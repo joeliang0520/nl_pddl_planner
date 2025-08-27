@@ -419,7 +419,7 @@ class Formula(Logic):
                             return False
                     else:
                         mapping[t1] = t2
-                else:
+                elif isinstance(t1, Constant) and isinstance(t2, Constant):
                     if t1 != t2:
                         return False
             if len(mapping) != len(set(mapping.values())):
@@ -1104,7 +1104,7 @@ class Predicate(Atomic):
                         return False
                 else:
                     mapping[term1] = term2
-            else:
+            elif isinstance(term1, Constant) and isinstance(term2, Constant):
                 if term1 != term2:
                     return False
         if len(mapping) != len(set(mapping.values())):
