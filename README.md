@@ -182,3 +182,5 @@ Failing to find "is inside" in domain predicates, attempting to entail it to a d
 
 [LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj can cool goal_recep" ?:  False
 ```
+
+In this example, `goal_obj is inside goal_recep` only exists in the goal predicate, not the domain predicate. And it was successfully entailed by the `goal_obj is in goal_recep` predicates in Domains
