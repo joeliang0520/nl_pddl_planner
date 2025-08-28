@@ -20,23 +20,23 @@ This repository includes:
 
 ```
 pddl_solver/
-├── pddl_planner/           # Core planning package
+├── pddl_planner/                  # Core planning package
 │   ├── logic/
-│   │   ├── parser.py       # PDDL→logic parser
-│   │   ├── nl_parser.py       # NL→logic parser (*new*)
-│   │   ├── formula.py      # Formula classes (Conjunctive, Disjunctive, Predicate, Equality), main file for logic
-│   │   ├── nl_formula.py      # Formula classes (Predicate) with additional field for NL representation and functions to handle logic operation with NL
-│   │   └── operation.py    # Unification & standardization operations
+│   │   ├── parser.py       	   # PDDL→logic parser
+│   │   ├── nl_parser.py (*new*)   # NL→logic parser
+│   │   ├── formula.py             # Formula classes (Conjunctive, Disjunctive, Predicate, Equality), main file for logic
+│   │   ├── nl_formula.py (*new*)  # Formula classes (Predicate) with additional field for NL representation and functions to handle logic operation with NL
+│   │   └── operation.py    	   # Unification & standardization operations
 │   ├── pddl_core/
-│   │   ├── domain.py       # PDDL Domain parser (types, predicates, actions)
-│   │   ├── nl_domain.py       # NL Domain parser (*new*)
-│   │   └── instance.py     # PDDL Problem parser (initial state, goal, objects)
-│   │   └── nl_instance.py     # NL Problem parser (initial state, goal, objects)
+│   │   ├── domain.py       	   # PDDL Domain parser (types, predicates, actions)
+│   │   ├── nl_domain.py (*new*)   # NL Domain parser 
+│   │   └── instance.py            # PDDL Problem parser (initial state, goal, objects)
+│   │   └── nl_instance.py (*new*) # NL Problem parser (initial state, goal, objects)
 │   └── planner/
-│       └── planner.py      # PDDL RegressionPlanner & PDDL FOLRegressionPlanner
-│       └── nl_planner.py      # NL FOLRegressionPlanner (*new*)
+│       └── planner.py             # PDDL RegressionPlanner & PDDL FOLRegressionPlanner
+│       └── nl_planner.py (*new*)  # NL FOLRegressionPlanner
 │   └── llm/
-│       └── llm.py          #Interface for entailment from both cache and LLM  (*new*)
+│       └── llm.py (*new*)         # Interface for entailment from both cache and LLM  (*new*)
 ├── test/
 │   ├── alfworldtext.py # Example of alfworldtext problem with NL actions and goals
 ├── file/
