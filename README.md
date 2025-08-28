@@ -133,7 +133,7 @@ Each goal set is a list of predicate instances that must hold at the end.
 ---
 
 
-## Example of LLM entailment:
+## Example of self-consistent LLM entailment:
 ### Example 1: goal: goal_obj is inside goal_recep |- action: ?o is in ?r
 
 ### Predicate Entailment Handling
@@ -158,29 +158,17 @@ Below is the printed log from the `llm.llm.entailment('is inside')` function wit
 ```{text}
 Failing to find "is inside" in domain predicates, attempting to entail it to a domain predicate
 
-[Not Found] Failed to find the predicate "goal_obj is inside goal_recep" in the cache, checking via LLM
+[Info] Checking entailment via cache/LLM for "goal_obj is inside goal_recep"
 
 [Substitution] Existing substitution: {?o: goal_recep, ?r: goal_obj} between "is inside(goal_obj, goal_recep)" and "can contain(?r, ?o)"
 
-[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj can contain goal_recep" ?:  False
+[LLM Response] is goal_obj is inside goal_recep entailed by goal_obj can contain goal_recep ?: [False, Trure, False]
 
 [Substitution] Existing substitution: {?r: goal_recep, ?o: goal_obj} between "is inside(goal_obj, goal_recep)" and "is in(?o, ?r)"
 
-[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj is in goal_recep" ?:  True
+[LLM Response] is goal_obj is inside goal_recep entailed by goal_obj is in goal_recep ?: [True, True, True]
 
 [Success] Predicate is inside(goal_obj, goal_recep) is entailed by is in from LLM
-
-[Substitution] Existing substitution: {?o: goal_recep, ?r: goal_obj} between "is inside(goal_obj, goal_recep)" and "can heat(?r, ?o)"
-
-[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj can heat goal_recep" ?:  False
-
-[Substitution] Existing substitution: {?o: goal_recep, ?r: goal_obj} between "is inside(goal_obj, goal_recep)" and "can clean(?r, ?o)"
-
-[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj can clean goal_recep" ?:  False
-
-[Substitution] Existing substitution: {?o: goal_recep, ?r: goal_obj} between "is inside(goal_obj, goal_recep)" and "can cool(?r, ?o)"
-
-[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj can cool goal_recep" ?:  False
 ```
 
-In this example, `goal_obj is inside goal_recep` only exists in the goal predicate, not the domain predicate. And it was successfully entailed by the `goal_obj is in goal_recep` predicates in Domains
+In this example, `goal_obj is inside goal_recep` only exists in the goal predicate, not the domain predicate. And it was successfully entailed by the `goal_obj is in goal_recep` predicates in Domains with three rounds of LLM entailments for self-consistency
