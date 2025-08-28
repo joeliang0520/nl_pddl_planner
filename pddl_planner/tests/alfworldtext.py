@@ -18,7 +18,7 @@ os.makedirs(save_path, exist_ok=True)
 
 # create a empty text file to store the results
 # initialize the planner
-for i, block in enumerate([all_blocks[2]]):
+for i, block in enumerate([all_blocks[1]]):
     print(f'Problem {block} =========================================')
     planner = NLFOLRegressionPlanner(domain.copy(), block.copy(), max_depth=10)
     regressed_plans = planner.regress_plan()
