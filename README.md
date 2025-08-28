@@ -20,28 +20,28 @@ This repository includes:
 
 ```
 pddl_solver/
-├── pddl_planner/           # Core planning package
+├── pddl_planner/                  # Core planning package
 │   ├── logic/
-│   │   ├── parser.py       # PDDL→logic parser
-│   │   ├── nl_parser.py       # NL→logic parser (*new*)
-│   │   ├── formula.py      # Formula classes (Conjunctive, Disjunctive, Predicate, Equality), main file for logic
-│   │   ├── nl_formula.py      # Formula classes (Predicate) with additional field for NL representation and functions to handle logic operation with NL
-│   │   └── operation.py    # Unification & standardization operations
+│   │   ├── parser.py       	   # PDDL→logic parser
+│   │   ├── nl_parser.py (*new*)   # NL→logic parser
+│   │   ├── formula.py             # Formula classes (Conjunctive, Disjunctive, Predicate, Equality), main file for logic
+│   │   ├── nl_formula.py (*new*)  # Formula classes (Predicate) with additional field for NL representation and functions to handle logic operation with NL
+│   │   └── operation.py    	   # Unification & standardization operations
 │   ├── pddl_core/
-│   │   ├── domain.py       # PDDL Domain parser (types, predicates, actions)
-│   │   ├── nl_domain.py       # NL Domain parser (*new*)
-│   │   └── instance.py     # PDDL Problem parser (initial state, goal, objects)
-│   │   └── nl_instance.py     # NL Problem parser (initial state, goal, objects)
+│   │   ├── domain.py       	   # PDDL Domain parser (types, predicates, actions)
+│   │   ├── nl_domain.py (*new*)   # NL Domain parser 
+│   │   └── instance.py            # PDDL Problem parser (initial state, goal, objects)
+│   │   └── nl_instance.py (*new*) # NL Problem parser (initial state, goal, objects)
 │   └── planner/
-│       └── planner.py      # PDDL RegressionPlanner & PDDL FOLRegressionPlanner
-│       └── nl_planner.py      # NL FOLRegressionPlanner (*new*)
+│       └── planner.py             # PDDL RegressionPlanner & PDDL FOLRegressionPlanner
+│       └── nl_planner.py (*new*)  # NL FOLRegressionPlanner
 │   └── llm/
-│       └── llm.py          #Interface for entailment from both cache and LLM  (*new*)
+│       └── llm.py (*new*)         # Interface for entailment from both cache and LLM  (*new*)
 ├── test/
-│   ├── alfworldtext.py # Example of alfworldtext problem with NL actions and goals
+│   ├── alfworldtext.py (*new*)    # Example of alfworldtext problem with NL actions and goals
 ├── file/
-│   ├── NL_actions.json # Contains examples of domains used in alfworldtext problem
-│   ├── NL_goals.json  # Contains examples of problem used in alfworldtext problem
+│   ├── NL_actions.json (*new*)    # Contains examples of domains used in alfworldtext problem
+│   ├── NL_goals.json  (*new*)     # Contains examples of problem used in alfworldtext problem
 └── README.md               # This file
 ```
 
@@ -133,7 +133,7 @@ Each goal set is a list of predicate instances that must hold at the end.
 ---
 
 
-## Example of LLM entailment:
+## Example of self-consistent LLM entailment:
 ### Example 1: goal: goal_obj is inside goal_recep |- action: ?o is in ?r
 
 ### Predicate Entailment Handling
@@ -158,29 +158,17 @@ Below is the printed log from the `llm.llm.entailment('is inside')` function wit
 ```{text}
 Failing to find "is inside" in domain predicates, attempting to entail it to a domain predicate
 
-[Not Found] Failed to find the predicate "goal_obj is inside goal_recep" in the cache, checking via LLM
+[Info] Checking entailment via cache/LLM for "goal_obj is inside goal_recep"
 
 [Substitution] Existing substitution: {?o: goal_recep, ?r: goal_obj} between "is inside(goal_obj, goal_recep)" and "can contain(?r, ?o)"
 
-[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj can contain goal_recep" ?:  False
+[LLM Response] is goal_obj is inside goal_recep entailed by goal_obj can contain goal_recep ?: [False, Trure, False]
 
 [Substitution] Existing substitution: {?r: goal_recep, ?o: goal_obj} between "is inside(goal_obj, goal_recep)" and "is in(?o, ?r)"
 
-[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj is in goal_recep" ?:  True
+[LLM Response] is goal_obj is inside goal_recep entailed by goal_obj is in goal_recep ?: [True, True, True]
 
 [Success] Predicate is inside(goal_obj, goal_recep) is entailed by is in from LLM
-
-[Substitution] Existing substitution: {?o: goal_recep, ?r: goal_obj} between "is inside(goal_obj, goal_recep)" and "can heat(?r, ?o)"
-
-[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj can heat goal_recep" ?:  False
-
-[Substitution] Existing substitution: {?o: goal_recep, ?r: goal_obj} between "is inside(goal_obj, goal_recep)" and "can clean(?r, ?o)"
-
-[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj can clean goal_recep" ?:  False
-
-[Substitution] Existing substitution: {?o: goal_recep, ?r: goal_obj} between "is inside(goal_obj, goal_recep)" and "can cool(?r, ?o)"
-
-[LLM Response] predicate "goal_obj is inside goal_recep" is entailed by "goal_obj can cool goal_recep" ?:  False
 ```
 
-In this example, `goal_obj is inside goal_recep` only exists in the goal predicate, not the domain predicate. And it was successfully entailed by the `goal_obj is in goal_recep` predicates in Domains
+In this example, `goal_obj is inside goal_recep` only exists in the goal predicate, not the domain predicate. And it was successfully entailed by the `goal_obj is in goal_recep` predicates in Domains with three rounds of LLM entailments for self-consistency
