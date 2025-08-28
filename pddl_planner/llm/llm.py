@@ -89,7 +89,10 @@ class LLM:
         if status:
             # if the predicate is in the cache, return the entailed predicate
             if entailed_predicate is not None:
-                print(f"[Success] Predicate {predicate.nl_description} is entailed by {entailed_predicate.nl_description} from cache") if self._verbose else None
+                if isinstance(entailed_predicate, NLPredicate):
+                    print(f"[Success] Predicate {predicate.nl_description} is entailed by {entailed_predicate.nl_description} from cache") if self._verbose else None
+                elif isinstance(entailed_predicate, List):
+                    print(f"[Success] Predicate {predicate.nl_description} is entailed by [{[e.nl_description for e in entailed_predicate]}] from cache") if self._verbose else None
                 # Replace the target predicate's name with the entailed predicate's name
                 predicate.entailed = entailed_predicate
                 return predicate
@@ -150,7 +153,7 @@ class LLM:
 
     def _entailment_check(self, target_str: str, pred_str: str) -> bool:
         # Professional prompt for entailment checking
-        prompt = f"""Task: Determine if two predicates are logically equivalent or if one entails the other.
+        prompt = f"""Task: Think step by step and determine if two predicates are logically equivalent or if one entails the other.
 
                 Predicate 1: "{target_str}"
                 Predicate 2: "{pred_str}"
@@ -159,13 +162,15 @@ class LLM:
                 - Analyze if Predicate 1 is logically entailed by Predicate 2
                 - Consider semantic meaning, logical structure, and variable mappings
                 - Respond with exactly "YES" if Predicate 1 is entailed by Predicate 2
-                - Respond with exactly "NO" if Predicate 1 is not entailed by Predicate 2
+                - Respond with "NO" if Predicate 1 is not entailed by Predicate 2 return the reasoning process
 
                 Response:"""
 
-        decision = self._call_llm_with_retries(prompt)
+        decision, text = self._call_llm_with_retries(prompt)
         if decision is not None:
             print(f'[LLM Response] predicate "{target_str}" is entailed by "{pred_str}" ?:  {decision}') if self._verbose else None
+            if not bool(decision):
+                print(f'Reasoning: {text}') if self._verbose else None
             return decision
 
         # Last attempt: ask for a strictly formatted answer if parsing failed
@@ -174,38 +179,88 @@ class LLM:
             prompt
             + "\n\nAnswer strictly with ONLY YES or NO, no punctuation, no explanation."
         )
-        decision = self._call_llm_with_retries(strict_prompt)
-        print(f'[LLM Response] predicate "{target_str}" is entailed by "{pred_str}" ?:  {decision}') if self._verbose else None
-
+        decision, text = self._call_llm_with_retries(strict_prompt)
+        if decision is not None:
+            print(f'[LLM Response] predicate "{target_str}" is entailed by "{pred_str}" ?:  {decision}') if self._verbose else None
         # Default to False if still ambiguous
         return bool(decision) if decision is not None else False
 
-    def _parse_yes_no_response(self, text: str) -> Optional[bool]:
+    def _parse_yes_no_response(self, text: str) -> Tuple[Optional[bool], str]:
         """
-        Parse a free-form model response and extract a YES/NO decision.
+        Parse a chain-of-thought style response and extract a YES/NO decision.
 
-        Returns True for YES, False for NO, or None if undecidable.
+        Strategy:
+        - Prefer the last explicit 'Response:' line if present.
+        - Then check the last non-empty sentence/line.
+        - Then check the first non-empty sentence/line.
+        - Finally, fallback to whole-text heuristic if unambiguous.
+
+        Returns (decision, original_text) where decision is True/False or None if undecidable.
         """
         if text is None:
-            return None
-        normalized = text.strip().upper()
-        if not normalized:
-            return None
-        # Check the first token/word primarily
-        first_token = normalized.split()[0].strip().strip(":,.!;()[]{}\n\t")
-        if first_token == 'YES':
-            return True
-        if first_token == 'NO':
-            return False
-        # Fallback: substring search if first token parsing fails
-        if 'YES' in normalized and 'NO' not in normalized:
-            return True
-        if 'NO' in normalized and 'YES' not in normalized:
-            return False
-        print(f'invalid response: {text}')
-        raise ValueError(f"Invalid response: {text}")
+            return None, ""
+        original_text = text
+        normalized_all = text.strip()
+        if not normalized_all:
+            return None, original_text
 
-    def _call_llm_with_retries(self, prompt: str, max_retries: int = 3, timeout: float = 30.0) -> str:
+        def to_upper_clean(s: str) -> str:
+            return s.strip().upper().strip(":,.!;()[]{}\n\t ")
+
+        lines = [ln for ln in (ln.strip() for ln in normalized_all.splitlines()) if ln]
+
+        # 1) Prefer explicit 'Response:' lines
+        for ln in reversed(lines):
+            if ln.upper().startswith("RESPONSE:"):
+                answer_raw = ln.split(":", 1)[1] if ":" in ln else ln[9:]
+                answer = to_upper_clean(answer_raw)
+                if answer.startswith("YES"):
+                    return True, original_text
+                if answer.startswith("NO"):
+                    return False, original_text
+
+        # Helper to split into sentences conservatively
+        def split_sentences(block: str) -> List[str]:
+            parts: List[str] = []
+            buf = ""
+            for ch in block:
+                buf += ch
+                if ch in ".!?\n":
+                    if buf.strip():
+                        parts.append(buf.strip())
+                    buf = ""
+            if buf.strip():
+                parts.append(buf.strip())
+            return parts
+
+        sentences = split_sentences(normalized_all)
+        last_sentence = to_upper_clean(sentences[-1]) if sentences else ""
+        first_sentence = to_upper_clean(sentences[0]) if sentences else ""
+
+        # 2) Check last sentence
+        if last_sentence.startswith("YES"):
+            return True, original_text
+        if last_sentence.startswith("NO"):
+            return False, original_text
+
+        # 3) Check first sentence
+        if first_sentence.startswith("YES"):
+            return True, original_text
+        if first_sentence.startswith("NO"):
+            return False, original_text
+
+        # 4) Fallback heuristic on full text only if unambiguous
+        upper_all = normalized_all.upper()
+        has_yes = "YES" in upper_all
+        has_no = "NO" in upper_all
+        if has_yes and not has_no:
+            return True, original_text
+        if has_no and not has_yes:
+            return False, original_text
+
+        return None, original_text
+
+    def _call_llm_with_retries(self, prompt: str, max_retries: int = 3, timeout: float = 30.0) -> Tuple[Optional[bool], str]:
         """
         Call the chat completion API with retries, exponential backoff, and jitter.
         """
@@ -225,7 +280,7 @@ class LLM:
                 time.sleep(wait_seconds)
         # After retries, surface a best-effort empty string to be handled by parser
         print(f"[Error] LLM call failed after {max_retries} attempts: {last_error}") if self._verbose else None
-        return None
+        return None, ""
     
     def _load_cache(self) -> Dict[str, str]:
         """
@@ -289,6 +344,7 @@ class LLM:
             entailed_predicate (Predicate): The entailed predicate that is used to update the cache.
         """
         target_str = target_predicate.nl_description
+
         if entailed_predicate is None:
             self._cache[target_str] = None
         elif isinstance(entailed_predicate, list):

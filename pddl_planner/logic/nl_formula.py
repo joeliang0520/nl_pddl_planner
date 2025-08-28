@@ -63,7 +63,6 @@ class NLPredicate(Predicate):
         return NLPredicate(self.name, self._str_represntation, not self._is_neg, *self.terms)
 
     def _equals_helper_with_entailment(self, other: "NLPredicate") -> bool:
-        print(f'checking if {other.nl_description} and {self.nl_description} are equal with terms {self.terms} and {other.terms}')
         """Predicate equality that is aware of entailment computed by the LLM.
 
         Two predicates are considered equal if:
@@ -71,20 +70,20 @@ class NLPredicate(Predicate):
         """
         # type check
         if not isinstance(other, NLPredicate):
-            print('not a NLPredicate')
             return False
         # get the entailed names of the predicate
 
         # Negation must match to be considered equal via entailment
         if self._is_neg != other.is_neg:
-            print('negations do not match')
             return False
 
         # If other's name is in self's entailed names, consider equal (debug-safe print)
         if other.name in self.entailed_names():
             return True
-        if NLPredicate._entailment_checker(self, other):
-            return True
+
+        if NLPredicate._entailment_checker is not None:
+            if NLPredicate._entailment_checker(self, other):
+                return True
         return False
 
     def __hash__(self) -> int:
@@ -102,7 +101,8 @@ class NLPredicate(Predicate):
         Returns:
             Predicate: The predicate that the predicate is entailed by.
         """
-        if isinstance(self._entailed_by, list):
+        if isinstance(self._entailed_by, List):
+            #TODO: currently only support single entailed predicate, need to support multiple entailed predicates
             return copy.deepcopy(self._entailed_by[-1])
         return copy.deepcopy(self._entailed_by)
         
@@ -113,8 +113,11 @@ class NLPredicate(Predicate):
         Args:
             entailed_predicate (Predicate): The predicate that the predicate is entailed by.
         """
-        if isinstance(self._entailed_by, list):
+        if isinstance(self._entailed_by, List):
             self._entailed_by.append(entailed_predicate)
+        elif isinstance(entailed_predicate, List):
+            self._entailed_by = [self._entailed_by]
+            self._entailed_by.extend(entailed_predicate)
         else:
             self._entailed_by = [self._entailed_by, entailed_predicate]
 
