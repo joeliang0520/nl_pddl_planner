@@ -93,6 +93,17 @@ class LLM:
             return None
 
     def _entailment_check(self, target_str: str, pred_str: str) -> Tuple[bool, str]:
+        """
+        Check if the target predicate is entailed by the candidate predicate.
+
+        Args:
+            target_str (str): The target predicate string representation.
+            pred_str (str): The candidate predicate string representation.
+
+        Returns:
+            Tuple[bool, str]: The decision and the raw text from the LLM.
+        """
+
         # Check cache first, then complete to n_iter with LLM calls and decide by self-consistency
 
         # 1) Parse cached responses (if any), then complete to n_iter using LLM, then decide
@@ -123,6 +134,12 @@ class LLM:
         """
         Given a list of parsed (decision, text) tuples, return the majority decision and
         a representative text. Does not perform cache or LLM calls.
+
+        Args:
+            results (List[Tuple[Optional[bool], str]]): The list of parsed (decision, text) tuples.
+
+        Returns:
+            Tuple[Optional[bool], str]: The majority decision and a representative text.
         """
         yes_count = 0
         no_count = 0
@@ -152,6 +169,15 @@ class LLM:
         """
         Build the entailment prompt and call the chat API with retries.
         Returns (decision, raw_text).
+
+        Args:
+            target_str (str): The target predicate string representation.
+            pred_str (str): The candidate predicate string representation.
+            max_retries (int): The maximum number of retries.
+            timeout (float): The timeout for the LLM call.
+
+        Returns:
+            Tuple[Optional[bool], str]: The decision and the raw text from the LLM.
         """
         prompt = f"""
                 You are a precise logic checker for first-order predicates.
@@ -196,6 +222,13 @@ class LLM:
     def _get_cached_llm_responses(self, target_str: str, candidate_pred_nl: str) -> Optional[List[str]]:
         """
         Retrieve cached raw LLM response texts (list) for the given NL pair if available.
+
+        Args:
+            target_str (str): The target predicate string representation.
+            candidate_pred_nl (str): The candidate predicate string representation.
+
+        Returns:
+            Optional[List[str]]: The cached raw LLM response texts.
         """
         # load the current cache to up to date version
         self._cache = self._load_cache()
@@ -211,6 +244,10 @@ class LLM:
     def _load_cache(self) -> Dict[str, str]:
         """
         Load the cache from the file.
+
+        Args:
+            target_str (str): The target predicate string representation.
+            candidate_pred_nl (str): The candidate predicate string representation.
 
         Returns:
             Dict[str, str]: The cache of previous entailments.
@@ -279,6 +316,11 @@ class LLM:
         """
         Update cache with raw LLM response for a specific target and candidate predicate pair.
         Cache schema: cache[target_str][candidate_pred_nl] = List[str]
+
+        Args:
+            target_str (str): The target predicate string representation.
+            candidate_pred_nl (str): The candidate predicate string representation.
+            response_text (str): The raw LLM response text.
         """
         # Initialize mapping for target_str if absent or not a dict
         if target_str not in self._cache or not isinstance(self._cache[target_str], dict):
