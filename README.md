@@ -38,10 +38,10 @@ pddl_solver/
 │   └── llm/
 │       └── llm.py (*new*)         # Interface for entailment from both cache and LLM  (*new*)
 ├── test/
-│   ├── alfworldtext.py # Example of alfworldtext problem with NL actions and goals
+│   ├── alfworldtext.py (*new*)    # Example of alfworldtext problem with NL actions and goals
 ├── file/
-│   ├── NL_actions.json # Contains examples of domains used in alfworldtext problem
-│   ├── NL_goals.json  # Contains examples of problem used in alfworldtext problem
+│   ├── NL_actions.json (*new*)    # Contains examples of domains used in alfworldtext problem
+│   ├── NL_goals.json  (*new*)     # Contains examples of problem used in alfworldtext problem
 └── README.md               # This file
 ```
 
