@@ -233,7 +233,10 @@ class NLFOLRegressionPlanner(NLPlanner):
         else:
             # check if the predicate can be entailed as a domain predicate
             print(f'Failing to find "{predicate.entailed.name}" in domain predicates, attempting to entail it to a domain predicate')
-            entailed_pred = self._llm.entailment(predicate, self._domain.predicates)
+
+            background_predicates = (copy.deepcopy(action), [clause for clause in self._instance.goal.clauses if isinstance(clause, NLPredicate)])
+            entailed_pred = self._llm.entailment(predicate, self._domain.predicates, background_predicates=background_predicates)
+
             if entailed_pred is not None:
                 ssa_node = self._ssa[entailed_pred.entailed.name][action.name]
                 # update the predicate names and string representation as the entailed predicate

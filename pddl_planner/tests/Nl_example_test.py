@@ -18,12 +18,18 @@ if __name__ == "__main__":
         print("Environment variables not loaded")
         
     # load the domain from the file
-    with open('files/alfworldtext_domain.json', 'r') as f:
+    with open('files/NL_actions_new.json', 'r') as f:
         domain = json.load(f)
 
     # load the goal blocks from the file    
-    with open('files/alfworldtext_goal.json', 'r') as f:
+    with open('files/NL_goals_new.json', 'r') as f:
         all_blocks = json.load(f)
+
+    #save with indent 4
+    with open('files/NL_actions_new.json', 'w') as f:
+        json.dump(domain, f, indent=4)
+    with open('files/NL_goals_new.json', 'w') as f:
+        json.dump(all_blocks, f, indent=4)
 
     # create a directory to store the results
     current_dir = os.path.dirname(os.path.abspath(__file__))

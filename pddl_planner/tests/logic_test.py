@@ -407,7 +407,7 @@ class TestDisjunctiveFormula(unittest.TestCase):
         p2 = Predicate("Q", False, Constant("b"))
         disjunctive_formula = DisjunctiveFormula(p1, p2)
         substitution = Substitution({Variable("X"): Constant("a")})
-        substituted_formula = disjunctive_formula.substitute(substitution)
+        substituted_formula = disjunctive_formula(substitution)
         expected_formula = DisjunctiveFormula(
             Predicate("P", False, Constant("a")), Predicate("Q", False, Constant("b"))
         )

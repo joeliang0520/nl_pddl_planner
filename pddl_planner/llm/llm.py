@@ -1,5 +1,6 @@
 # Class to interact with the LLM
 import openai
+from pddl_planner.pddl_core.action import Action
 from pddl_planner.logic.formula import Substitution
 from pddl_planner.logic.nl_formula import NLPredicate
 from pddl_planner.logic.operation import Operations
@@ -32,7 +33,7 @@ class LLM:
         self._operations = Operations()
         self._verbose = verbose
 
-    def entailment(self, predicate: NLPredicate, predicates: List[NLPredicate]) -> NLPredicate|None:
+    def entailment(self, predicate: NLPredicate, predicates: List[NLPredicate], background_predicates: Tuple[Action, List[NLPredicate]] = (None, [])) -> NLPredicate|None:
         """
         Check if the predicate can be entailed as a one of the list of predicates.
 
@@ -60,9 +61,49 @@ class LLM:
                 continue
 
             print(f'[Substitution] Existing substitution: {substitution} between "{str(predicate_copy)}" and "{str(pred_copy)}"') if self._verbose else None
-            # Apply substitution to both predicates to get their substituted string representations
-            substituted_target = predicate_copy.substitute(substitution)
-            substituted_pred = pred_copy.substitute(substitution)
+
+            # Before substitution, extend substitution by unifying with all action clauses (if any)
+            extended_substitution = substitution
+            try:
+                if isinstance(background_predicates, tuple) and len(background_predicates) == 2:
+                    action_ctx, _ = background_predicates
+                    if action_ctx is not None:
+                        # Unify with preconditions
+                        for clause in getattr(action_ctx.preconditions, 'clauses', []):
+                            if isinstance(clause, NLPredicate):
+                                tmp = self._operations.unify_with_different_name(predicate_copy, clause, copy.deepcopy(extended_substitution))
+                                if tmp is not None:
+                                    extended_substitution = tmp
+                                tmp = self._operations.unify_with_different_name(pred_copy, clause, copy.deepcopy(extended_substitution))
+                                if tmp is not None:
+                                    extended_substitution = tmp
+                        # Unify with effects
+                        for clause in getattr(action_ctx.effects, 'clauses', []):
+                            if isinstance(clause, NLPredicate):
+                                tmp = self._operations.unify_with_different_name(predicate_copy, clause, copy.deepcopy(extended_substitution))
+                                if tmp is not None:
+                                    extended_substitution = tmp
+                                tmp = self._operations.unify_with_different_name(pred_copy, clause, copy.deepcopy(extended_substitution))
+                                if tmp is not None:
+                                    extended_substitution = tmp
+            except Exception:
+                pass
+            # Apply extended substitution to both predicates to get their substituted string representations
+            substituted_target = predicate_copy.substitute(extended_substitution)
+            substituted_pred = pred_copy.substitute(extended_substitution)
+
+            # Apply the same substitution to the background action (if provided)
+            substituted_background = background_predicates
+            try:
+                if isinstance(background_predicates, tuple) and len(background_predicates) == 2:
+                    action_ctx, bg_preds_ctx = background_predicates
+                    if action_ctx is not None:
+                        action_ctx_copy = copy.deepcopy(action_ctx)
+                        action_ctx_copy = action_ctx_copy.substitute(extended_substitution)
+                        substituted_background = (action_ctx_copy, bg_preds_ctx)
+            except Exception:
+                substituted_background = background_predicates
+
             
             # Conduct entailment between the substituted string representations
             target_str = substituted_target.nl_description
@@ -70,10 +111,10 @@ class LLM:
 
             if predicate_copy._is_neg:
                 # reverse the entailment check for negative predicates
-                entailment_result, response_text = self._entailment_check(pred_str, target_str)
+                entailment_result, response_text = self._entailment_check(pred_str, target_str, substituted_background)
             else:
                 # conduct entailment check
-                entailment_result, response_text = self._entailment_check(target_str, pred_str)
+                entailment_result, response_text = self._entailment_check(target_str, pred_str, substituted_background)
 
             if entailment_result:
                 # if the predicate is entailed, update the cache
@@ -92,7 +133,7 @@ class LLM:
             print(f"[No Entailment] Failed: Predicate {predicate.nl_description} is not entailed by any of the predicates") if self._verbose else None
             return None
 
-    def _entailment_check(self, target_str: str, pred_str: str) -> Tuple[bool, str]:
+    def _entailment_check(self, target_str: str, pred_str: str, background_predicates: Tuple[Action, List[NLPredicate]] = (None, [])) -> Tuple[bool, str]:
         """
         Check if the target predicate is entailed by the candidate predicate.
 
@@ -117,7 +158,7 @@ class LLM:
         missing = max(0, self._n_iter - len(cached_texts))
         last_text = ""
         for _ in range(missing):
-            decision, text = self._get_llm_responses(target_str, pred_str)
+            decision, text = self._get_llm_responses(target_str, pred_str, background_predicates)
             if text is not None:
                 self._update_cache_llm_response(target_str, pred_str, text)
                 last_text = text or last_text
@@ -165,7 +206,8 @@ class LLM:
             return False, (text_no or last_text)
         return None, last_text
 
-    def _get_llm_responses(self, target_str: str, pred_str: str, max_retries: int = 3, timeout: float = 30.0) -> Tuple[Optional[bool], str]:
+    def _get_llm_responses(self, target_str: str, pred_str: str, background_predicates: Tuple[Action, List[NLPredicate]] = (None, []),
+                            max_retries: int = 3, timeout: float = 30.0) -> Tuple[Optional[bool], str]:
         """
         Build the entailment prompt and call the chat API with retries.
         Returns (decision, raw_text).
@@ -173,33 +215,48 @@ class LLM:
         Args:
             target_str (str): The target predicate string representation.
             pred_str (str): The candidate predicate string representation.
+            background_predicates (Tuple[Action, List[NLPredicate]]): The background predicates and action.
             max_retries (int): The maximum number of retries.
             timeout (float): The timeout for the LLM call.
 
         Returns:
             Tuple[Optional[bool], str]: The decision and the raw text from the LLM.
         """
+        
+        background_predicates_str = "\n ".join([f"- {pred.nl_description}" for pred in background_predicates[1]])
+        if background_predicates[0] is not None:
+            action = background_predicates[0]
+            action_description = f"""
+                {action.name} 
+                with the following preconditions: {[clause.nl_description for clause in action.preconditions.clauses if isinstance(clause, NLPredicate)]}
+                and the following effects: {[clause.nl_description for clause in action.effects.clauses if isinstance(clause, NLPredicate)]}
+                """
+        else:
+            action_description = ""
         prompt = f"""
-                You are a precise logic checker for first-order predicates.
+                You are a everyday agent that currently doing the following action: 
+                {action_description}
 
-                Task: Think step by step and determine if Predicate 1 is entailed by Predicate 2 (if Predicate 2 then Predicate 1).
-
-                Predicate 1: "{target_str}"
-                Predicate 2: "{pred_str}"
+                Task: 
+                 - Think step by step and determine according to everyday commonsense does an object being Predicate 2 imply Predicate 1 when doing the action.
 
                 Instructions:
-                - Analyze if Predicate 2 then Predicate 1.
-                - Consider semantic meaning, logical structure, and variable mappings.
-                - Semantic normalization: treat near-synonyms/paraphrases as equivalent (e.g., in/inside/within).
-                - External knowledge: you may use widely accepted lexical and ontological facts (e.g., subtype relations like mug ⊆ cup, fridge ⊆ cooling_device; commonsense role/part relations). Use the minimal such facts needed and name them explicitly in your steps. If needed knowledge is uncertain, state the assumption and answer NO if entailment depends on it.
-                
-
-                - Respond with exactly "YES" if Predicate 1 is entailed by Predicate 2
-                - Respond with "NO" if Predicate 1 is not entailed by Predicate 2 return the reasoning process
+                - Use the definition of the predicates to determine if Predicate 2 implies Predicate 1.
+                - Predicate 1: "{target_str}"
+                - Predicate 2: "{pred_str}"
+                - Here are some background predicates that you can use to determine if Predicate 2 implies Predicate 1, 
+                use these predicates to determine the type of the specific object Predicate 1 and Predicate 2 are referring to.
+                {background_predicates_str}
+                - When determing the entailment, consider the meaning of the Predicate 1 and Predicate 2 with the type of the specific object each referring to in the context of the action.
                 
                 Output format (STRICT):
                 - Line 1: exactly YES or NO.
-                - Line 2: Reason: one sentence.
+                - Line 2: Reason.
+
+                Example of entailment:
+                - The agent possesses POTATO implies the agent holds POTATO
+                - POTATO is in the sink implies POTATO is in the sink
+                - POTATO is baked implies POTATO is cooked
 
                 Response:"""
         last_error: Optional[Exception] = None
@@ -411,7 +468,7 @@ class LLM:
         Save the cache to the file based on the provided cache path.
         """
         with open(self._cache_path, 'w') as f:
-            json.dump(self._cache, f)
+            json.dump(self._cache, f, indent=2)
 
     def replace_predicate_name(self, target_predicate: NLPredicate, entailed_predicate: NLPredicate) -> NLPredicate:
         """

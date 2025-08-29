@@ -17,14 +17,14 @@
             }
         ],
         [
-            "goal_obj is in goal_recep",
+            "goal_obj is inside goal_recep",
             {
                 "goal_obj": "object",
                 "goal_recep": "object"
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -55,7 +55,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -86,7 +86,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -142,7 +142,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -173,7 +173,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -204,7 +204,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -235,7 +235,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -266,7 +266,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -297,7 +297,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -328,7 +328,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -359,7 +359,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -390,7 +390,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -521,7 +521,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -627,7 +627,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -658,7 +658,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -714,7 +714,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -745,7 +745,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -776,7 +776,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -832,7 +832,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -863,7 +863,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -894,7 +894,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -925,7 +925,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -956,7 +956,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -987,7 +987,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -1018,7 +1018,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -1074,7 +1074,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -1105,7 +1105,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -1136,7 +1136,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -1167,7 +1167,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -1198,7 +1198,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -1229,7 +1229,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -1260,7 +1260,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -1291,7 +1291,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -1322,7 +1322,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -1353,7 +1353,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -1384,7 +1384,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -1440,7 +1440,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -1471,7 +1471,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -1502,7 +1502,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -1533,7 +1533,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -1564,7 +1564,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -1595,7 +1595,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -1626,7 +1626,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -1682,7 +1682,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -1713,7 +1713,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -1744,7 +1744,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -1775,7 +1775,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -1831,7 +1831,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -1862,7 +1862,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -1893,7 +1893,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -1924,7 +1924,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -1955,7 +1955,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -2011,7 +2011,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -2042,7 +2042,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -2098,7 +2098,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -2179,7 +2179,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -2260,7 +2260,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -2291,7 +2291,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -2322,7 +2322,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -2378,7 +2378,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -2409,7 +2409,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -2440,7 +2440,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -2496,7 +2496,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -2552,7 +2552,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -2583,7 +2583,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -2614,7 +2614,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -2645,7 +2645,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -2676,7 +2676,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -2707,7 +2707,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -2738,7 +2738,7 @@
             }
         ],
         [
-            "goal_obj is chilled",
+            "goal_obj is cool",
             {
                 "goal_obj": "object"
             }
@@ -2769,7 +2769,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -2800,7 +2800,7 @@
             }
         ],
         [
-            "goal_obj is heated",
+            "goal_obj is hot",
             {
                 "goal_obj": "object"
             }
@@ -2831,7 +2831,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -2887,7 +2887,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
@@ -2918,7 +2918,7 @@
             }
         ],
         [
-            "goal_obj is washed",
+            "goal_obj is clean",
             {
                 "goal_obj": "object"
             }
