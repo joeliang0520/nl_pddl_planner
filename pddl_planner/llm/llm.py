@@ -61,8 +61,12 @@ class LLM:
                 continue
 
             print(f'[Substitution] Existing substitution: {substitution} between "{str(predicate_copy)}" and "{str(pred_copy)}"') if self._verbose else None
+            
+            # Apply extended substitution to both predicates to get their substituted string representations
+            substituted_target = predicate_copy.substitute(substitution)
+            substituted_pred = pred_copy.substitute(substitution)
 
-            # Before substitution, extend substitution by unifying with all action clauses (if any)
+            # extend substitution by unifying with all action clauses (if any)
             extended_substitution = substitution
             try:
                 if isinstance(background_predicates, tuple) and len(background_predicates) == 2:
@@ -74,23 +78,14 @@ class LLM:
                                 tmp = self._operations.unify_with_different_name(predicate_copy, clause, copy.deepcopy(extended_substitution))
                                 if tmp is not None:
                                     extended_substitution = tmp
-                                tmp = self._operations.unify_with_different_name(pred_copy, clause, copy.deepcopy(extended_substitution))
-                                if tmp is not None:
-                                    extended_substitution = tmp
-                        # Unify with effects
+                        # Unify with effect
                         for clause in getattr(action_ctx.effects, 'clauses', []):
                             if isinstance(clause, NLPredicate):
                                 tmp = self._operations.unify_with_different_name(predicate_copy, clause, copy.deepcopy(extended_substitution))
                                 if tmp is not None:
                                     extended_substitution = tmp
-                                tmp = self._operations.unify_with_different_name(pred_copy, clause, copy.deepcopy(extended_substitution))
-                                if tmp is not None:
-                                    extended_substitution = tmp
             except Exception:
                 pass
-            # Apply extended substitution to both predicates to get their substituted string representations
-            substituted_target = predicate_copy.substitute(extended_substitution)
-            substituted_pred = pred_copy.substitute(extended_substitution)
 
             # Apply the same substitution to the background action (if provided)
             substituted_background = background_predicates
@@ -223,42 +218,14 @@ class LLM:
             Tuple[Optional[bool], str]: The decision and the raw text from the LLM.
         """
         
-        background_predicates_str = "\n ".join([f"- {pred.nl_description}" for pred in background_predicates[1]])
-        if background_predicates[0] is not None:
-            action = background_predicates[0]
-            action_description = f"""
-                {action.name} 
-                with the following preconditions: {[clause.nl_description for clause in action.preconditions.clauses if isinstance(clause, NLPredicate)]}
-                and the following effects: {[clause.nl_description for clause in action.effects.clauses if isinstance(clause, NLPredicate)]}
-                """
-        else:
-            action_description = ""
-        prompt = f"""
-                You are a everyday agent that currently doing the following action: 
-                {action_description}
-
-                Task: 
-                 - Think step by step and determine according to everyday commonsense does an object being Predicate 2 imply Predicate 1 when doing the action.
-
-                Instructions:
-                - Use the definition of the predicates to determine if Predicate 2 implies Predicate 1.
-                - Predicate 1: "{target_str}"
-                - Predicate 2: "{pred_str}"
-                - Here are some background predicates that you can use to determine if Predicate 2 implies Predicate 1, 
-                use these predicates to determine the type of the specific object Predicate 1 and Predicate 2 are referring to.
-                {background_predicates_str}
-                - When determing the entailment, consider the meaning of the Predicate 1 and Predicate 2 with the type of the specific object each referring to in the context of the action.
-                
-                Output format (STRICT):
-                - Line 1: exactly YES or NO.
-                - Line 2: Reason.
-
-                Example of entailment:
-                - The agent possesses POTATO implies the agent holds POTATO
-                - POTATO is in the sink implies POTATO is in the sink
-                - POTATO is baked implies POTATO is cooked
-
-                Response:"""
+        prompt = self._build_entailment_prompt(
+            target_str,
+            pred_str,
+            background_predicates=background_predicates,
+            include_action=True,
+            include_background_predicates=True,
+            include_examples=True,
+        )
         last_error: Optional[Exception] = None
         for attempt in range(max_retries):
             try:
@@ -276,6 +243,75 @@ class LLM:
         print(f"[Error] LLM call failed after {max_retries} attempts: {last_error}") if self._verbose else None
         return None, ""
 
+    def _build_entailment_prompt(
+        self,
+        target_str: str,
+        pred_str: str,
+        background_predicates: Tuple[Action, List[NLPredicate]] = (None, []),
+        include_action: bool = True,
+        include_background_predicates: bool = True,
+        include_examples: bool = True,
+    ) -> str:
+        """
+        Build an entailment prompt with optional sections.
+
+        Args:
+            target_str: NL text for Predicate 1 (target)
+            pred_str: NL text for Predicate 2 (candidate)
+            background_predicates: (Action, [NLPredicate]) context
+            include_action: include action preconditions/effects in prompt
+            include_background_predicates: include background predicate list
+            include_examples: include example entailments section
+
+        Returns:
+            str: The full prompt string.
+        """
+        action_description = ""
+        if include_action and background_predicates and background_predicates[0] is not None:
+            action = background_predicates[0]
+            action_description = f"""
+                {action.name} 
+                with the following preconditions: {[clause.nl_description for clause in action.preconditions.clauses if isinstance(clause, NLPredicate)]}
+                and the following effects: {[clause.nl_description for clause in action.effects.clauses if isinstance(clause, NLPredicate)]}
+                """
+        background_predicates_str = ""
+        if include_background_predicates and background_predicates and len(background_predicates) > 1:
+            background_predicates_str = "\n ".join([f"- {pred.nl_description}" for pred in background_predicates[1]])
+        examples_block = ""
+        if include_examples:
+            examples_block = """
+                Example of entailment:
+                In a logistics domain, if location L1 is in city C, and a truck is at L1, does that entail the truck is in city C?”
+                A correct answer: “Yes – being at a location that is in city C means the truck is also in city C (by transitivity of location containment).” 
+                in Blocks World: “If block B is on block A, what does that imply about clear(A)?” 
+                The model should respond that clear(A) must be false (A isn’t clear because B is on it), elaborating that a block can’t be clear if another block is on top.
+                """
+
+        prompt = f"""
+                You are a creative everyday agent { ' that currently doing the following action:' if action_description else ':'}
+                {action_description}
+
+                Task: 
+                 - Think step by step and determine according to everyday commonsense does an object being Predicate 2 imply Predicate 1{ ' when doing the action' if action_description else ''}.
+
+                Instructions:
+                1. Use the definition of the predicates to determine if Predicate 2 implies Predicate 1.
+                - Predicate 1: "{target_str}"
+                - Predicate 2: "{pred_str}"
+                2. { '- Here are some background predicates that you can use to determine if Predicate 2 implies Predicate 1, use these predicates to determine the type of the specific object Predicate 1 and Predicate 2 are referring to.' if background_predicates_str else ''}
+                {background_predicates_str}
+                3. When determing the entailment, consider the meaning of the Predicate 1 and Predicate 2 with the type of the specific object each referring to{ ' in the context of the action' if action_description else ' in common contexts'}.
+                4. Be creative and think outside the box.
+
+                Output format (STRICT):
+                - Line 1: exactly YES or NO.
+                - Line 2: Reason.
+
+                {examples_block}
+
+                Response:"""
+        return prompt
+    
     def _get_cached_llm_responses(self, target_str: str, candidate_pred_nl: str) -> Optional[List[str]]:
         """
         Retrieve cached raw LLM response texts (list) for the given NL pair if available.
