@@ -316,10 +316,25 @@ class NLFOLRegressionPlanner(NLPlanner):
                 - A list of actions (List[Action]) that form the plan to achieve that subgoal.
         """
 
+        # Pre-compute goal predicate names for entailment gating
+        goal_predicate_names = set()
+        def _collect_goal_predicates(formula: Formula) -> None:
+            if isinstance(formula, NLPredicate):
+                goal_predicate_names.add(formula.name)
+                return
+            if hasattr(formula, 'clauses') and isinstance(getattr(formula, 'clauses'), list):
+                for cl in formula.clauses:
+                    _collect_goal_predicates(cl)
+        _collect_goal_predicates(self._instance.goal)
+
         # A LLM-backed entailment checker for NLPredicate duplicate detection used in is_duplicate method
         def _entailment_checker(target: NLPredicate, pred: NLPredicate) -> bool:
             try:
+                # Only attempt entailment if the candidate predicate name appears in the goal
+                if pred.name not in goal_predicate_names:
+                    return False
                 # Check if a is entailed by b
+                print(f'[Goal Entailment] Checking if "{target.name}" entails the goal "{pred.name}"')
                 entailed_predicate = self._llm.entailment(copy.deepcopy(pred), [copy.deepcopy(target)])
                 if entailed_predicate is not None:
                     return True

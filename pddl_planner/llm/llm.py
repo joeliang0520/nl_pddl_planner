@@ -86,8 +86,7 @@ class LLM:
                                     extended_substitution = tmp
             except Exception:
                 pass
-
-            # Apply the same substitution to the background action (if provided)
+            
             substituted_background = background_predicates
             try:
                 if isinstance(background_predicates, tuple) and len(background_predicates) == 2:
@@ -106,10 +105,20 @@ class LLM:
 
             if predicate_copy._is_neg:
                 # reverse the entailment check for negative predicates
-                entailment_result, response_text = self._entailment_check(pred_str, target_str, substituted_background)
+                entailment_result, response_text = self._entailment_check(
+                    pred_str,
+                    target_str,
+                    substituted_background,
+                    target_predicate_name=pred_copy.name,
+                )
             else:
                 # conduct entailment check
-                entailment_result, response_text = self._entailment_check(target_str, pred_str, substituted_background)
+                entailment_result, response_text = self._entailment_check(
+                    target_str,
+                    pred_str,
+                    substituted_background,
+                    target_predicate_name=predicate_copy.name,
+                )
 
             if entailment_result:
                 # if the predicate is entailed, update the cache
@@ -128,13 +137,15 @@ class LLM:
             print(f"[No Entailment] Failed: Predicate {predicate.nl_description} is not entailed by any of the predicates") if self._verbose else None
             return None
 
-    def _entailment_check(self, target_str: str, pred_str: str, background_predicates: Tuple[Action, List[NLPredicate]] = (None, [])) -> Tuple[bool, str]:
+    def _entailment_check(self, target_str: str, pred_str: str, background_predicates: Tuple[Action, List[NLPredicate]] = (None, []), target_predicate_name: Optional[str] = None) -> Tuple[bool, str]:
         """
         Check if the target predicate is entailed by the candidate predicate.
 
         Args:
             target_str (str): The target predicate string representation.
             pred_str (str): The candidate predicate string representation.
+            background_predicates (Tuple[Action, List[NLPredicate]]): The background predicates and action.
+            target_predicate_name (Optional[str]): The name of the target predicate.
 
         Returns:
             Tuple[bool, str]: The decision and the raw text from the LLM.
@@ -153,9 +164,9 @@ class LLM:
         missing = max(0, self._n_iter - len(cached_texts))
         last_text = ""
         for _ in range(missing):
-            decision, text = self._get_llm_responses(target_str, pred_str, background_predicates)
+            decision, text = self._get_llm_responses(target_str, pred_str, background_predicates, target_predicate_name=target_predicate_name)
             if text is not None:
-                self._update_cache_llm_response(target_str, pred_str, text)
+                self._update_cache_llm_response(target_str, pred_str, text, predicate_name=target_predicate_name)
                 last_text = text or last_text
             normal_results.append((decision, text or ""))
         print(f'[LLM Response] is "{target_str}" entailed by "{pred_str}" ?: {[result[0] for result in normal_results]}') if self._verbose else None
@@ -202,7 +213,7 @@ class LLM:
         return None, last_text
 
     def _get_llm_responses(self, target_str: str, pred_str: str, background_predicates: Tuple[Action, List[NLPredicate]] = (None, []),
-                            max_retries: int = 3, timeout: float = 30.0) -> Tuple[Optional[bool], str]:
+                            max_retries: int = 3, timeout: float = 30.0, target_predicate_name: Optional[str] = None) -> Tuple[Optional[bool], str]:
         """
         Build the entailment prompt and call the chat API with retries.
         Returns (decision, raw_text).
@@ -281,10 +292,9 @@ class LLM:
         if include_examples:
             examples_block = """
                 Example of entailment:
-                In a logistics domain, if location L1 is in city C, and a truck is at L1, does that entail the truck is in city C?”
-                A correct answer: “Yes – being at a location that is in city C means the truck is also in city C (by transitivity of location containment).” 
-                in Blocks World: “If block B is on block A, what does that imply about clear(A)?” 
-                The model should respond that clear(A) must be false (A isn’t clear because B is on it), elaborating that a block can’t be clear if another block is on top.
+                - The agent possesses POTATO implies the agent holds POTATO
+                - POTATO is in the sink implies POTATO is in the sink
+                - POTATO is baked implies POTATO is cooked
                 """
 
         prompt = f"""
@@ -301,9 +311,9 @@ class LLM:
                 2. { '- Here are some background predicates that you can use to determine if Predicate 2 implies Predicate 1, use these predicates to determine the type of the specific object Predicate 1 and Predicate 2 are referring to.' if background_predicates_str else ''}
                 {background_predicates_str}
                 3. When determing the entailment, consider the meaning of the Predicate 1 and Predicate 2 with the type of the specific object each referring to{ ' in the context of the action' if action_description else ' in common contexts'}.
-                4. Be creative and think outside the box.
+                4. Be creative and think outside the box. If there just typo between the two predicates, you should say Yes.
 
-                Output format (STRICT):
+                Output format:
                 - Line 1: exactly YES or NO.
                 - Line 2: Reason.
 
@@ -405,7 +415,7 @@ class LLM:
         # if the cache is not loaded, return False and None
         return False, None
 
-    def _update_cache_llm_response(self, target_str: str, candidate_pred_nl: str, response_text: str) -> None:
+    def _update_cache_llm_response(self, target_str: str, candidate_pred_nl: str, response_text: str, predicate_name: Optional[str] = None) -> None:
         """
         Update cache with raw LLM response for a specific target and candidate predicate pair.
         Cache schema: cache[target_str][candidate_pred_nl] = List[str]
@@ -418,6 +428,9 @@ class LLM:
         # Initialize mapping for target_str if absent or not a dict
         if target_str not in self._cache or not isinstance(self._cache[target_str], dict):
             self._cache[target_str] = {}
+        # Store target predicate name for future reference
+        if predicate_name is not None:
+            self._cache[target_str]["predicate_name"] = predicate_name
         if candidate_pred_nl not in self._cache[target_str] or not isinstance(self._cache[target_str][candidate_pred_nl], list):
             self._cache[target_str][candidate_pred_nl] = []
         self._cache[target_str][candidate_pred_nl].append(response_text)
