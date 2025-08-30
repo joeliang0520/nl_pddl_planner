@@ -66,7 +66,7 @@ class LLM:
             substituted_target = predicate_copy.substitute(substitution)
             substituted_pred = pred_copy.substitute(substitution)
 
-            # extend substitution by unifying with all action clauses (if any)
+            # extend substitution by unifying with all action clauses (if any) for contextual information feed into the LLM
             extended_substitution = substitution
             try:
                 if isinstance(background_predicates, tuple) and len(background_predicates) == 2:
@@ -137,7 +137,8 @@ class LLM:
             print(f"[No Entailment] Failed: Predicate {predicate.nl_description} is not entailed by any of the predicates") if self._verbose else None
             return None
 
-    def _entailment_check(self, target_str: str, pred_str: str, background_predicates: Tuple[Action, List[NLPredicate]] = (None, []), target_predicate_name: Optional[str] = None) -> Tuple[bool, str]:
+    def _entailment_check(self, target_str: str, pred_str: str, background_predicates: Tuple[Action, List[NLPredicate]] = (None, []), 
+    target_predicate_name: Optional[str] = None) -> Tuple[bool, str]:
         """
         Check if the target predicate is entailed by the candidate predicate.
 
@@ -233,9 +234,9 @@ class LLM:
             target_str,
             pred_str,
             background_predicates=background_predicates,
-            include_action=True,
+            include_action=False,
             include_background_predicates=True,
-            include_examples=True,
+            include_examples=False,
         )
         last_error: Optional[Exception] = None
         for attempt in range(max_retries):
@@ -287,7 +288,28 @@ class LLM:
                 """
         background_predicates_str = ""
         if include_background_predicates and background_predicates and len(background_predicates) > 1:
-            background_predicates_str = "\n ".join([f"- {pred.nl_description}" for pred in background_predicates[1]])
+            filtered_bg: List[str] = []
+            seen_bg = set()
+            for bg_pred in background_predicates[1]:
+                desc = bg_pred.nl_description.strip()
+                if not desc:
+                    continue
+                # avoid leaking the target or candidate predicate as background predicates to LLM
+                if desc == pred_str or desc == target_str:
+                    continue
+                lower_desc = desc.lower()
+                # keep only type-like statements
+                if not (("is a" in lower_desc) or ("is an" in lower_desc)):
+                    continue
+                if desc in seen_bg:
+                    continue
+                seen_bg.add(desc)
+                filtered_bg.append(f"- {desc}")
+                # cap background to a reasonable size
+                if len(filtered_bg) >= 20:
+                    break
+            background_predicates_str = "\n ".join(filtered_bg)
+        
         examples_block = ""
         if include_examples:
             examples_block = """
@@ -298,20 +320,26 @@ class LLM:
                 """
 
         prompt = f"""
-                You are a creative everyday agent { ' that currently doing the following action:' if action_description else ':'}
+                Role: You are a helper agent in a common household setting{ ' that currently doing the following action:' if action_description else ':'}
                 {action_description}
 
-                Task: 
-                 - Think step by step and determine according to everyday commonsense does an object being Predicate 2 imply Predicate 1{ ' when doing the action' if action_description else ''}.
+                Question: 
+                 - if you know Predicate 2 "{pred_str}" is true, can you imply Predicate 1 "{target_str}" is true { ' when doing the action' if action_description else ''}?.
 
-                Instructions:
-                1. Use the definition of the predicates to determine if Predicate 2 implies Predicate 1.
+                - Respond with exactly "YES" if you think the statement is generally imply
+                - Respond with "NO" if you think the statement is generally false
+
+                Input:
                 - Predicate 1: "{target_str}"
                 - Predicate 2: "{pred_str}"
-                2. { '- Here are some background predicates that you can use to determine if Predicate 2 implies Predicate 1, use these predicates to determine the type of the specific object Predicate 1 and Predicate 2 are referring to.' if background_predicates_str else ''}
+                
+                Instructions:
+                1. Use the definition of the predicates to determine if Predicate 2 implies Predicate 1.
+                 { '2.You know following background to determine the sepcific information of the objects within Predicate 1 and Predicate 2.' if background_predicates_str else ''}
                 {background_predicates_str}
-                3. When determing the entailment, consider the meaning of the Predicate 1 and Predicate 2 with the type of the specific object each referring to{ ' in the context of the action' if action_description else ' in common contexts'}.
-                4. Be creative and think outside the box. If there just typo between the two predicates, you should say Yes.
+                {'3.' if include_background_predicates else '2. '}. When determing the response, consider the meaning of the Predicate 1 and Predicate 2 with the type of the specific object each referring to{ ' in the context of the action' if action_description else ' in common contexts'}.
+                {'4.' if include_background_predicates else '3. '}. Be creative and think outside the box. If there just typo between the two predicates, you should say Yes.
+
 
                 Output format:
                 - Line 1: exactly YES or NO.
@@ -320,6 +348,7 @@ class LLM:
                 {examples_block}
 
                 Response:"""
+        print(prompt) if self._verbose else None
         return prompt
     
     def _get_cached_llm_responses(self, target_str: str, candidate_pred_nl: str) -> Optional[List[str]]:
