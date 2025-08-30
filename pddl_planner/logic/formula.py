@@ -1,6 +1,7 @@
 import textwrap, warnings, re, copy
 from typing import List, Set, Dict, Union, Any, Tuple
 import pddl_planner.logic.formula as formula
+import numpy as np
 
 class Logic:
     """Class capturing logical utilities and global variable generation.
@@ -526,6 +527,7 @@ class ConjunctiveFormula(Formula):
         Returns:
             DisjunctiveFormula: A DisjunctiveFormula with each clause negated.
         """
+        #print(f'get_negation dnf: {self._clauses}' if np.any([isinstance(clause, Equality) for clause in self.clauses]) else None)
         return DisjunctiveFormula(*[clause.get_negation() for clause in self.clauses])
     
     def simplify(self) -> Formula:
@@ -580,8 +582,12 @@ class ConjunctiveFormula(Formula):
         equality_subst = Substitution()
         for clause in simplified_clauses:
             if isinstance(clause, Equality) and not clause.is_neq:
-                if isinstance(clause.term1, Variable):
+                if isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
                     equality_subst[clause.term2] = clause.term1
+                elif isinstance(clause.term1, Variable) and isinstance(clause.term2, Constant):
+                    equality_subst[clause.term2] = clause.term1
+                elif isinstance(clause.term1, Constant) and isinstance(clause.term2, Variable):
+                    equality_subst[clause.term1] = clause.term2
         
         substituted_clauses = set()
         for clause in simplified_clauses:
@@ -591,9 +597,13 @@ class ConjunctiveFormula(Formula):
         # Remove equality clauses (only those where both terms are Variables) from the result.
         final_clauses = []
         for clause in substituted_clauses:
-            if isinstance(clause, Equality) and not clause.is_neq:
-                if isinstance(clause.term1, Variable):
-                    continue
+            if isinstance(clause, Equality):
+                if not clause.is_neq:
+                    if not (isinstance(clause.term1, Constant) and isinstance(clause.term2, Constant)):
+                        continue
+                elif isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
+                    if clause.term1.name != clause.term2.name:
+                        continue # remove due to unique name axiom
             final_clauses.append(clause)
         
         # Remove duplicates
@@ -727,6 +737,7 @@ class DisjunctiveFormula(Formula):
         Returns:
             ConjunctiveFormula: A ConjunctiveFormula with each clause negated.
         """
+        #print(f'get_negation cnf: {self._clauses}' if np.any([isinstance(clause, Equality) for clause in self.clauses]) else None)
         return ConjunctiveFormula(*[clause.get_negation() for clause in self.clauses])
     
 class Operator(Formula):
@@ -753,7 +764,6 @@ class Equality(Operator):
         self._clauses: List["Formula"] = []  
         self._is_neq: bool = is_neq
         self._term_type_dict = term_type_dict
-
     def collect_terms(self) -> Set["Term"]:
         """Collect all terms present in the formula.
 
@@ -768,6 +778,7 @@ class Equality(Operator):
     def substitute(self, substitution: "Substitution") -> "Equality":
         new_term1 = substitution.get(self._term1, self._term1)
         new_term2 = substitution.get(self._term2, self._term2)
+        #print(f'substitute equality: {self._term1} {self._term2} {self._is_neq} {new_term1} {new_term2}')
         return Equality(new_term1, new_term2, self._is_neq)
     
     @property

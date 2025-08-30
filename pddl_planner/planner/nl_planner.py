@@ -1,5 +1,6 @@
 import copy
 import heapq
+import json
 import os
 from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional, Union
@@ -53,7 +54,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         self._max_depth = max_depth
         self._ssa = self.create_SSA()
         self._llm = LLM(model_name=llm_model, api_key=llm_api_key)
-    
+        
     @dataclass
     class SSA_Node:
         """
@@ -208,6 +209,23 @@ class NLFOLRegressionPlanner(NLPlanner):
                         ssa)
             all_ssa[pred.name] = pred_ssa
         return all_ssa
+
+    def create_SSA_as_itself(self, predicate: Predicate) -> Dict[str, SSA_Node]:
+        """
+        Create SSA as itself.
+        """
+        pred_ssa: Dict[str, NLFOLRegressionPlanner.SSA_Node] = {}
+        for action in self._domain.actions:
+            standardized_action = action.standardize(self._operations)
+            ssa = DisjunctiveFormula(predicate).distribute_and_over_or()
+            pred_ssa[standardized_action.name] = NLFOLRegressionPlanner.SSA_Node(
+                predicate.name,
+                predicate.terms,
+                standardized_action.name, 
+                standardized_action.parameters, 
+                Substitution(), ssa)
+        return pred_ssa
+                
     
     def regress_pred(self, predicate: NLPredicate, action: Action) -> DisjunctiveFormula:
         """
@@ -228,11 +246,11 @@ class NLFOLRegressionPlanner(NLPlanner):
             DisjunctiveFormula: The regressed formula with variables substituted according to the SSA_Node.
         """
         # check if the predicate is in domain predicates
-        if predicate.entailed.name in self._ssa:
-            ssa_node = self._ssa[predicate.entailed.name][action.name]
+        if predicate.name in self._ssa:
+            ssa_node = self._ssa[predicate.name][action.name]
         else:
             # check if the predicate can be entailed as a domain predicate
-            print(f'Failing to find "{predicate.entailed.name}" in domain predicates, attempting to entail it to a domain predicate')
+            print(f'Failing to find "{predicate.name}" in domain predicates, attempting to entail it to a domain predicate')
 
             background_predicates = (copy.deepcopy(action), [clause for clause in self._instance.goal.clauses if isinstance(clause, NLPredicate)])
             entailed_pred = self._llm.entailment(predicate, self._domain.predicates, background_predicates=background_predicates)
@@ -240,11 +258,11 @@ class NLFOLRegressionPlanner(NLPlanner):
             if entailed_pred is not None:
                 ssa_node = self._ssa[entailed_pred.entailed.name][action.name]
                 # update the predicate names and string representation as the entailed predicate
-                predicate = entailed_pred
+                #predicate = entailed_pred
             else:
                 # create a new ssa node with postive and negative effects as none
-                print(f'Failing to entail "{predicate.entailed.name}" in domain predicates, creating a new ssa node with postive and negative effects as none')
-                self._ssa[predicate.name] = self.create_SSA([predicate])[predicate.name]
+                print(f'Failing to entail "{predicate.name}" in domain predicates, creating a new ssa node with postive and negative effects as none')
+                self._ssa[predicate.name] = self.create_SSA_as_itself(predicate)
                 ssa_node = self._ssa[predicate.name][action.name]
         # Build a substitution:
         # Map the stored predicate parameters to the input predicate's terms.
@@ -254,6 +272,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         # Map the stored action parameters to the input action's parameters.
         for stored_act_var, input_act_var in zip(ssa_node.action_params, action.parameters):
             substitution[stored_act_var] = input_act_var
+        
         returned_ssa = copy.deepcopy(ssa_node.ssa)
         
         # if predicate.term_type_dict is not None and ssa_node.ssa.term_type_dict is not None:
@@ -262,6 +281,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         # print(f'ssa_node: {ssa_node.predicate_params} action: {ssa_node.action_params} predicate: {predicate.terms}')
         # print(f'substitution: {substitution}')
         # print(f'returned_ssa: {ssa_node.ssa.clauses} for action "{action.name}" and predicate "{predicate.name}"')
+
         return returned_ssa.substitute(substitution)
 
     def regress(self, goal: DisjunctiveFormula, action: Action) -> DisjunctiveFormula:
@@ -300,7 +320,8 @@ class NLFOLRegressionPlanner(NLPlanner):
             # Combine the regressed clauses and convert to DN
             regressed_disjunct_list.append(ConjunctiveFormula(*regressed_conjunct_list).distribute_and_over_or())
         # Return a flattened regressed goal  in DNF
-        return DisjunctiveFormula(*regressed_disjunct_list).distribute_and_over_or()
+        flattened_regressed_goal = DisjunctiveFormula(*regressed_disjunct_list).distribute_and_over_or()
+        return flattened_regressed_goal
     
     def regress_plan(self, simplify_equality: bool = True, simplify_contradiction: bool = True, simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True) -> List[Tuple[Formula, List[Action]]]:
         """

@@ -66,39 +66,6 @@ class LLM:
             substituted_target = predicate_copy.substitute(substitution)
             substituted_pred = pred_copy.substitute(substitution)
 
-            # extend substitution by unifying with all action clauses (if any) for contextual information feed into the LLM
-            extended_substitution = substitution
-            try:
-                if isinstance(background_predicates, tuple) and len(background_predicates) == 2:
-                    action_ctx, _ = background_predicates
-                    if action_ctx is not None:
-                        # Unify with preconditions
-                        for clause in getattr(action_ctx.preconditions, 'clauses', []):
-                            if isinstance(clause, NLPredicate):
-                                tmp = self._operations.unify_with_different_name(predicate_copy, clause, copy.deepcopy(extended_substitution))
-                                if tmp is not None:
-                                    extended_substitution = tmp
-                        # Unify with effect
-                        for clause in getattr(action_ctx.effects, 'clauses', []):
-                            if isinstance(clause, NLPredicate):
-                                tmp = self._operations.unify_with_different_name(predicate_copy, clause, copy.deepcopy(extended_substitution))
-                                if tmp is not None:
-                                    extended_substitution = tmp
-            except Exception:
-                pass
-            
-            substituted_background = background_predicates
-            try:
-                if isinstance(background_predicates, tuple) and len(background_predicates) == 2:
-                    action_ctx, bg_preds_ctx = background_predicates
-                    if action_ctx is not None:
-                        action_ctx_copy = copy.deepcopy(action_ctx)
-                        action_ctx_copy = action_ctx_copy.substitute(extended_substitution)
-                        substituted_background = (action_ctx_copy, bg_preds_ctx)
-            except Exception:
-                substituted_background = background_predicates
-
-            
             # Conduct entailment between the substituted string representations
             target_str = substituted_target.nl_description
             pred_str = substituted_pred.nl_description
@@ -108,7 +75,7 @@ class LLM:
                 entailment_result, response_text = self._entailment_check(
                     pred_str,
                     target_str,
-                    substituted_background,
+                    background_predicates,
                     target_predicate_name=pred_copy.name,
                 )
             else:
@@ -116,7 +83,7 @@ class LLM:
                 entailment_result, response_text = self._entailment_check(
                     target_str,
                     pred_str,
-                    substituted_background,
+                    background_predicates,
                     target_predicate_name=predicate_copy.name,
                 )
 
