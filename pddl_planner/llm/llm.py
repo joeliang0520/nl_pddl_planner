@@ -288,27 +288,9 @@ class LLM:
                 """
         background_predicates_str = ""
         if include_background_predicates and background_predicates and len(background_predicates) > 1:
-            filtered_bg: List[str] = []
-            seen_bg = set()
-            for bg_pred in background_predicates[1]:
-                desc = bg_pred.nl_description.strip()
-                if not desc:
-                    continue
-                # avoid leaking the target or candidate predicate as background predicates to LLM
-                if desc == pred_str or desc == target_str:
-                    continue
-                lower_desc = desc.lower()
-                # keep only type-like statements
-                if not (("is a" in lower_desc) or ("is an" in lower_desc)):
-                    continue
-                if desc in seen_bg:
-                    continue
-                seen_bg.add(desc)
-                filtered_bg.append(f"- {desc}")
-                # cap background to a reasonable size
-                if len(filtered_bg) >= 20:
-                    break
-            background_predicates_str = "\n ".join(filtered_bg)
+            background_predicates_str = "\n ".join([f"- {pred.nl_description}" for pred in background_predicates[1] 
+            if pred.nl_description != pred_str and pred.nl_description != target_str])
+            # avoid leaking the target or candidate predicate as background predicates to LLM
         
         examples_block = ""
         if include_examples:
@@ -348,7 +330,6 @@ class LLM:
                 {examples_block}
 
                 Response:"""
-        print(prompt) if self._verbose else None
         return prompt
     
     def _get_cached_llm_responses(self, target_str: str, candidate_pred_nl: str) -> Optional[List[str]]:

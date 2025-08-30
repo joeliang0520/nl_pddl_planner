@@ -37,7 +37,7 @@ if __name__ == "__main__":
     os.makedirs(save_path, exist_ok=True)
 
     # initialize the planner
-    for i, block in enumerate([all_blocks[2]]):
+    for i, block in enumerate(all_blocks[:20]):
         print(f'Problem {block} =========================================')
         planner = NLFOLRegressionPlanner(domain.copy(), block.copy(), max_depth=10)
         regressed_plans = planner.regress_plan()
