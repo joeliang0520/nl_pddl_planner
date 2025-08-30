@@ -35,15 +35,17 @@ class LLM:
 
     def entailment(self, predicate: NLPredicate, predicates: List[NLPredicate], background_predicates: Tuple[Action, List[NLPredicate]] = (None, [])) -> NLPredicate|None:
         """
-        Check if the predicate can be entailed as a one of the list of predicates.
+        Determine whether a target NL predicate is entailed by any predicate schema in a list.
 
         Args:
-            predicate (Predicate): The predicate to check for possible entailment.
-            predicates (List[Predicate]): The list of predicates that are available for entailment.
+            predicate (NLPredicate): The target predicate to check for entailment.
+            predicates (List[NLPredicate]): Candidate predicate schemas to test against.
+            background_predicates (Tuple[Action, List[NLPredicate]]): Optional (Action, background NL predicates)
+                context used to enrich the LLM prompt.
 
         Returns:
-            Predicate: The predicate that can be entailed as a one of the list of predicates.
-            None: If the predicate cannot be entailed as a one of the list of predicates.
+            NLPredicate | None: The input predicate annotated with its entailed schema if found
+                (or list of candidates if multiple), otherwise None.
         """
         # update current cache
         self._cache = self._load_cache()
@@ -107,7 +109,7 @@ class LLM:
     def _entailment_check(self, target_str: str, pred_str: str, background_predicates: Tuple[Action, List[NLPredicate]] = (None, []), 
     target_predicate_name: Optional[str] = None) -> Tuple[bool, str]:
         """
-        Check if the target predicate is entailed by the candidate predicate.
+        Check if the target description is entailed by the candidate description, with caching and self-consistency.
 
         Args:
             target_str (str): The target predicate string representation.
@@ -116,7 +118,7 @@ class LLM:
             target_predicate_name (Optional[str]): The name of the target predicate.
 
         Returns:
-            Tuple[bool, str]: The decision and the raw text from the LLM.
+            Tuple[bool, str]: (decision, representative_raw_text)
         """
 
         # Check cache first, then complete to n_iter with LLM calls and decide by self-consistency
@@ -194,7 +196,7 @@ class LLM:
             timeout (float): The timeout for the LLM call.
 
         Returns:
-            Tuple[Optional[bool], str]: The decision and the raw text from the LLM.
+            Tuple[Optional[bool], str]: (decision, raw_text) where decision can be True/False/None on parse failure.
         """
         
         prompt = self._build_entailment_prompt(
@@ -235,12 +237,12 @@ class LLM:
         Build an entailment prompt with optional sections.
 
         Args:
-            target_str: NL text for Predicate 1 (target)
-            pred_str: NL text for Predicate 2 (candidate)
-            background_predicates: (Action, [NLPredicate]) context
-            include_action: include action preconditions/effects in prompt
-            include_background_predicates: include background predicate list
-            include_examples: include example entailments section
+            target_str (str): NL text for Predicate 1 (target).
+            pred_str (str): NL text for Predicate 2 (candidate).
+            background_predicates (Tuple[Action, List[NLPredicate]]): (Action, [NLPredicate]) context.
+            include_action (bool): Whether to include action preconditions/effects.
+            include_background_predicates (bool): Whether to include background predicate list.
+            include_examples (bool): Whether to include example entailments.
 
         Returns:
             str: The full prompt string.
@@ -308,7 +310,7 @@ class LLM:
             candidate_pred_nl (str): The candidate predicate string representation.
 
         Returns:
-            Optional[List[str]]: The cached raw LLM response texts.
+            Optional[List[str]]: The cached raw LLM response texts if present; otherwise None.
         """
         # load the current cache to up to date version
         self._cache = self._load_cache()
@@ -324,10 +326,6 @@ class LLM:
     def _load_cache(self) -> Dict[str, str]:
         """
         Load the cache from the file.
-
-        Args:
-            target_str (str): The target predicate string representation.
-            candidate_pred_nl (str): The candidate predicate string representation.
 
         Returns:
             Dict[str, str]: The cache of previous entailments.
@@ -395,12 +393,14 @@ class LLM:
     def _update_cache_llm_response(self, target_str: str, candidate_pred_nl: str, response_text: str, predicate_name: Optional[str] = None) -> None:
         """
         Update cache with raw LLM response for a specific target and candidate predicate pair.
-        Cache schema: cache[target_str][candidate_pred_nl] = List[str]
+        Cache schema: cache[target_str]["predicate_name"] = str (optional);
+        cache[target_str][candidate_pred_nl] = List[str]
 
         Args:
             target_str (str): The target predicate string representation.
             candidate_pred_nl (str): The candidate predicate string representation.
             response_text (str): The raw LLM response text.
+            predicate_name (Optional[str]): The name of the target predicate for reference.
         """
         # Initialize mapping for target_str if absent or not a dict
         if target_str not in self._cache or not isinstance(self._cache[target_str], dict):
