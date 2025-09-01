@@ -1,14 +1,16 @@
 # NL-PDDL Planner
 
-A planner implemented in Python that thats Natural Languages (NL) predicates from the actions and goals as inputs and introduces a First‑Order Logic (FOL) Regression planner grounded in SSA from Situation Calculus, provides sample PDDL domains for testing, and includes scripts to run the FOL regression planner on different domains.
+NL-PDDL Planner is a Python implementation of a regression-based planner that operates directly on natural language (NL) predicates. It integrates First-Order Logic (FOL) regression with successor state axioms (SSA) from Situation Calculus, and provides PDDL-style domain and problem representations for testing.
 
-This repository includes:
+Features
+- NL Parser – processes NL domain and problem descriptions into a logic formula
+- Maintaining Core PDDL Structures – representations for domain and problem instances.
+- Planning Algorithms – FOL regression planners for the Open World Planning Task.
+- LLM Entailment – leverages large language models to detect predicate entailment between goal and domain entailments, even when predicate names differ.
+- Logic Utilities – functions for formula manipulation, unification, and substitution.
 
-- A **Parser** for NL domains and problems.
-- **NL Planning algorithms**: FOL (First-Order Logic) Regression planners that can handles Natural Language entailments from NL predicates in problem to the domain predicates.
-- **LLM Entailment** Using LLM to check if two predicates entails each others even if the name of the predicate is different.
-- **Logic utilities**: NL Formula manipulation, unification, substitution.
-- **Core PDDL structures**: Domain and problem instance representation.
+Scripts are included to run the regression planner on a variety of domains.
+
 
 ## Table of Contents
 
@@ -42,7 +44,7 @@ pddl_solver/
 ├── file/
 │   ├── NL_actions.json (*new*)    # Contains examples of domains used in alfworldtext problem
 │   ├── NL_goals.json  (*new*)     # Contains examples of problem used in alfworldtext problem
-└── README.md               # This file
+└── README.md               	   # This file
 ```
 
 ## Getting Started
