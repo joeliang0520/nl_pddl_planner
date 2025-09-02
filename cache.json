@@ -1178,5 +1178,581 @@
       "NO  \nPredicate 2 \"goal_obj is on\" does not imply that \"goal_obj is a pencil.\" The two statements provide different information: one refers to the position of the object, while the other defines its identity. Since it is given that \"goal_obj is inside goal_recep\" (the shelf), it cannot be both inside and on something at the same time.",
       "NO  \nThe statement cannot be implied because knowing that \"goal_obj is on\" does not provide any information about the type of object it is (whether it is a pencil or something else), especially since \"goal_obj is inside goal_recep\" suggests that the object is stored and not necessarily on a surface."
     ]
+  },
+  "goal_obj is an bread": {
+    "predicate_name": "is an bread",
+    "the agent is holding goal_obj": [
+      "NO  \nPredicate 2 states that the agent is holding the goal_obj, but given that the goal_obj is known to be \"cool\" (and not bread), we cannot imply that the goal_obj is bread.",
+      "NO  \nPredicate 2 states that the agent is holding goal_obj, while Predicate 1 asserts that goal_obj is bread. Given the background information that goal_obj is \"cool\" and is inside the countertop (goal_recep), it cannot also be bread while being held by the agent's empty hand. Therefore, Predicate 2 does not imply Predicate 1 is true.",
+      "NO  \nThe information provided indicates that \"goal_obj\" is described as \"cool\" and is inside \"goal_recep\" (the countertop), which does not support the claim that \"goal_obj\" is bread. Furthermore, the agent's hand is noted as empty, making it impossible for the agent to be holding \"goal_obj\" in the first place, thus failing to fulfill the implication."
+    ],
+    "goal_obj is a heating device": [
+      "NO  \nA heating device is typically not considered to be bread; thus, knowing that the goal object is a heating device does not imply that it is also bread.",
+      "NO  \nA heating device is not an object that can be classified as bread; therefore, Predicate 2 does not imply Predicate 1.",
+      "NO  \nReason: A heating device is typically used to generate heat, while bread is a type of food. The properties of being a heating device do not imply that the object is bread, as they belong to entirely different categories."
+    ],
+    "goal_obj is heated": [
+      "NO  \nReason: The statement \"goal_obj is heated\" does not imply that \"goal_obj is a bread\". In fact, \"goal_obj\" is described as being cool, which contradicts the idea of it being heated. Therefore, Predicate 2 does not lead to the conclusion of Predicate 1 being true.",
+      "NO  \nThe heating of an object does not indicate that it is bread specifically; it could be any other food item or material. Moreover, the current state of \"goal_obj\" being cool contradicts the implication that it is heated, making the implication unsuitable.",
+      "NO  \nReason: Just because \"goal_obj is heated\" does not imply it is \"bread\"; it could be another food item or object that can also be heated."
+    ],
+    "goal_obj is a washing device": [
+      "NO  \nA washing device is not the same as bread; they are fundamentally different objects with different purposes and properties.",
+      "NO  \nA washing device and bread are fundamentally different objects; having one implies the other does not belong to the same category.",
+      "NO  \nA washing device and bread are entirely different categories of objects; one cannot be both."
+    ],
+    "goal_obj is washed": [
+      "NO  \nReason: The fact that \"goal_obj is washed\" does not imply that \"goal_obj is bread\"; it could refer to any object that can be washed and is currently cool inside the countertop. Therefore, we cannot conclude that the object is bread based solely on its being washed.",
+      "NO  \nWashing does not imply that the object is bread; it could be any object that can be washed, such as fruits or vegetables.",
+      "NO  \nReason: The statement \"goal_obj is washed\" does not imply that \"goal_obj is a bread,\" as the object in question (goal_obj) could be anything that is washed, and the provided information indicates it is \"cool\" and inside a countertop, which does not confirm it as bread."
+    ],
+    "goal_obj is a chilling device": [
+      "NO  \nA chilling device (like a refrigerator) is not the same as bread, and knowing that the goal object is a chilling device does not imply that it is bread.",
+      "NO  \nThe statement is generally false because a \"chilling device\" (like a refrigerator) does not imply that the item inside (goal_obj) is bread; it could be any food or drink that is cool.",
+      "NO  \nA chilling device is typically used for cooling items, while bread is a food item that is not related to being a chilling device. Therefore, knowing that \"goal_obj is a chilling device\" does not imply that \"goal_obj is bread.\""
+    ],
+    "goal_obj is chilled": [
+      "NO  \nPredicate 2 indicates that the goal_obj is chilled, which does not necessarily imply that the goal_obj is bread, as multiple types of food can be chilled.",
+      "NO  \nThe statement is generally false because \"goal_obj is chilled\" does not imply that \"goal_obj is an bread.\" Chilling is a characteristic that can apply to various food items, not exclusively bread.",
+      "NO  \nThe statement is generally false because while \"goal_obj is chilled\" indicates that the object is cool, it does not necessarily imply that the object is bread. Various types of items can be chilled, not just bread."
+    ],
+    "goal_obj is a light": [
+      "NO  \nPredicate 2 states that \"goal_obj is a light,\" while Predicate 1 states \"goal_obj is an bread.\" These two statements refer to different types of objects, and a light cannot be classified as bread in any common context. Therefore, Predicate 2 does not imply Predicate 1.",
+      "NO  \nThe statement is generally false because a light is not a type of bread; thus, knowing that \"goal_obj is a light\" does not imply that \"goal_obj is a bread.\"",
+      "NO  \nThe statement is generally false because a \"light\" is not a \"bread\"; they are fundamentally different objects, with no implication that one being true suggests the other could be true."
+    ],
+    "goal_obj is on": [
+      "NO  \nReason: Given that \"goal_obj is inside goal_recep\" and \"goal_obj is cool,\" it is not possible to infer that \"goal_obj is a bread.\" Therefore, Predicate 2 does not imply Predicate 1.",
+      "NO  \nThe statement is generally false because Predicate 2 \"goal_obj is on\" does not provide any information that implies Predicate 1 \"goal_obj is an bread.\" The goal_obj is described as being cool and inside a countertop, which does not suggest that it is bread.",
+      "NO  \nPredicate 2 states \"goal_obj is on,\" which does not imply anything about the nature of \"goal_obj.\" Since \"goal_obj is cool\" and it is inside \"goal_recep\" (the countertop), it does not indicate that \"goal_obj\" is bread; it could be any number of other items. Therefore, Predicate 1 cannot be concluded as true based solely on Predicate 2."
+    ]
+  },
+  "goal_obj is an spatula": {
+    "predicate_name": "is an spatula",
+    "the agent is holding goal_obj": [
+      "NO  \nPredicate 2 states that the agent is holding `goal_obj`, but it is already established that `goal_obj` is inside `goal_recep` (the drawer) and the agent's hand is empty, meaning it cannot be holding anything. Therefore, we cannot imply that `goal_obj` is a spatula based on the given conditions.",
+      "NO  \nThe predicate \"the agent is holding goal_obj\" cannot imply that \"goal_obj is a spatula\" because the information given indicates that the goal_obj is inside a drawer and the agent's hand is empty, which means the agent cannot be holding anything, including a spatula.",
+      "NO  \nThe statement cannot be implied as true because Predicate 2 states that the agent is holding \"goal_obj,\" which is referenced as being inside a drawer (goal_recep) and clean, but it does not specify what \"goal_obj\" actually is. Since it is not stated that \"goal_obj\" is a spatula, we cannot conclude that from the given information."
+    ],
+    "goal_obj is a heating device": [
+      "NO  \nA heating device (like a stove or heater) is not the same as a spatula, which is a cooking utensil. Therefore, knowing that the goal object is a heating device does not imply it is a spatula.",
+      "NO  \nA heating device is not a spatula; they are different categories of objects, and one does not imply the other.",
+      "NO  \nA spatula is not a heating device, so if goal_obj is a heating device, it cannot also be a spatula."
+    ],
+    "goal_obj is heated": [
+      "NO  \nA heated object does not imply that it is a spatula; many other items can also be heated (e.g., pots, pans, plates).",
+      "NO  \nA spatula is typically not an object that is heated; thus, the fact that \"goal_obj is heated\" does not imply that \"goal_obj is an spatula.\" Being heated more commonly refers to items like cookware, while a spatula is a utensil often used to manipulate food but is not itself heated.",
+      "NO  \nA spatula is not typically associated with being heated; it is usually a tool used for cooking but does not itself become heated without being in contact with a heat source. Therefore, Predicate 2 does not imply Predicate 1."
+    ],
+    "goal_obj is a washing device": [
+      "NO  \nA washing device is not a spatula; they are two different types of objects with distinct functions.",
+      "NO  \nA washing device cannot be a spatula; they belong to different categories of kitchen tools.",
+      "NO  \nA washing device and a spatula serve different functions and are distinct types of objects, making it impossible for one to imply the other."
+    ],
+    "goal_obj is washed": [
+      "NO  \nWashing an object does not imply that it is specifically a spatula; it could be any object.",
+      "NO  \nWashing an object does not imply that it is a spatula; it could be any number of other utensils or items.",
+      "NO  \nWashing an object does not imply that the object is a spatula, as many items can be washed."
+    ],
+    "goal_obj is a chilling device": [
+      "NO  \nA chilling device and a spatula are fundamentally different types of objects with distinct functions; one cannot logically infer that a goal object being a chilling device implies it is a spatula.",
+      "NO  \nThe statement is generally false because a chilling device (like a refrigerator or ice pack) is fundamentally different from a spatula, which is a kitchen utensil used for flipping or serving food. Therefore, one cannot imply the other in a common context.",
+      "NO  \nA chilling device and a spatula serve very different purposes and are not interchangeable items, so knowing that one is true does not imply the other is true."
+    ],
+    "goal_obj is chilled": [
+      "NO  \nThe statement cannot be generally implied because \"goal_obj is chilled\" does not provide information that specifies \"goal_obj\" is a spatula; it could refer to a variety of items that can be chilled, such as food or drinks.",
+      "NO  \nThe statement \"goal_obj is chilled\" does not imply that \"goal_obj is an spatula.\" The two predicates refer to different attributes of the object; being chilled refers to temperature, while being a spatula refers to its type. Therefore, one does not logically lead to the conclusion of the other.",
+      "NO  \nThe predicates do not imply one another; a chilled object can be any item, not specifically a spatula."
+    ],
+    "goal_obj is a light": [
+      "NO  \nPredicate 2 specifies that the goal object is a light, while Predicate 1 suggests the goal object is a spatula. These two objects are fundamentally different in function and classification, therefore Predicate 2 does not imply Predicate 1.",
+      "NO  \nA light and a spatula are two distinct objects with different functions; knowing that the goal object is a light does not imply that it is also a spatula.",
+      "NO  \nThe statement is generally false because a light and a spatula are two different objects serving different purposes, so knowing that one is a light does not imply that the other is a spatula."
+    ],
+    "goal_obj is on": [
+      "NO  \nThe statement \"goal_obj is on\" does not imply that \"goal_obj is an spatula.\" There is no necessary connection between being \"on\" something and being a spatula; other objects can also be on something, so the truth of Predicate 2 does not lead to the conclusion of Predicate 1.",
+      "NO  \nThe statement \"goal_obj is on\" does not provide any information that allows us to conclude that \"goal_obj is an spatula.\" The first predicate specifies the type of the object, while the second only indicates a condition about its position. They are not directly related based on the given context.",
+      "NO  \nThe statement does not generally imply that \"goal_obj is an spatula\" from \"goal_obj is on.\" The predicate \u201cgoal_obj is on\u201d merely indicates the position of the object without providing information about the object's identity. Therefore, it is possible for \"goal_obj\" to be something other than a spatula."
+    ]
+  },
+  "goal_obj is an plate": {
+    "predicate_name": "is an plate",
+    "the agent is holding goal_obj": [
+      "NO  \nThe statement that \"the agent is holding goal_obj\" does not imply that \"goal_obj is a plate.\" In fact, given that the goal_obj is mentioned to be clean and inside the countertop (goal_recep), and the agent's hand is empty, it suggests the agent is not currently holding goal_obj. Therefore, it cannot be concluded that goal_obj is a plate based on the information provided.",
+      "NO  \nThe statement \"goal_obj is a plate\" cannot be implied from \"the agent is holding goal_obj\" because it is given that the agent's hand is empty, which makes it impossible to hold anything, including a plate.",
+      "NO  \nThe statement cannot be implied because Predicate 2 indicates that the agent is holding the goal_obj, but it is specified that the goal_obj is inside the countertop (goal_recep). Therefore, it cannot be a plate if it is not being held, resulting in a contradiction with the predicates given."
+    ],
+    "goal_obj is a heating device": [
+      "NO  \nA heating device does not imply that the object is a plate; they are different types of objects with distinct functions.",
+      "NO  \nA heating device and a plate refer to different categories of objects; a heating device is designed to generate heat, while a plate is typically a flat dish for serving food. Therefore, knowing that one is a heating device does not imply that it is also a plate.",
+      "NO  \nA heating device is not a plate; they are different categories of objects."
+    ],
+    "goal_obj is heated": [
+      "NO  \nThe statement \"goal_obj is heated\" does not imply that \"goal_obj is an plate.\" While a plate can be heated, there are many other objects that can also be heated. Therefore, the truth of Predicate 2 does not generally lead to the truth of Predicate 1.",
+      "NO  \nHeating an object does not imply that it is specifically a plate; it could be any heat-resistant object.",
+      "NO  \nHeating an object does not imply that it is a plate; many items can be heated. The only information given is that \"goal_obj is heated,\" which does not specify its identity."
+    ],
+    "goal_obj is a washing device": [
+      "NO  \nA washing device is a specific type of appliance used for cleaning clothes, while a plate is a dishware item used for serving food. Since a washing device cannot be a plate, Predicate 2 does not imply Predicate 1.",
+      "NO  \nA washing device is not a plate, so Predicate 2 does not imply Predicate 1.",
+      "NO  \nThe statement is generally false because a washing device and a plate are two different categories of objects; one is meant for cleaning while the other is a type of dishware. Thus, knowing that the goal object is a washing device does not imply that it is a plate."
+    ],
+    "goal_obj is washed": [
+      "NO  \nReason: Just because \"goal_obj is washed\" is true does not imply that \"goal_obj is a plate.\" The goal object could be any item that can be washed, such as a cup or bowl, and not specifically a plate.",
+      "NO  \nJust because \"goal_obj is washed\" does not necessarily imply that \"goal_obj is a plate.\" The object could be something else that is washable, such as a bowl or a glass. Therefore, we cannot conclude that Predicate 1 is true based solely on Predicate 2.",
+      "NO  \nThe statement \"goal_obj is washed\" does not imply that \"goal_obj is a plate.\" There are many objects that can be washed, and being washed does not specifically indicate that the object is a plate."
+    ],
+    "goal_obj is a chilling device": [
+      "NO  \nA \"chilling device\" typically refers to something like a refrigerator or ice maker, while a \"plate\" is a flat dish, which means they are fundamentally different types of objects.",
+      "NO  \nA chilling device, such as a refrigerator or cooler, is not a plate, so Predicate 2 does not imply Predicate 1.",
+      "NO  \nA chilling device is typically not a plate; thus, Predicate 2 does not imply Predicate 1."
+    ],
+    "goal_obj is chilled": [
+      "NO  \nThe statement that \"goal_obj is chilled\" does not imply that \"goal_obj is a plate.\" Chilling can apply to a variety of objects, and without additional context indicating that the chilled object is specifically a plate, the implication cannot be made.",
+      "NO  \nPredicate 2 \"goal_obj is chilled\" does not provide any information that confirms or implies Predicate 1 \"goal_obj is an plate.\" Chilling can apply to various objects and is not specific to plates. Thus, you cannot conclude that the chilled object is necessarily a plate.",
+      "NO  \n\"goal_obj is chilled\" does not imply that \"goal_obj is a plate\" as being chilled can apply to various objects, not specifically a plate."
+    ],
+    "goal_obj is a light": [
+      "NO  \nA light and a plate are two distinct types of objects; knowing that the goal object is a light does not imply that it is also a plate.",
+      "NO  \nPredicate 2 states that \"goal_obj is a light,\" which indicates that it is a type of lighting fixture. Predicate 1 claims \"goal_obj is a plate,\" which refers to a dish for serving or eating food. Since a light and a plate refer to fundamentally different objects, Predicate 2 does not imply Predicate 1.",
+      "NO  \nA light and a plate are two different types of objects; therefore, knowing that \"goal_obj is a light\" does not imply that \"goal_obj is a plate.\""
+    ],
+    "goal_obj is on": [
+      "NO  \nThe statement \"goal_obj is on\" does not imply \"goal_obj is a plate\" because the object can be on a surface and still be something other than a plate, such as a bowl, cup, or other clean items. The information provided does not specify that the object is a plate.",
+      "NO  \nThe statement cannot be generally implied because \"goal_obj is on\" does not provide sufficient information to conclude that \"goal_obj is a plate.\" The fact that the object is on something does not indicate its type; it could be any kind of object that can be placed on a surface, not specifically a plate.",
+      "NO  \nThe statement does not imply that \"goal_obj is a plate\" just because \"goal_obj is on.\" The predicate \"goal_obj is on\" does not provide specific information about the type of object. It could refer to many different kinds of objects, not just plates."
+    ]
+  },
+  "goal_obj is an cloth": {
+    "predicate_name": "is an cloth",
+    "the agent is holding goal_obj": [
+      "NO  \nThe statement is generally false because 'goal_obj' is described as being clean and inside a countertop, rather than being a cloth. Thus, it cannot be implied that 'goal_obj is a cloth'.",
+      "NO  \nThe statement is generally false because Predicate 1 specifies that \"goal_obj is a cloth,\" while Predicate 2 indicates that \"the agent is holding goal_obj.\" However, since the provided background information states that \"goal_obj is clean\" and \"goal_obj is inside goal_recep,\" it implies that the goal_obj is not being held, as the agent's hand is empty. Thus, the two predicates do not logically imply each other as there is a contradiction.",
+      "NO  \nThe statement that \"goal_obj is an cloth\" cannot be implied true based on the information given in Predicate 2. The background context states that \"goal_obj is clean\" and does not indicate that it is a cloth, so Predicate 2 does not imply Predicate 1."
+    ],
+    "goal_obj is a heating device": [
+      "NO  \nA heating device and cloth are fundamentally different types of objects, where a heating device typically provides heat and a cloth is generally used for drying, cleaning, or covering. Therefore, knowing that \"goal_obj is a heating device\" does not imply \"goal_obj is a cloth.\"",
+      "NO  \nA heating device is not generally a cloth; they serve different purposes and are made of different materials.",
+      "NO  \nA heating device is typically not a cloth; it is usually an electrical appliance or mechanism designed to generate heat, while a cloth is a material used for various purposes, none of which implies it is a heating device."
+    ],
+    "goal_obj is heated": [
+      "NO  \nReason: Being heated does not imply that the goal object is cloth, as many objects can be heated, such as food or metal. The two predicates do not correlate in a way that infers one from the other.",
+      "NO  \nHeating an object does not imply that it is a cloth; numerous materials can be heated. The predicates do not logically connect in this context.",
+      "NO  \nHeating an object does not imply that it is made of cloth, as many types of materials can be heated. Thus, Predicate 2 doesn't confirm Predicate 1."
+    ],
+    "goal_obj is a washing device": [
+      "NO  \nA washing device (Predicate 2) does not imply that \"goal_obj\" is a cloth (Predicate 1). A washing device is used to clean various items, including clothes, but it is not itself a cloth. Therefore, one cannot conclude that if the object is a washing device, it must also be a cloth.",
+      "NO  \nA washing device is not necessarily an article of clothing; it is a machine used for cleaning clothes. Therefore, knowing that \"goal_obj is a washing device\" does not imply that \"goal_obj is an cloth.\"",
+      "NO  \nA washing device is not an item of clothing; it is used to clean clothes, but it does not imply that the object being referred to is itself a piece of clothing."
+    ],
+    "goal_obj is washed": [
+      "NO  \nReason: The predicate \"goal_obj is washed\" does not necessarily imply that \"goal_obj is an cloth.\" There are various types of objects that can be washed, and being clean does not limit the object to being a cloth.",
+      "NO  \nReason: The fact that \"goal_obj is washed\" does not imply that \"goal_obj is a cloth,\" as \"washed\" can refer to a variety of objects, not limited to cloth items.",
+      "NO  \nThe statement \"goal_obj is washed\" does not necessarily imply that \"goal_obj is a cloth.\" While a cloth can be washed, other objects can also be washed. Therefore, the truth of Predicate 2 does not guarantee the truth of Predicate 1."
+    ],
+    "goal_obj is a chilling device": [
+      "NO  \nA \"chilling device\" typically refers to an appliance like a refrigerator or ice maker, which is not generally considered a \"cloth.\" Therefore, Predicate 2 does not imply Predicate 1.",
+      "NO  \nThe statement that \"goal_obj is a chilling device\" does not imply that \"goal_obj is a cloth\". A chilling device typically refers to an appliance or equipment designed to cool items, while cloth refers to a textile material. These two categories are distinct and do not overlap in a way that one implies the other.",
+      "NO  \nA chilling device typically refers to something designed to cool or chill items, such as a refrigerator or cooler, whereas cloth is a material used for making fabrics or garments. Therefore, being a chilling device does not imply that the item is cloth."
+    ],
+    "goal_obj is chilled": [
+      "NO  \nBeing \"chilled\" does not imply that an object is \"a cloth\". While certain cloth items can be chilled (like a fabric that is used for a cold compress), the phrase \"goal_obj is chilled\" generally refers to temperature, which is not inherently connected to the classification of the object as a cloth.",
+      "NO  \nThe statement \"goal_obj is chilled\" does not imply that \"goal_obj is an cloth\". The first predicate refers to an object being a type of fabric or garment, while the second simply indicates a state of temperature. There is no necessary connection between the two statements that would confirm that a chilled object is a fabric.",
+      "NO  \nThe statement is generally false because being \"chilled\" does not imply that the \"goal_obj\" is a cloth. In common contexts, chilled objects are often food or drinks rather than clothing items."
+    ],
+    "goal_obj is a light": [
+      "NO  \nA light and cloth are distinct categories of objects; thus, if an object is identified as a light, it cannot be implied to also be a cloth.",
+      "NO  \nA light and a cloth are two distinct categories of objects; therefore, the truth of Predicate 2 (goal_obj is a light) does not imply the truth of Predicate 1 (goal_obj is a cloth).",
+      "NO  \nThe predicates refer to two distinct types of objects; a \"light\" and a \"cloth\" are fundamentally different and one does not imply the other in common contexts."
+    ],
+    "goal_obj is on": [
+      "NO  \nThe statement cannot be generally implied because \"goal_obj is on\" does not provide any information about the object being a cloth; it could be any type of object that is clean and inside a countertop.",
+      "NO  \nThe statement \"goal_obj is on\" does not imply that \"goal_obj is an cloth.\" The information given indicates that \"goal_obj is clean\" and \"inside goal_recep,\" which suggests it might not be a cloth, and being \"on\" does not provide evidence of its material or type.",
+      "NO  \nThe truth of \"goal_obj is on\" does not imply that \"goal_obj is an cloth\" is true. The goal_obj is clean and specified to be inside a countertop (goal_recep), and could be any object, not necessarily cloth. Therefore, predicate 1 is not universally implied by predicate 2."
+    ]
+  },
+  "goal_obj is an apple": {
+    "predicate_name": "is an apple",
+    "the agent is holding goal_obj": [
+      "NO  \nPredicate 2 states that the agent is holding \"goal_obj,\" which refers to an object that is described as \"hot\" and is inside a garbage can. Therefore, it cannot be concluded that \"goal_obj\" is an apple.",
+      "NO  \nThe agent is holding goal_obj, and goal_obj is specified as \"hot\" and inside a garbage can, not an apple. Therefore, Predicate 2 does not imply Predicate 1.",
+      "NO  \nThe statement cannot be implied because, according to the given background, \"goal_obj\" is specified as \"hot\" and not an \"apple.\" Therefore, Predicate 2 does not support the truth of Predicate 1."
+    ],
+    "goal_obj is a heating device": [
+      "NO  \nAn apple cannot be a heating device; therefore, Predicate 2 being true does not imply Predicate 1 is true.",
+      "NO  \nAn apple is a fruit, while a heating device is used for heating; these two categories do not overlap. Hence, knowing that the goal object is a heating device does not imply it is an apple.",
+      "NO  \nThe predicates are describing different types of objects; a heating device cannot be an apple. An apple is a fruit, while a heating device refers to an object that generates heat, so one cannot imply the other."
+    ],
+    "goal_obj is heated": [
+      "NO  \nReason: While \"goal_obj is heated\" being true suggests that it is hot, it does not specifically imply that \"goal_obj is an apple\". The heated object could be something other than an apple, and the information provided about the goal_obj being in a garbage can further suggests it is likely not an apple.",
+      "NO  \nThe statement \"goal_obj is heated\" does not imply \"goal_obj is an apple.\" The information suggests that the goal object is already deemed hot and is located in a garbage can, which is not consistent with it being an apple.",
+      "NO  \nAn apple can be heated, but not all heated objects are apples. Since the goal_obj is inside a garbage can, it is unlikely to be an apple, which means Predicate 2 does not imply Predicate 1."
+    ],
+    "goal_obj is a washing device": [
+      "NO  \nPredicate 2 states that \"goal_obj is a washing device,\" which implies it is a machine used for cleaning clothes. Predicate 1, stating \"goal_obj is an apple,\" refers to a fruit. Since a washing device cannot be an apple, the two predicates are mutually exclusive.",
+      "NO  \nA washing device and an apple are fundamentally different objects, and knowing that an object is a washing device does not imply that it could also be an apple.",
+      "NO  \nThe statement is generally false because a washing device cannot be an apple, as they refer to entirely different categories of objects."
+    ],
+    "goal_obj is washed": [
+      "NO  \nThe statement \"goal_obj is washed\" cannot imply that \"goal_obj is an apple\" because the specific information provided states that \"goal_obj is hot\" and \"goal_obj is inside goal_recep,\" which indicates it's not an apple, but rather something unsuitable for washing, likely garbage in this context.",
+      "NO  \nReason: The predicate \"goal_obj is washed\" does not imply that \"goal_obj is an apple.\" The object in question is described as \"hot\" and located inside a garbage can, which contradicts it being an apple, as apples are typically not hot or found in a garbage can as a washed item.",
+      "NO  \nWashing an object does not necessarily imply that the object is an apple; it could be any object that can be washed."
+    ],
+    "goal_obj is a chilling device": [
+      "NO  \nThe predicates refer to different classifications: \"goal_obj is a chilling device\" implies it is a device for cooling, while \"goal_obj is an apple\" refers to a type of fruit. Therefore, one cannot imply the other based on the information provided.",
+      "NO  \nThe assertion that \"goal_obj is a chilling device\" does not imply that \"goal_obj is an apple.\" Chilling devices typically refer to items like refrigerators or coolers, whereas an apple is a fruit. Additionally, given the context that \"goal_obj is hot\" and \"goal_obj is inside a garbage can,\" it would be contradictory for it to simultaneously be both an apple and a chilling device.",
+      "NO  \nAn apple cannot be a chilling device, as it is a fruit and cannot serve the function of a device meant for chilling."
+    ],
+    "goal_obj is chilled": [
+      "NO  \nReason: The fact that \"goal_obj is chilled\" does not imply that \"goal_obj is an apple.\" Additionally, it is specified that \"goal_obj is hot\" and \"inside goal_recep,\" indicating that the object is not an apple and is instead something different, further supporting that there is no implication between the two predicates.",
+      "NO  \nPredicate 2 states that \"goal_obj is chilled,\" but it cannot be inferred from that alone that \"goal_obj is an apple,\" especially when it's indicated that \"goal_obj is hot.\" Therefore, the truth of Predicate 2 does not imply the truth of Predicate 1.",
+      "NO  \n\"goal_obj is chilled\" does not imply \"goal_obj is an apple.\" In fact, it contradicts the given condition that \"goal_obj is hot.\""
+    ],
+    "goal_obj is a light": [
+      "NO  \nPredicate 2 states that \"goal_obj is a light,\" which is fundamentally different from Predicate 1 stating \"goal_obj is an apple.\" A light and an apple are distinct objects with different properties, so the truth of Predicate 2 does not imply the truth of Predicate 1.",
+      "NO  \nPredicate 2 states that \"goal_obj is a light,\" which does not imply that \"goal_obj is an apple.\" The two objects are fundamentally different; a light is an object used for illumination, while an apple is a fruit. Therefore, the truth of Predicate 2 does not lead to the truth of Predicate 1.",
+      "NO  \nPredicate 2 states that \"goal_obj is a light,\" while Predicate 1 states that \"goal_obj is an apple.\" A light and an apple are fundamentally different objects, meaning that the truth of Predicate 2 does not imply the truth of Predicate 1."
+    ],
+    "goal_obj is on": [
+      "NO  \nPredicate 2 (\"goal_obj is on\") does not provide any information that implies Predicate 1 (\"goal_obj is an apple\") is true, especially since we know that \"goal_obj is inside goal_recep\", indicating that it is likely not an apple.",
+      "NO  \nThe statement that \"goal_obj is an apple\" cannot be inferred from \"goal_obj is on,\" especially given that \"goal_obj\" is specified to be hot and is inside a garbage can, which typically would not involve an apple.",
+      "NO  \nPredicate 2 \"goal_obj is on\" does not provide sufficient information to imply that Predicate 1 \"goal_obj is an apple\" is true, especially given that \"goal_obj\" is defined as being \"hot\" and \"inside a garbage can,\" which would suggest it is not an apple."
+    ]
+  },
+  "goal_obj is an pan": {
+    "predicate_name": "is an pan",
+    "the agent is holding goal_obj": [
+      "NO  \nThe information provided indicates that \"goal_obj\" is \"cool\" and is \"inside goal_recep,\" which is a countertop. Therefore, \"goal_obj\" cannot be a pan if it is specifically identified as \"cool\" and not as a pan, thus Predicate 2 does not imply Predicate 1.",
+      "NO  \nThe statement cannot be generally implied because Predicate 2 states that \"the agent is holding goal_obj,\" while Predicate 1 claims that \"goal_obj is a pan.\" Given the background that \"goal_obj is cool\" and \"goal_obj is inside goal_recep,\" it indicates that the object is likely not a pan. Thus, the specific attribute of goal_obj contradicts the possibility of it being a pan.",
+      "NO  \nThe statement cannot be generally implied as true because \"goal_obj is cool\" and does not match \"goal_obj is a pan\". Therefore, Predicate 2 does not imply Predicate 1."
+    ],
+    "goal_obj is a heating device": [
+      "NO  \nA heating device refers to appliances like heaters, stoves, or microwaves that provide heat, while a pan is a specific type of cooking vessel. Not all heating devices are pans, and since \"goal_obj\" is described as cool and inside a countertop, it cannot be inferred that \"goal_obj\" being a heating device implies it is a pan.",
+      "NO  \nA heating device can refer to several objects (like a heater or microwave), while a pan is specifically a type of cookware, suggesting that \"goal_obj is a heating device\" does not imply \"goal_obj is a pan.\"",
+      "NO  \nA heating device can be a variety of objects, including an oven or a radiator, and does not necessarily imply that the object is a pan."
+    ],
+    "goal_obj is heated": [
+      "NO  \nA \"goal_obj\" that is \"heated\" does not necessarily imply that it is a \"pan.\" The provided information indicates that \"goal_obj\" is cool and located inside the countertop (\"goal_recep\"), which contradicts the idea that it is a heated pan.",
+      "NO  \nHeating does not imply that the object is a pan, as any object that can be heated could be in addition to a pan.",
+      "NO  \nHeating does not imply that an object is a pan. There are many objects that can be heated, not just pans. In this case, \"goal_obj\" is stated to be cool, which further suggests it is not heated at the moment."
+    ],
+    "goal_obj is a washing device": [
+      "NO  \nA washing device and a pan are different types of objects, and one does not imply the other based on their definitions.",
+      "NO  \nA washing device and a pan are two distinct types of objects and cannot be considered the same; therefore, Predicate 2 does not imply Predicate 1.",
+      "NO  \nA washing device (like a washing machine) is not a pan; therefore, Predicate 2 does not imply Predicate 1."
+    ],
+    "goal_obj is washed": [
+      "NO  \nWashing an object does not imply that the object is necessarily a pan. The status of being washed can apply to many items beyond just pans. Therefore, we cannot conclude that \"goal_obj is a pan\" based solely on \"goal_obj is washed.\"",
+      "NO  \nThe statement cannot be implied as true because there is no information supporting that \"goal_obj is an pan\" based only on \"goal_obj is washed\". The conditions do not specify the type of object that has been washed.",
+      "NO  \nPredicate 2 states \"goal_obj is washed,\" which does not necessarily imply that \"goal_obj is a pan.\" The fact that the object is washed does not give any information about its identity as a pan."
+    ],
+    "goal_obj is a chilling device": [
+      "NO  \nA chilling device, such as a refrigerator or cooler, is not the same as a pan, which is typically used for cooking or holding food. Therefore, knowing that the goal object is a chilling device does not imply that it is also a pan.",
+      "NO  \nA chilling device, such as a fridge or cooler, is not typically the same as a pan, which is used for cooking. These objects serve different functions and are not interchangeable.",
+      "NO  \nA chilling device does not imply that the object is a pan; in fact, these describe different types of objects. A pan is typically used for cooking, while a chilling device is used for cooling or lowering the temperature of items."
+    ],
+    "goal_obj is chilled": [
+      "NO  \nThe statement \"goal_obj is chilled\" does not imply that \"goal_obj is a pan.\" Chilling can apply to various objects, not exclusively to pans, and the specific context does not provide any indication that the chilled object is a pan.",
+      "NO  \nThe predicates refer to different properties; \"goal_obj is chilled\" does not imply that \"goal_obj is an pan.\" Instead, \"goal_obj\" could refer to any item, and \"chilled\" suggests temperature, not specifically that it is a pan.",
+      "NO  \nPredicate 2 \"goal_obj is chilled\" does not imply Predicate 1 \"goal_obj is a pan\" because being chilled does not necessarily mean that the object is a pan; it could refer to any number of other chilled items."
+    ],
+    "goal_obj is a light": [
+      "NO  \nPredicate 2 specifies that \"goal_obj is a light,\" while Predicate 1 specifies that \"goal_obj is a pan.\" A light and a pan are fundamentally different objects with distinct functions, so knowing that goal_obj is a light does not imply that it is also a pan.",
+      "NO  \nThe statement is generally false because a \"light\" and a \"pan\" are distinct objects with different functions and characteristics. Knowing that \"goal_obj is a light\" does not imply that \"goal_obj is a pan.\"",
+      "NO  \nA light and a pan are two distinct objects with different purposes and characteristics, so the truth of Predicate 2 does not imply the truth of Predicate 1."
+    ],
+    "goal_obj is on": [
+      "NO  \nPredicate 2 states that \"goal_obj is on,\" which does not provide any information to imply that \"goal_obj is a pan.\" Additionally, the context indicates that \"goal_obj is cool\" and \"inside goal_recep,\" suggesting it is not on a heat source, further contradicting that it could be a pan.",
+      "NO  \nPredicate 2 states that \"goal_obj is on,\" but since \"goal_obj is cool\" and \"inside goal_recep,\" it cannot be a pan, which typically would not be cool if it were on and actively being used.",
+      "NO  \nThe statement \"goal_obj is on\" does not imply that \"goal_obj is a pan,\" as the specific information given about \"goal_obj\" indicates that it is cool and inside the countertop (\"goal_recep\"). Therefore, it cannot be inferred that \"goal_obj\" is a pan solely based on its position."
+    ]
+  },
+  "goal_recep is a fridge": {
+    "predicate_name": "is a fridge",
+    "the agent is holding goal_recep": [
+      "NO  \nThe statement \"the agent is holding goal_recep\" does not imply that \"goal_recep is a fridge.\" Given the background information, it is specified that \"goal_obj is an apple\" and \"goal_obj is inside goal_recep,\" indicating that goal_recep is not a fridge, but rather something else. Furthermore, the agent's hand being empty contradicts the implication that they can hold something. Thus, there is no logical basis to conclude that goal_recep is a fridge based on Predicate 2.",
+      "NO  \nThe statement cannot be implied because there is no information supporting that \"goal_recep\" is a fridge; in fact, it suggests it's an object (an apple) inside \"goal_recep,\" and it seems likely that goal_recep could be something else entirely, such as a bowl or container, rather than a fridge.",
+      "NO  \nThe information states that the goal object is an apple, which is inside the goal receptacle (goal_recep). This implies that the goal_recep cannot be a fridge, as fridges typically do not hold single items or fruits in the context provided. Therefore, Predicate 2 does not imply Predicate 1."
+    ],
+    "goal_recep is a heating device": [
+      "NO  \nA heating device and a fridge serve opposite purposes; a fridge is designed to cool items, whereas a heating device warms them. Thus, if goal_recep is a heating device, it cannot be a fridge.",
+      "NO  \nA heating device and a fridge serve opposing functions\u2014one heats and the other cools\u2014so if goal_recep is a heating device, it cannot simultaneously be a fridge.",
+      "NO  \nA heating device and a fridge serve opposite functions; a fridge is designed to cool items while a heating device is used to warm them. Therefore, if \"goal_recep\" is a heating device, it cannot be a fridge."
+    ],
+    "goal_recep is heated": [
+      "NO  \nA fridge is typically used to keep items cool or cold, not heated. If \"goal_recep is heated\", it contradicts the function of a fridge, implying that \"goal_recep\" cannot be a fridge.",
+      "NO  \nA fridge is designed to keep items cold, not heated. If \"goal_recep\" is heated, it cannot be a fridge.",
+      "NO  \nA fridge is not typically heated; it is designed to keep items cold. Therefore, if \"goal_recep is heated\" is true, it cannot be implied that \"goal_recep is a fridge.\""
+    ],
+    "goal_recep is a washing device": [
+      "NO  \nA washing device and a fridge are two different types of appliances with distinct purposes; one cannot be both simultaneously based on common definitions.",
+      "NO  \nA washing device and a fridge serve different purposes and are distinct types of appliances. Therefore, knowing that one is true does not imply the other is true.",
+      "NO  \nA washing device and a fridge are two distinct types of appliances; thus, knowing that a device is a washing device does not imply that it is also a fridge."
+    ],
+    "goal_recep is washed": [
+      "NO  \nWashing something does not imply that it is a fridge; different objects can be washed, and the action of washing an object does not determine its type.",
+      "NO  \nWashing something does not imply that it is a fridge; the two predicates do not have a direct relationship based on common understanding or context.",
+      "NO  \nWashing \"goal_recep\" does not imply that it is a fridge; it could be any type of container or object that can be washed. The implication cannot be drawn based solely on the information given."
+    ],
+    "goal_recep is a chilling device": [
+      "YES  \nA fridge is indeed a type of chilling device, so if \"goal_recep is a chilling device\" is true, it can generally be implied that \"goal_recep is a fridge.\"",
+      "YES  \nIn common contexts, a fridge is indeed a type of chilling device, so if \"goal_recep is a chilling device,\" we can conclude that it could be a fridge.",
+      "YES  \nA fridge is typically understood as a type of chilling device, so if \"goal_recep is a chilling device,\" it can generally imply that \"goal_recep is a fridge.\""
+    ],
+    "goal_recep is chilled": [
+      "NO  \nThe truth of \"goal_recep is chilled\" does not necessarily imply that \"goal_recep is a fridge,\" as there are other objects that could also contain something chilled.",
+      "NO  \nThe statement \"goal_recep is chilled\" does not imply that \"goal_recep is a fridge,\" as there are other items (e.g., containers or coolers) that could also be chilled. In this context, \"chilled\" simply means it is kept at a lower temperature, but it does not specify the object is indeed a fridge.",
+      "NO  \nThe statement \"goal_recep is chilled\" does not imply that \"goal_recep is a fridge.\" Chilling can occur in other contexts, such as a cooler or ice bath, so chilling does not exclusively indicate that the object is a fridge."
+    ],
+    "goal_recep is a light": [
+      "NO  \nA fridge is not a light; they are two distinct types of objects, so knowing that \"goal_recep is a light\" does not imply that \"goal_recep is a fridge.\"",
+      "NO  \nA fridge and a light are different types of objects with distinct functions; thus, knowing that \"goal_recep is a light\" does not imply that \"goal_recep is a fridge.\"",
+      "NO  \nA light and a fridge are two distinct types of objects, and knowing that \"goal_recep is a light\" does not support the claim that \"goal_recep is a fridge.\""
+    ],
+    "goal_recep is on": [
+      "NO  \nBeing \"on\" does not imply that \"goal_recep\" is a fridge; it could be any appliance or device that can be turned on.",
+      "NO  \nThe statement cannot be generally implied. Just because \"goal_recep is on\" does not mean that \"goal_recep is a fridge.\" It could refer to any type of appliance or receptacle that can be \"on.\"",
+      "YES  \nThe statement implies that if \"goal_recep is on,\" it is likely that \"goal_recep\" is functioning as a fridge, meaning that it could logically be a fridge that is currently on. There is no evidence to contradict that a functioning receptacle for an apple would not be a fridge."
+    ]
+  },
+  "goal_recep is a safe": {
+    "predicate_name": "is a safe",
+    "the agent is holding goal_recep": [
+      "NO  \nThe statement cannot be generally implied because Predicate 2 indicates that the agent is holding \"goal_recep,\" which refers to a receptacle (not a safe), and based on the background, \"goal_obj\" (a vase) is inside \"goal_recep.\" The information does not support that \"goal_recep\" is categorized as a safe.",
+      "NO  \nReason: If \"goal_recep\" is specified as containing a \"goal_obj,\" which is a vase, then \"goal_recep\" cannot be a safe; rather, it is a receptacle (like a container) that holds an object. Thus, Predicate 2 does not imply Predicate 1.",
+      "NO  \nThe statement does not generally imply that \"goal_recep is a safe.\" Given that \"goal_obj\" is a vase and that it is inside \"goal_recep,\" which is not defined as a safe, we cannot conclude that \"goal_recep\" is a safe based solely on the fact that the agent is holding it."
+    ],
+    "goal_recep is a heating device": [
+      "NO  \nA heating device and a safe are two distinct types of objects with different functions; a heating device is designed for generating heat, while a safe is for storing valuables securely. Therefore, knowing that \"goal_recep is a heating device\" does not imply that \"goal_recep is a safe.\"",
+      "NO  \nA heating device cannot be a safe; they serve entirely different purposes and functions.",
+      "NO  \nA heating device is typically not related to being a safe; therefore, one does not imply the other."
+    ],
+    "goal_recep is heated": [
+      "NO  \nHeating an object does not imply it is a safe. In common contexts, a heated receptacle does not inherently mean it is designed to be a safe, and the information provided does not suggest a direct correlation between these two predicates.",
+      "NO  \nThe statement does not imply that \"goal_recep is a safe\" is true based solely on the information that \"goal_recep is heated.\" A heated object does not necessarily indicate it is a safe; it could be in reference to something else entirely, like an oven or a dish.",
+      "NO  \nHeating does not imply that something is a safe; they refer to different properties. A \"heated\" object could be anything that has been warmed, like an oven or a pot, and does not inherently mean it is a safe for storing objects."
+    ],
+    "goal_recep is a washing device": [
+      "NO  \nA washing device and a safe are different types of objects with distinct functions, and knowing that goal_recep is a washing device does not imply that it is also a safe.",
+      "NO  \nA washing device is not a safe; they serve different functions and purposes in a household context.",
+      "NO  \nA washing device and a safe serve very different purposes and are distinct categories of objects; thus, one does not imply the other."
+    ],
+    "goal_recep is washed": [
+      "NO  \nWashing \"goal_recep\" does not imply that it is a safe; it is specified as containing a vase, suggesting it may not be a safe at all.",
+      "NO  \nWashing something does not imply that it is a safe; it simply means the item has been cleaned. The context indicates that \"goal_recep\" is likely a receptacle for the vase, not a safe.",
+      "NO  \nReason: The fact that \"goal_recep is washed\" does not imply that \"goal_recep is a safe.\" A washed item can be anything from a dish to a receptacle, and there is no inherent logic linking the cleanliness of the object to its classification as a \"safe.\""
+    ],
+    "goal_recep is a chilling device": [
+      "NO  \nThe statement is generally false because a chilling device is typically not a safe, and there is no implication that a chilling device would serve as a storage area for valuable items like a safe does.",
+      "NO  \nA chilling device and a safe are distinct categories; one cools items while the other is used for secure storage. There is no logical basis to conclude that a chilling device must also be a safe.",
+      "NO  \nA chilling device and a safe refer to different types of objects with distinct functions, and there is no implied connection that would support the conclusion that one is the other."
+    ],
+    "goal_recep is chilled": [
+      "NO  \nThe statement \"goal_recep is chilled\" does not imply \"goal_recep is a safe,\" especially since \"goal_recep\" is associated with an object (vase) that does not align with the concept of a safe, which typically refers to a secure storage container.",
+      "NO  \nThe statement \"goal_recep is chilled\" does not imply that \"goal_recep is a safe.\" The definitions of the predicates suggest that \"chilled\" refers to a temperature condition, while \"a safe\" refers to a secure storage container. The two predicates are unrelated in their meanings regarding the object and do not logically connect.",
+      "NO  \nThe statement \"goal_recep is chilled\" does not imply that \"goal_recep is a safe.\" In common contexts, a \"chilled\" condition typically refers to temperature, often relating to food or drinks, while a \"safe\" refers to a secure storage unit for valuables. These two predicates describe different characteristics that are unrelated."
+    ],
+    "goal_recep is a light": [
+      "NO  \nThe predicates indicate that \"goal_recep\" is identified as a light, while \"goal_recep\" being a safe suggests it serves a different purpose related to secure storage. Therefore, one does not imply the other in a general context.",
+      "NO  \nThe predicate \"goal_recep is a light\" does not imply that \"goal_recep is a safe.\" In common contexts, a light is typically not associated with being a safe, and the fact that the goal_obj is a vase inside the goal_recep further indicates that the receptacle is likely not designed for safety purposes.",
+      "NO  \nThe statement \"goal_recep is a light\" does not imply that \"goal_recep is a safe.\" A light is typically an object that provides illumination, whereas a safe is a secure container for valuables. The two predicates refer to fundamentally different types of objects."
+    ],
+    "goal_recep is on": [
+      "NO  \nThe fact that \"goal_recep is on\" does not imply that \"goal_recep is a safe.\" In this context, \"goal_recep\" could refer to various objects that are not necessarily safe, such as a surface where an object can be placed, but not a safe itself.",
+      "NO  \nThe statement \"goal_recep is on\" does not imply that \"goal_recep is a safe.\" The first predicate describes a specific type of furniture used for storage, while the second predicate pertains to its operational state. An object being \"on\" does not confirm its identity as a safe.",
+      "NO  \nReason: The statement \"goal_recep is on\" does not imply that \"goal_recep is a safe.\" The first predicate describes a type of object (a safe), while the second predicate describes its state (being on), which does not confirm or guarantee that it is a safe. The presence of a vase inside does not support the implication either."
+    ]
+  },
+  "goal_obj is an vase": {
+    "predicate_name": "is an vase",
+    "the agent is holding goal_obj": [
+      "NO  \nThe reason is that Predicate 2 states the agent is holding \"goal_obj,\" but it's given that \"goal_obj\" is inside \"goal_recep\" (the safe) and the agent's hand is empty. Therefore, the agent cannot be holding \"goal_obj,\" which contradicts Predicate 2. Additionally, there is no information that explicitly connects \"goal_obj\" being a vase, which makes the implication false.",
+      "NO  \nReason: If \"goal_obj is an vase\" were true, that would contradict the fact that the \"goal_obj\" is actually inside a safe (\"goal_recep\") and that the agent's hand is empty, meaning the agent can't be holding a vase.",
+      "NO  \nThe predicate \"the agent is holding goal_obj\" cannot imply \"goal_obj is a vase\" since goal_obj is actually inside a safe (goal_recep) and being held implies it is not in the safe. Furthermore, there is no information indicating that the specific object is a vase; it could be something else entirely."
+    ],
+    "goal_obj is a heating device": [
+      "NO  \nA heating device and a vase are fundamentally different categories of objects; thus, knowing that \"goal_obj is a heating device\" does not imply that \"goal_obj is a vase.\"",
+      "NO  \nA heating device and a vase are distinct categories of objects, and knowing that the goal object is a heating device does not imply that it is also a vase. In general contexts, these two predicates describe different types of objects with different functions.",
+      "NO  \nReason: A heating device and a vase are distinct categories of objects; one does not imply the other."
+    ],
+    "goal_obj is heated": [
+      "NO  \nHeating does not necessarily imply that the object is a vase; many objects can be heated that are not vases.",
+      "NO  \nReason: The statement \"goal_obj is heated\" does not imply that \"goal_obj is a vase.\" The predicates refer to different attributes and there is no inherent connection that would suggest a heated object must be a vase. Additionally, given that \"goal_obj\" is inside a \"safe,\" it may not even be the type of object that can be generally associated with heating.",
+      "NO  \nHeating an object does not imply that the object is a vase; it could be any heat-resistant item."
+    ],
+    "goal_obj is a washing device": [
+      "NO  \nA washing device and a vase are fundamentally different objects; one is used for cleaning and the other for holding flowers or decorative purposes. Therefore, knowing that \"goal_obj is a washing device\" does not imply that \"goal_obj is a vase.\"",
+      "NO  \nA washing device and a vase are two distinct types of objects, and knowing that the goal object is a washing device does not imply that it is also a vase.",
+      "NO  \nA washing device cannot be a vase, as they refer to distinctly different types of objects."
+    ],
+    "goal_obj is washed": [
+      "NO  \nWashing an object does not imply that it is specifically a vase; other objects can also be washed, regardless of whether they are vases or not.",
+      "NO  \nWashing an object does not imply that it is a vase; it could be any object.",
+      "NO  \nThe statement \"goal_obj is washed\" does not imply \"goal_obj is a vase,\" as there are many objects that can be washed, and being washed does not specify the object's type."
+    ],
+    "goal_obj is a chilling device": [
+      "NO  \nA chilling device is typically not classified as a vase; thus, knowing that an object is a chilling device does not imply that it is also a vase.",
+      "NO  \nA chilling device typically refers to an appliance designed to cool items, while a vase is generally a container for holding flowers or liquid. These objects serve different purposes and are not synonymous, so the truth of Predicate 2 does not imply the truth of Predicate 1.",
+      "NO  \nA chilling device and a vase are two different types of objects, and knowing one is true does not imply that the other is true in a general context. A chilling device is meant for cooling and does not suggest it is a vase, which is typically used for holding flowers or decorative purposes."
+    ],
+    "goal_obj is chilled": [
+      "NO  \nThe statement \"goal_obj is chilled\" does not imply that \"goal_obj is a vase,\" as \"chilled\" refers to temperature and does not indicate the object's type or category. Chilled objects can be various other items, not just vases.",
+      "NO  \nA \"goal_obj\" that is \"chilled\" does not imply that it is a \"vase.\" Chilling typically refers to the temperature of an object, while being a \"vase\" refers to its shape and purpose, which are unrelated traits.",
+      "NO  \nThe statement \"goal_obj is chilled\" does not imply that \"goal_obj is a vase.\" Being chilled could apply to multiple objects, not just a vase, and the relationship between chilling and being a vase is not direct or inherent."
+    ],
+    "goal_obj is a light": [
+      "NO  \nA light and a vase are distinct types of objects, and knowing that the goal object is a light does not imply that it is a vase.",
+      "NO  \nA light and a vase are two distinct types of objects; knowing that \"goal_obj is a light\" does not imply that \"goal_obj is a vase\" is true.",
+      "NO  \nA light is not a vase, and the two predicates refer to different types of objects. Therefore, knowing that \"goal_obj is a light\" does not imply that \"goal_obj is a vase.\""
+    ],
+    "goal_obj is on": [
+      "NO  \nPredicate 2 does not imply Predicate 1 because \"goal_obj is on\" does not provide any information about the object being a vase. The context indicates that \"goal_obj\" is inside a safe, which is separate from the notion of being a vase.",
+      "NO  \nThe statement cannot be implied because while \"goal_obj is on\" indicates a state of placement or support, it does not provide any information about the nature or type of the object itself (whether it is a vase or something else). Additionally, \"goal_obj is inside goal_recep\" suggests that the goal object is contained within the safe, which further contradicts the idea that it is on something. Therefore, Predicate 2 does not imply Predicate 1.",
+      "NO  \nThe statement \"goal_obj is on\" does not necessarily imply that \"goal_obj is a vase.\" The information provided indicates that \"goal_obj\" is inside a safe (goal_recep), which does not confirm that it is a vase. The predicates are not logically linked in such a way that one necessarily implies the other."
+    ]
+  },
+  "goal_recep is a desk": {
+    "predicate_name": "is a desk",
+    "the agent is holding goal_recep": [
+      "NO  \nThe statement \"goal_recep is a desk\" cannot be implied from \"the agent is holding goal_recep,\" especially since it is specified that \"goal_obj is a mug\" and \"goal_obj is inside goal_recep,\" indicating that goal_recep is likely a container and not a desk.",
+      "NO  \nThe statement is generally false because Predicate 2 states that \"the agent is holding goal_recep,\" but since \"goal_obj is a mug\" and \"goal_obj is inside goal_recep,\" it implies that goal_recep cannot be a desk; rather, it is likely some kind of container (like a box or a holder) that holds the mug.",
+      "NO  \nThe statement cannot be implied since \"goal_recep\" is known to contain a mug, not a desk, therefore Predicate 1 is false based on the given information."
+    ],
+    "goal_recep is a heating device": [
+      "NO  \nA heating device and a desk are fundamentally different in their functions and classifications; therefore, the truth of Predicate 2 does not imply the truth of Predicate 1.",
+      "NO  \nA heating device and a desk serve different functions, and knowing that \"goal_recep\" is a heating device does not imply that it is also a desk.",
+      "NO  \nA heating device and a desk are two different types of objects. Knowing that \"goal_recep is a heating device\" does not imply that \"goal_recep is a desk.\""
+    ],
+    "goal_recep is heated": [
+      "NO  \nA heated object does not imply it is a desk; in fact, it suggests it could be anything that can be heated, such as a mug or an appliance.",
+      "NO  \nA heated object does not imply that it is a desk; in common contexts, many objects can be heated, such as a mug, but they may not be classified as a desk.",
+      "NO  \nThe statement cannot be generally implied because a heated object does not necessarily indicate that it is a desk. The fact that \"goal_recep is heated\" suggests it could be an appliance or container. Additionally, a mug is placed inside \"goal_recep,\" which would more likely imply that \"goal_recep\" is a type of vessel rather than a desk."
+    ],
+    "goal_recep is a washing device": [
+      "NO  \nA washing device and a desk are fundamentally different types of objects; one is meant for washing, while the other is meant for working or placing items on. Therefore, knowing that \"goal_recep is a washing device\" does not imply that \"goal_recep is a desk\".",
+      "NO  \nA washing device and a desk are two different types of objects with distinct functions and characteristics. Thus, if \"goal_recep is a washing device\" is true, it cannot imply that \"goal_recep is a desk.\"",
+      "NO  \nA washing device and a desk are two different kinds of objects with distinct functions and characteristics; knowing that goal_recep is a washing device does not imply it is a desk."
+    ],
+    "goal_recep is washed": [
+      "NO  \nWashing an object does not imply its type; a desk is not typically washed, especially if \"goal_obj\" is defined as a mug within \"goal_recep\".",
+      "NO  \nWashing does not imply that \"goal_recep\" is a desk; instead, it indicates that \"goal_recep\" is an object related to the act of washing, which does not necessarily correlate with being a desk. Additionally, since \"goal_obj\" is identified as a mug and is inside \"goal_recep,\" this suggests that \"goal_recep\" is likely a container rather than a desk.",
+      "NO  \nWashing something does not imply that it is a desk; it could be a mug or any other type of object. In this case, we know that \"goal_obj is a mug,\" which further confirms that \"goal_recep\" cannot be a desk."
+    ],
+    "goal_recep is a chilling device": [
+      "NO  \nA chilling device, such as a refrigerator, is distinct from a desk, and a chilling device cannot be classified as a desk based on their definitions and common understanding.",
+      "NO  \nA chilling device is typically not classified as a desk, and the information provided does not indicate a relationship where the two predicates can imply each other.",
+      "NO  \nA chilling device and a desk are fundamentally different types of objects; one is used for cooling and preservation, while the other serves as a surface for work or activities. Thus, knowing that \"goal_recep is a chilling device\" does not imply that \"goal_recep is a desk.\""
+    ],
+    "goal_recep is chilled": [
+      "NO  \nThe statement cannot be implied because \"goal_recep is chilled\" does not provide any information about \"goal_recep\" being a desk. Additionally, since \"goal_obj\" is a mug inside \"goal_recep,\" it more likely refers to a container or a surface rather than a desk.",
+      "NO  \nThe statement is generally false because a \"chilled\" state does not imply that the object is a \"desk.\" The term \"chilled\" is more relevant to items like beverages or food items rather than furniture.",
+      "NO  \nThe statement cannot be implied because \"goal_recep is chilled\" refers to a condition of temperature, which does not provide any information indicating that \"goal_recep is a desk.\" In fact, since the goal object is identified as a mug, it's unlikely for a chilled object to also be a desk."
+    ],
+    "goal_recep is a light": [
+      "NO  \nA light and a desk are distinct object types, and knowing that \"goal_recep is a light\" does not logically imply that \"goal_recep is a desk.\"",
+      "NO  \nA light and a desk are fundamentally different types of objects; knowing that \"goal_recep is a light\" does not allow us to infer that \"goal_recep is a desk.\"",
+      "NO  \nThe two predicates describe different types of objects; a light and a desk are fundamentally different and do not imply one another. A light cannot be a desk, so knowing that \"goal_recep is a light\" does not lead to the conclusion that \"goal_recep is a desk.\""
+    ],
+    "goal_recep is on": [
+      "NO  \nThe statement \"goal_recep is on\" does not imply that \"goal_recep is a desk.\" The information provided indicates that \"goal_obj is a mug\" and \"goal_obj is inside goal_recep,\" which suggests that goal_recep is likely a surface or holder (potentially a table or shelf) rather than specifically a desk. Therefore, Predicate 2 does not provide enough information to confirm Predicate 1.",
+      "NO  \nThe statement cannot be implied because \"goal_recep is on\" simply means that something is currently active or functioning; it does not provide information about the physical form of goal_recep, which in this case you know to be an object that is a mug, not a desk.",
+      "NO  \nThe statement \"goal_recep is on\" does not provide any information about the nature of \"goal_recep\" being a desk, especially since \"goal_obj\" is identified as a mug and the context does not indicate that \"goal_recep\" is necessarily a desk."
+    ]
+  },
+  "goal_obj is an knife": {
+    "predicate_name": "is an knife",
+    "the agent is holding goal_obj": [
+      "NO  \nThe statement \"goal_obj is a knife\" cannot be inferred from \"the agent is holding goal_obj.\" Given the background information, it is clear that the agent's hand is empty, meaning they cannot be holding anything at all, including a knife. Therefore, Predicate 2 does not imply Predicate 1.",
+      "NO  \nThe statement cannot be generally implied because although the agent is holding \"goal_obj,\" which we know is clean and inside a countertop, there is no basis to conclude that \"goal_obj\" is specifically a knife.",
+      "NO  \nThe statement cannot be implied because although the agent is holding \"goal_obj,\" which is clean and inside the countertop, it does not provide any information that specifies \"goal_obj\" to be a knife. It could be any object."
+    ],
+    "goal_obj is a heating device": [
+      "NO  \nA heating device and a knife are two distinct categories of objects, and one being true does not imply the other is true.",
+      "NO  \nA heating device and a knife are fundamentally different types of objects; therefore, knowledge that one is a heating device does not imply that it is a knife.",
+      "NO  \nA heating device is generally not a knife; these two predicates refer to distinctly different objects or categories."
+    ],
+    "goal_obj is heated": [
+      "NO  \nThe statement is generally false because while a heated object could be a knife, it could also refer to other heated items (e.g., a pan or a pot). Therefore, Predicate 2 does not imply Predicate 1.",
+      "NO  \nA knife is typically not heated; rather, it is used for cutting. Therefore, the fact that \"goal_obj is heated\" does not imply that \"goal_obj is a knife.\"",
+      "NO  \nA knife is not typically associated with being heated; therefore, Predicate 2 does not imply Predicate 1."
+    ],
+    "goal_obj is a washing device": [
+      "NO  \nA washing device and a knife are fundamentally different objects with different functions; thus, one cannot imply the other.",
+      "NO  \nA washing device and a knife are fundamentally different objects with distinct purposes, and knowing that an object is a washing device does not imply it can be a knife.",
+      "NO  \nA washing device, such as a washing machine, serves a different purpose and is inherently distinct from a knife, which is a cutting tool; thus, knowing the object is a washing device does not imply it is a knife."
+    ],
+    "goal_obj is washed": [
+      "NO  \nJust because \"goal_obj is washed\" is true does not imply that \"goal_obj is a knife.\" The statement about being washed pertains to the cleanliness of the object but does not specify its type; it could be any object that is capable of being washed.",
+      "NO  \nWashing an object does not imply that it is a knife; many other objects can also be washed.",
+      "NO  \nThe status of \"goal_obj is washed\" does not provide any information about the specific identity of \"goal_obj\" as a knife. An object can be washed without being a knife, as many items could be cleaned."
+    ],
+    "goal_obj is a chilling device": [
+      "NO  \nA chilling device (such as a refrigerator or ice maker) is not a knife; therefore, the implication does not hold true.",
+      "NO  \nA chilling device is not a knife; they serve different purposes and are different types of objects.",
+      "NO  \nA chilling device is generally associated with cooling or refrigeration, while a knife is a cutting tool. These two objects belong to different categories and purposes, so knowing that one is a chilling device does not imply the other is a knife."
+    ],
+    "goal_obj is chilled": [
+      "NO  \nA \"chilled\" object usually refers to something that has been cooled down, typically in a refrigerator or similar environment, while a \"knife\" is generally not an object that requires chilling. Therefore, \"goal_obj is chilled\" does not imply that \"goal_obj is a knife.\"",
+      "NO  \nThe statement fails to imply that \"goal_obj is an knife\" based on the information that \"goal_obj is chilled.\" Chilling does not specifically indicate that the object is a knife; it could apply to many other items.",
+      "NO  \nThe statement is generally false because \"goal_obj is chilled\" does not imply that \"goal_obj is a knife.\" Chilled objects could include various items like food or drinks but are not restricted to knives, which typically do not need to be chilled."
+    ],
+    "goal_obj is a light": [
+      "NO  \nA light and a knife are two distinct objects with different functions and characteristics. Thus, knowing that \"goal_obj is a light\" does not imply that \"goal_obj is a knife.\"",
+      "NO  \nA light and a knife are entirely different objects; one is used for illumination, while the other is a cutting tool. Therefore, knowing that the goal object is a light does not imply that it is also a knife.",
+      "NO  \nA light and a knife are two distinct objects with different functions and characteristics; therefore, knowing that one is a light does not imply that it is also a knife."
+    ],
+    "goal_obj is on": [
+      "NO  \nThe statement that \"goal_obj is on\" does not imply that \"goal_obj is a knife.\" The predicate \"goal_obj is on\" only informs us about the position of the object, not its identity. Since goal_obj is described as \"clean\" and \"inside goal_recep,\" its specific identity cannot be inferred merely from its location. A clean object could be many things, not just a knife.",
+      "NO  \nThe statement \"goal_obj is on\" does not imply that \"goal_obj is a knife\" since the goal object could be any item that is clean and inside the countertop, not necessarily a knife.",
+      "NO  \nThe information given does not imply that \"goal_obj is a knife\" just because \"goal_obj is on.\" The predicates do not establish a direct connection between the state of being \"on\" and the type of object being a knife. There are many objects that could be \"on\" something."
+    ]
+  },
+  "goal_obj is an watch": {
+    "predicate_name": "is an watch",
+    "the agent is holding goal_obj": [
+      "NO  \nThe statement cannot be implied because Predicate 2 states that \"the agent is holding goal_obj,\" while Predicate 1 asserts that \"goal_obj is a watch.\" Given the background information that \"goal_obj is inside goal_recep\" (a safe) and \"the agent's hand is empty,\" it is impossible for the agent to be holding the goal_obj since it is not accessible. Therefore, Predicate 2 does not imply Predicate 1 in this situation.",
+      "NO  \nThe statement is generally false because Predicate 2 states that the agent is holding the goal_obj, and goal_obj is inside the safe (goal_recep) and cannot be held. Therefore, it does not imply that goal_obj is a watch.",
+      "NO  \nThe agent cannot be holding goal_obj because the agent's hand is empty. Thus, Predicate 2 cannot imply Predicate 1."
+    ],
+    "goal_obj is a heating device": [
+      "NO  \nA heating device and a watch are two distinctly different categories of objects; one cannot be both a heating device and a watch simultaneously.",
+      "NO  \nA heating device and a watch are fundamentally different types of objects; one provides warmth while the other is used to tell time. Thus, knowing that \"goal_obj is a heating device\" does not imply that \"goal_obj is a watch.\"",
+      "NO  \nA heating device is generally not a watch; they refer to different categories of objects."
+    ],
+    "goal_obj is heated": [
+      "NO  \nHeating an object does not imply that it is a watch. The predicates refer to different characteristics, and being heated does not provide information about the object's type.",
+      "NO  \nThe predicate \"goal_obj is heated\" does not imply that \"goal_obj is a watch,\" as heating is not a property that is exclusive to watches and could apply to many other objects.",
+      "NO  \n\"goal_obj is heated\" does not imply that \"goal_obj is a watch,\" as heating can apply to various objects, not just watches."
+    ],
+    "goal_obj is a washing device": [
+      "NO  \nThe two predicates refer to entirely different objects; a washing device is not a watch, and knowing that the goal object is a washing device does not imply it is also a watch.",
+      "NO  \nA washing device and a watch are two distinct categories of objects; one does not imply the other.",
+      "NO  \nA washing device and a watch are distinct types of objects, and the truth of one does not imply the truth of the other."
+    ],
+    "goal_obj is washed": [
+      "NO  \nWashing an object does not imply that it is a watch. It could be any object that can be washed.",
+      "NO  \nWashing an object does not necessarily imply that the object itself is a watch; it could be any other item that can be washed.",
+      "NO  \nWashing an object does not imply that it is a watch; it could be any number of items that can be washed. The predicates do not provide enough information to establish that \"goal_obj\" specifically is a watch."
+    ],
+    "goal_obj is a chilling device": [
+      "NO  \nA chilling device and a watch are fundamentally different objects serving distinct purposes, so the truth of Predicate 2 does not imply the truth of Predicate 1.",
+      "NO  \nA chilling device, such as a refrigerator, is not a watch, and there is no logical connection implying that if something is a chilling device, it can also be a watch.",
+      "NO  \nA chilling device and a watch are two distinct categories of objects with different functions and purposes, so one cannot imply the other."
+    ],
+    "goal_obj is chilled": [
+      "NO  \nThe state of being \"chilled\" does not imply that the object is a \"watch\"; it could refer to any other object that can be chilled. Therefore, Predicate 2 does not support the truth of Predicate 1.",
+      "NO  \nThe statement cannot be implied as \"goal_obj is an watch\" just because \"goal_obj is chilled.\" A chilled object might not be a watch; it could be any number of items that can be chilled. There is no direct correlation between the two predicates.",
+      "NO  \nThe statement does not imply that \"goal_obj is an watch\" just because \"goal_obj is chilled.\" A chilled object does not necessarily indicate it is a watch, as many items can be chilled. In addition, there is no information suggesting that watches are normally chilled or kept in a safe."
+    ],
+    "goal_obj is a light": [
+      "NO  \nA light and a watch are two different objects and one does not imply the other. If the goal object is a light, it cannot simultaneously be a watch.",
+      "NO  \nThe statement is generally false because a light and a watch are distinct objects with different functions and characteristics. The fact that \"goal_obj is a light\" does not imply that \"goal_obj is a watch.\"",
+      "NO  \nA light and a watch are two different types of objects; knowing that the goal object is a light does not imply that it is also a watch."
+    ],
+    "goal_obj is on": [
+      "NO  \nThe statement cannot be generally implied; just because \"goal_obj is on\" does not indicate that \"goal_obj is an watch.\" The first predicate specifies the type of object, while the second predicate indicates a state that could apply to many different objects, not just a watch.",
+      "NO  \nThe statement \"goal_obj is on\" does not imply \"goal_obj is a watch\" because the first predicate states the condition of being on, which doesn't convey any information about the specific identity of the object. The goal_obj could be any object, not necessarily a watch.",
+      "NO  \nReason: The fact that \"goal_obj is on\" does not provide any information that implies \"goal_obj is a watch.\" It could be any object that can be placed on something, and since \"goal_obj is inside goal_recep,\" it further indicates that it is not a watch that can be \"on\" in a traditional sense."
+    ]
   }
 }
