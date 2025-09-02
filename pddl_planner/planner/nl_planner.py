@@ -13,19 +13,19 @@ from pddl_planner.pddl_core.action import Action
 from pddl_planner.llm.llm import LLM
     
 class NLPlanner():
-    def __init__(self, pddl_domain: str, pddl_problem: str) -> None:
+    def __init__(self, nl_domain: str, nl_problem: str) -> None:
         """
         Initializes a Planner instance.
 
         Args:
-            pddl_domain (str): The domain PDDL file path.
-            pddl_problem (str): The problem PDDL file path.
+            nl_domain (str): The domain PDDL file path.
+            nl_problem (str): The problem PDDL file path.
 
         Returns:
             None
         """
-        self._domain = NLDomain(pddl_domain)
-        self._instance = NLInstance(pddl_problem, self._domain)
+        self._domain = NLDomain(nl_domain)
+        self._instance = NLInstance(nl_problem, self._domain)
         self._operations = Operations()
 
     def plan(self):
@@ -38,19 +38,19 @@ class NLPlanner():
         pass
 
 class NLFOLRegressionPlanner(NLPlanner):
-    def __init__(self, pddl_domain: str, pddl_problem: str, max_depth: int = 10, llm_model: str = "gpt-4o-mini", llm_api_key: str = os.getenv("OPENAI_API_KEY")) -> None:
+    def __init__(self, nl_domain: str, nl_problem: str, max_depth: int = 10, 
+    llm_model: str = "gpt-4o-mini", llm_api_key: str = os.getenv("OPENAI_API_KEY")) -> None:
         """
-        Initialize a FOL-RegressionPlanner as proposed by us. This planner is based on First-Order Logic (FOL) and uses SSA from Situation Calculus.
+        Initialize a FOL-RegressionPlanner based on First-Order Logic (FOL) and uses SSA from Situation Calculus.
 
         Args:
-            pddl_domain (str): The domain PDDL file path.
-            pddl_problem (str): The problem PDDL file path.
+            nl_domain (str): The NL domain file path.
+            nl_problem (str): The NL problem file path.
             max_depth (int, optional): The maximum depth of the plan tree. Defaults to 10.
-            simplify_mode (tuple, optional): Simplification mode (DNF_subsumption, Equality_simplification, Typing_simplification). Defaults to (True, True, True).
             llm_model (str, optional): The model name of the LLM. Defaults to "gpt-4o-mini".
             llm_api_key (str, optional): The API key of the LLM. Defaults to os.getenv("OPENAI_API_KEY").
         """
-        super().__init__(pddl_domain, pddl_problem)
+        super().__init__(nl_domain, nl_problem)
         self._max_depth = max_depth
         self._ssa = self.create_SSA()
         self._llm = LLM(model_name=llm_model, api_key=llm_api_key)
@@ -89,6 +89,7 @@ class NLFOLRegressionPlanner(NLPlanner):
             Returns:
                 None
             """
+            
             self.action = action
             self.sub_goal = copy.deepcopy(sub_goal)
             self.parent = parent
