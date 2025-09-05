@@ -402,11 +402,19 @@ class NLFOLRegressionPlanner(NLPlanner):
                             clause, clause_substitution = clause.simplify_equality()
                             substitution.update(clause_substitution)
                         simplified_goals.append(clause)
-                    regressed_goal = DisjunctiveFormula(*simplified_goals).substitute(substitution).simplify().distribute_and_over_or() if simplify_contradiction else DisjunctiveFormula(*simplified_goals).substitute(substitution).distribute_and_over_or()
+                    regressed_goal = (
+                        DisjunctiveFormula(*simplified_goals)
+                        .substitute(substitution)
+                        .simplify_plan()
+                        .distribute_and_over_or()
+                        if simplify_contradiction
+                        else DisjunctiveFormula(*simplified_goals)
+                        .substitute(substitution)
+                        .distribute_and_over_or()
+                    )
                 if (simplify_typing and self._domain.has_type_conflict(regressed_goal)) or isinstance(regressed_goal, FalseFormula):
                     # skip if there is a type conflict or the formula simplifes to false
                     continue
-                
                 # remove any conjuncts in the regressed goal that implies the seen subgoal
                 regressed_goal_list = []
                 if simplify_dnf or dup_detection:

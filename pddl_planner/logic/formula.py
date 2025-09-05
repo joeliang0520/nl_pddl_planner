@@ -529,6 +529,47 @@ class ConjunctiveFormula(Formula):
         """
         #print(f'get_negation dnf: {self._clauses}' if np.any([isinstance(clause, Equality) for clause in self.clauses]) else None)
         return DisjunctiveFormula(*[clause.get_negation() for clause in self.clauses])
+
+
+    def simplify_plan(self) -> Formula:
+        """Simplify the conjunction by simplifying each clause and removing contradictions.
+        
+        If any two clauses contradict, the result is False.
+        
+        Returns:
+            Formula: The simplified conjunctive formula, or FalseFormula if a contradiction was found.
+        """
+        # Simplify each clause if possible
+            # simplified_clauses = [clause.simplify() if hasattr(clause, 'simplify') else clause 
+            #                         for clause in self._clauses]
+
+        simplified_clauses = []
+        for disj in self._clauses:
+            s = disj.simplify() if hasattr(disj, 'simplify') else disj
+            # Exclude disjuncts that are false.
+            if isinstance(s, Equality) and s.is_neq and s.term1.name != s.term2.name and isinstance(s.term1, Variable) and isinstance(s.term2, Variable):
+                    continue
+            if not isinstance(s, FalseFormula):
+                simplified_clauses.append(s)
+        
+        
+        # Check pairwise for contradiction among simplified clauses
+        for i in range(len(simplified_clauses)):
+            if isinstance(simplified_clauses[i], Equality) and simplified_clauses[i].is_neq and simplified_clauses[i].term1 == simplified_clauses[i].term2:
+                return FalseFormula()
+            for j in range(i + 1, len(simplified_clauses)):
+                if simplified_clauses[i].has_contradiction(simplified_clauses[j]):
+                    return FalseFormula()
+        # Remove duplicates (optional) and return single clause if only one remains
+        unique = list({str(clause): clause for clause in simplified_clauses}.values())
+        if not unique:
+            return FalseFormula()
+        # if len(unique) == 1:
+        #     return unique[0]
+
+        ret_formula = ConjunctiveFormula(*unique)
+        self._combine_and_propagate_type_dict(ret_formula)
+        return ret_formula
     
     def simplify(self) -> Formula:
         """Simplify the conjunction by simplifying each clause and removing contradictions.
@@ -539,8 +580,15 @@ class ConjunctiveFormula(Formula):
             Formula: The simplified conjunctive formula, or FalseFormula if a contradiction was found.
         """
         # Simplify each clause if possible
-        simplified_clauses = [clause.simplify() if hasattr(clause, 'simplify') else clause 
-                                for clause in self._clauses]
+            # simplified_clauses = [clause.simplify() if hasattr(clause, 'simplify') else clause 
+            #                         for clause in self._clauses]
+
+        simplified_clauses = []
+        for disj in self._clauses:
+            s = disj.simplify() if hasattr(disj, 'simplify') else disj
+            if not isinstance(s, FalseFormula):
+                simplified_clauses.append(s)
+        
         
         # Check pairwise for contradiction among simplified clauses
         for i in range(len(simplified_clauses)):
@@ -638,6 +686,75 @@ class ConjunctiveFormula(Formula):
 class DisjunctiveFormula(Formula):
     """Disjunctive formula (OR)."""
 
+    def simplify_plan(self) -> "Formula":
+        """
+        Planner-aware simplification.
+
+        - Applies standard simplify() on each disjunct
+        - Removes duplicate/superset disjuncts
+        - Additionally removes tautological variable-inequalities (X != Y) under the Unique Name Axiom context
+          when they do not constrain any other clause in the disjunct.
+
+        Returns:
+            Formula: The simplified disjunctive formula.
+        """
+        simplified_disjuncts: List[Formula] = []
+        for disj in self._clauses:
+            if hasattr(disj, 'simplify_plan'):
+                s = disj.simplify_plan()
+            elif hasattr(disj, 'simplify'):
+                s = disj.simplify()
+            else:
+                s = disj
+            if isinstance(s, FalseFormula):
+                continue
+            if isinstance(s, ConjunctiveFormula):
+                kept = []
+                for c in s.clauses:
+                    if isinstance(c, Equality) and c.is_neq and isinstance(c.term1, Variable) and isinstance(c.term2, Variable) and c.term1.name != c.term2.name:
+                        # Drop pure variable-inequalities as they add no constraint under UNA in planning
+                        continue
+                    kept.append(c)
+                s = ConjunctiveFormula(*kept) if kept else FalseFormula()
+                if isinstance(s, FalseFormula):
+                    continue
+            simplified_disjuncts.append(s)
+
+        # Remove duplicate clauses.
+        unique_disjuncts: List[Formula] = []
+        for clause in simplified_disjuncts:
+            is_dup = False
+            for u in unique_disjuncts:
+                if clause.is_duplicate(u):
+                    is_dup = True
+                    break
+            if not is_dup:
+                unique_disjuncts.append(clause)
+
+        if not unique_disjuncts:
+            return FalseFormula()
+
+        # Remove any disjunct that is a superset of another disjunct.
+        minimal_disjuncts: List[Formula] = []
+        for i, di in enumerate(unique_disjuncts):
+            di_clauses = di.clauses if isinstance(di, ConjunctiveFormula) else [di]
+            di_set = set(str(cl) for cl in di_clauses)
+            subsumed = False
+            for j, dj in enumerate(unique_disjuncts):
+                if i == j:
+                    continue
+                dj_clauses = dj.clauses if isinstance(dj, ConjunctiveFormula) else [dj]
+                dj_set = set(str(cl) for cl in dj_clauses)
+                if dj_set.issubset(di_set) and dj_set != di_set:
+                    subsumed = True
+                    break
+            if not subsumed:
+                minimal_disjuncts.append(di)
+
+        ret_formula = DisjunctiveFormula(*minimal_disjuncts)
+        self._combine_and_propagate_type_dict(ret_formula)
+        return ret_formula
+
     def simplify(self) -> Formula:
         """Simplify the disjunction by simplifying each disjunct, eliminating false
         ones, and removing duplicate clauses.
@@ -651,6 +768,8 @@ class DisjunctiveFormula(Formula):
         for disj in self._clauses:
             s = disj.simplify() if hasattr(disj, 'simplify') else disj
             # Exclude disjuncts that are false.
+            # if isinstance(s, Equality) and s.is_neq and s.term1.name != s.term2.name and isinstance(s.term1, Variable) and isinstance(s.term2, Variable):
+            #         continue
             if not isinstance(s, FalseFormula):
                 simplified_disjuncts.append(s)
         
