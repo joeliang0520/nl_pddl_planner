@@ -17,6 +17,8 @@ Scripts are included to run the regression planner on a variety of domains.
 - [Directory Structure](#directory-structure)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
+- [NL→NL-PDDL Translation Pipeline](#nl→nl-pddl-translation-pipeline)
+- [Structure of NL Domain and Goal Files](#structure-of-nl-domain-and-goal-files)
 
 ## Directory Structure
 
@@ -58,9 +60,68 @@ pddl_solver/
 ## Usage
 
 - **Run a NL Example**
-  ```bash
-  python pddl_planner/tests/alfworldtext.py
-  ```
+    ```bash
+    python pddl_planner/tests/alfworldtext.py
+    ```
+
+
+## NL→NL-PDDL Translation Pipeline
+
+Use the LLM-based tools in `pddl_planner/scripts` to translate free-form
+descriptions into NL‑PDDL JSON files and run the NL planner.
+
+### 1. Translate a single description
+
+1. Write your natural language domain/problem description to a text file
+   (see the examples in the [Benchmarks](files) folder).
+2. Invoke the translator:
+
+   ```bash
+   python pddl_planner/scripts/translate_nl_to_nlpddl.py \
+       --input blocks.txt \
+       --domain-out domain.json \
+       --problem-out problem.json \
+       --model gpt-4.1 \
+       --api-key <your-key>
+   ```
+
+   Set `OPENAI_API_KEY` in the environment or pass `--api-key` to supply a
+   key.  The script writes `domain.json` and `problem.json` in NL‑PDDL
+   format.
+
+### 2. Batch-convert benchmark JSON
+
+To convert a benchmark file containing multiple NL problem statements:
+
+```bash
+python pddl_planner/scripts/benchmark_to_nlpddl.py \
+    --input benchmark.json \
+    --output-dir out_problems \
+    --model gpt-4.1 \
+    --api-key <your-key>
+```
+
+Set `OPENAI_API_KEY` in the environment or pass `--api-key` to supply a
+key.  The script writes `domain.json` and `problem.json` in NL‑PDDL
+format.
+
+Each instance becomes `<prefix>_domain.json` and `<prefix>_problem.json`
+inside `out_problems/`.
+
+### 3. Run the NL planner
+
+Execute the regression planner over the generated NL‑PDDL files:
+
+```bash
+python pddl_planner/scripts/run_fol_regression.py \
+    --domain domain.json \
+    --problem problem.json \
+    --planner nl_fol \
+    --depth 3
+```
+
+The `nl_fol` planner uses LLM entailment to decide whether predicates in
+the goal state are satisfied by the current state.
 
 
 ## Structure of NL Domain and Goal Files
