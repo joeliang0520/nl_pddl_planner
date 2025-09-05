@@ -287,3 +287,28 @@ def translate_to_nlpddl(
     _normalize_arguments(problem.goal_state)
 
     return TranslationOutput(domain=domain, problem=problem)
+
+
+def goals_to_json(problems: Problem | List[Problem]) -> List[List[List[object]]]:
+    """Serialize one or more problems into the goals-only JSON layout.
+
+    Parameters
+    ----------
+    problems:
+        A single :class:`Problem` instance or a list of problems.
+
+    Returns
+    -------
+    list
+        A JSON-ready list where each element corresponds to a goal set and is
+        represented as a list of predicate instances in ``[text, {args}]``
+        format.
+    """
+
+    if isinstance(problems, Problem):
+        problems = [problems]
+
+    goal_sets: List[List[List[object]]] = []
+    for pr in problems:
+        goal_sets.append([p.to_list() for p in pr.goal_state])
+    return goal_sets

@@ -5,6 +5,7 @@ from pddl_planner.llm.translator import (
     Predicate,
     Domain,
     Problem,
+    goals_to_json,
 )
 
 
@@ -32,6 +33,9 @@ def test_serialization_helpers():
     assert domain_json[0]["Predicate"][0][0] == "the hand is empty"
     assert domain_json[1]["Action"] == "Pickup"
     assert problem_json[1][0][0] == "holding ?o"
+
+    goals_json = goals_to_json(problem)
+    assert goals_json == [[hold_pred.to_list()]]
 
 
 def test_predicate_and_actionname_coercion():

@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 from pddl_planner.llm.benchmark_parser import extract_problem_descriptions
-from pddl_planner.llm.translator import translate_to_nlpddl
+from pddl_planner.llm.translator import goals_to_json, translate_to_nlpddl
 
 
 def main() -> None:
@@ -50,6 +50,7 @@ def main() -> None:
                 [p.to_list() for p in result.problem.initial_state],
                 [p.to_list() for p in result.problem.goal_state],
             ]
+            goal_json = goals_to_json(result.problem)
 
             prefix = f"instance_{instance_id}_problem_{idx}"
             (out_dir / f"{prefix}_domain.json").write_text(
@@ -58,8 +59,13 @@ def main() -> None:
             (out_dir / f"{prefix}_problem.json").write_text(
                 json.dumps(problem_json, indent=2)
             )
+            (out_dir / f"{prefix}_goal.json").write_text(
+                json.dumps(goal_json, indent=2)
+            )
 
-            print(f"Wrote {prefix}_domain.json and {prefix}_problem.json")
+            print(
+                f"Wrote {prefix}_domain.json, {prefix}_problem.json and {prefix}_goal.json"
+            )
 
 
 if __name__ == "__main__":

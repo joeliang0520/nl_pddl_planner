@@ -2,7 +2,7 @@ import argparse
 import json
 from pathlib import Path
 
-from pddl_planner.llm.translator import translate_to_nlpddl
+from pddl_planner.llm.translator import goals_to_json, translate_to_nlpddl
 
 
 def main() -> None:
@@ -27,6 +27,10 @@ def main() -> None:
         help="Where to write the generated problem JSON",
     )
     parser.add_argument(
+        "--goal-out", "-g", default="goal.json",
+        help="Where to write the generated goals JSON",
+    )
+    parser.add_argument(
         "--model", "-m", default="gpt-4.1",
         help="OpenAI model to use for translation",
     )
@@ -48,11 +52,15 @@ def main() -> None:
         [p.to_list() for p in result.problem.goal_state],
     ]
 
+    goal_json = goals_to_json(result.problem)
+
     Path(args.domain_out).write_text(json.dumps(domain_json, indent=2))
     Path(args.problem_out).write_text(json.dumps(problem_json, indent=2))
+    Path(args.goal_out).write_text(json.dumps(goal_json, indent=2))
 
     print(f"Domain written to {args.domain_out}")
     print(f"Problem written to {args.problem_out}")
+    print(f"Goals written to {args.goal_out}")
 
 
 if __name__ == "__main__":
