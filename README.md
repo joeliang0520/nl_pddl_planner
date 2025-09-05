@@ -67,10 +67,26 @@ pddl_solver/
 
 ## NL→NL-PDDL Translation Pipeline
 
-Use the LLM-based tools in `pddl_planner/scripts` to translate free-form
-descriptions into NL‑PDDL JSON files and run the NL planner.
+Use the tools in `pddl_planner/scripts` to translate free-form descriptions
+into NL‑PDDL JSON files and run the NL planner.  For Blocksworld, a simple
+rule-based converter is available that does not require an LLM.
 
-### 1. Translate a single description
+### 1. Rule-based Blocksworld conversion
+
+```bash
+python pddl_planner/scripts/rule_based_to_nlpddl.py \
+    --input blocks.txt \
+    --domain-out domain.json \
+    --problem-out problem.json
+```
+
+The script reads a natural language Blocksworld description from
+`blocks.txt` and writes NL‑PDDL `domain.json` and `problem.json` files.
+If the input contains multiple `[STATEMENT]` blocks, the single domain file
+is accompanied by a problem file where each element represents one
+`[initial, goal]` pair.
+
+### 2. Translate a single description
 
 1. Write your natural language domain/problem description to a text file
    (see the examples in the [Benchmarks](files) folder).
@@ -89,7 +105,7 @@ descriptions into NL‑PDDL JSON files and run the NL planner.
    key.  The script writes `domain.json` and `problem.json` in NL‑PDDL
    format.
 
-### 2. Batch-convert benchmark JSON
+### 3. Batch-convert benchmark JSON
 
 To convert a benchmark file containing multiple NL problem statements:
 
@@ -108,7 +124,7 @@ format.
 Each instance becomes `<prefix>_domain.json` and `<prefix>_problem.json`
 inside `out_problems/`.
 
-### 3. Run the NL planner
+### 4. Run the NL planner
 
 Execute the regression planner over the generated NL‑PDDL files:
 
