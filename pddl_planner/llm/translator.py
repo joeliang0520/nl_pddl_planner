@@ -172,30 +172,118 @@ def translate_to_nlpddl(
     """
 
     client = OpenAI(api_key=api_key)
+    
+    # Enhanced system prompt with clearer examples
     system_prompt = (
-        "You are a translator that converts natural language planning descriptions into "
-        "NL-PDDL JSON. Return an object with two fields: 'domain' and 'problem'. The "
-        "domain has 'predicates' and 'actions'. Each predicate has 'text' and "
-        "'arguments' (a mapping from variable names to types, default to 'object'). Each "
-        "action has 'Action', 'Action name', 'Parameters', 'Preconditions', and 'Effects' "
-        "with 'Positive' and 'Negative' predicates. The problem has 'initial_state' and "
-        "'goal_state' lists of predicates. Use variable names prefixed with '?'. Only "
-        "output JSON conforming to the provided schema."
+        "You are a translator that converts natural language planning descriptions "
+        "into NL-PDDL JSON. Follow these critical rules:\n\n"
+        "DOMAIN RULES:\n"
+        "1. Domain predicates must use VARIABLES (e.g., ?b, ?x, ?b1, ?b2) not constants\n"
+        "2. Action parameters must also use VARIABLES\n"
+        "3. Preconditions and effects in actions must reference the action's parameters\n\n"
+        "PROBLEM RULES:\n"
+        "1. Problem predicates use CONSTANTS (e.g., 'red', 'blue', 'orange') not variables\n"
+        "2. Initial state and goal state use specific object names from the problem\n"
+        "3. Arguments dict maps constant names to 'object'\n\n"
+        "CORRECT DOMAIN EXAMPLE:\n"
+        '{"predicates": [\n'
+        '  {"text": "the block is clear", "arguments": {"?b": "block"}},\n'
+        '  {"text": "the hand is empty", "arguments": {}},\n'
+        '  {"text": "?b1 is on top of ?b2", "arguments": {"?b1": "block", "?b2": "block"}}\n'
+        '],\n'
+        '"actions": [{\n'
+        '  "Action": "pick_up",\n'
+        '  "Action name": {"text": "pick up ?b", "arguments": {"?b": "block"}},\n'
+        '  "Parameters": {"?b": "block"},\n'
+        '  "Preconditions": [\n'
+        '    {"text": "the hand is empty", "arguments": {}},\n'
+        '    {"text": "?b is clear", "arguments": {"?b": "block"}}\n'
+        '  ],\n'
+        '  "Effects": {\n'
+        '    "Positive": [{"text": "holding ?b", "arguments": {"?b": "block"}}],\n'
+        '    "Negative": [{"text": "the hand is empty", "arguments": {}}]\n'
+        '  }\n'
+        '}]}\n\n'
+        "CORRECT PROBLEM EXAMPLE:\n"
+        '{"initial_state": [\n'
+        '  {"text": "red is clear", "arguments": {"red": "object"}},\n'
+        '  {"text": "blue is on top of orange", "arguments": {"blue": "object", "orange": "object"}}\n'
+        '],\n'
+        '"goal_state": [\n'
+        '  {"text": "orange is on top of red", "arguments": {"orange": "object", "red": "object"}}\n'
+        ']}\n\n'
+        "Return JSON conforming to the provided schema."
     )
 
-    schema = TranslationOutput.model_json_schema(by_alias=True)
-    completion = client.chat.completions.create(
+    # More explicit domain instruction
+    domain_prompt = (
+        "Extract the DOMAIN from this description. The domain defines:\n"
+        "1. PREDICATES: General properties/relations using variables IN THE TEXT (e.g., '?b is clear', '?b1 is on top of ?b2')\n"
+        "2. ACTIONS: Operations with parameters, preconditions, and effects\n\n"
+        "IMPORTANT:\n"
+        "- Use variables like ?b, ?b1, ?b2 IN THE PREDICATE TEXT ITSELF\n"
+        "- All types should be 'object' (not 'block', 'robot', etc.)\n"
+        "- Do NOT use specific colors (red, blue, etc.) in the domain - those belong in the problem\n\n"
+        "Description:\n" + description
+    )
+
+    # ---- first call: domain ----
+    domain_schema = Domain.model_json_schema(by_alias=True)
+    domain_completion = client.chat.completions.create(
         model=model,
         messages=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": description},
+            {"role": "user", "content": domain_prompt},
         ],
         response_format={
             "type": "json_schema",
-            "json_schema": {"name": "TranslationOutput", "schema": schema},
+            "json_schema": {"name": "Domain", "schema": domain_schema},
         },
         temperature=0,
     )
+    domain_dict = json.loads(domain_completion.choices[0].message.content)
+    domain = Domain.model_validate(domain_dict)
 
-    response_dict = json.loads(completion.choices[0].message.content)
-    return TranslationOutput.model_validate(response_dict)
+    # More explicit problem instruction
+    problem_prompt = (
+        "Using the domain below, extract the PROBLEM from the description.\n"
+        "The problem specifies:\n"
+        "1. INITIAL STATE: Current facts using specific object names (red, blue, etc.)\n"
+        "2. GOAL STATE: Desired facts using specific object names\n\n"
+        "Replace variables from domain predicates with actual object names.\n"
+        "Example: domain predicate '?b is clear' becomes 'red is clear' in the problem.\n\n"
+        "Domain:\n" + json.dumps(domain_dict, indent=2) +
+        "\n\nOriginal description:\n" + description
+    )
+
+    # ---- second call: problem ----
+    problem_schema = Problem.model_json_schema(by_alias=True)
+    problem_completion = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": problem_prompt},
+        ],
+        response_format={
+            "type": "json_schema",
+            "json_schema": {"name": "Problem", "schema": problem_schema},
+        },
+        temperature=0,
+    )
+    problem_dict = json.loads(problem_completion.choices[0].message.content)
+    problem = Problem.model_validate(problem_dict)
+
+    # Post-process: ensure problem uses constants properly
+    def _normalize_arguments(preds: List[Predicate]) -> None:
+        for pred in preds:
+            new_args: Dict[str, str] = {}
+            for name, value in pred.arguments.items():
+                # Remove any lingering variable markers
+                clean_name = name.lstrip('?')
+                new_args[clean_name] = "object"
+            pred.arguments = new_args
+
+    _normalize_arguments(problem.initial_state)
+    _normalize_arguments(problem.goal_state)
+
+    return TranslationOutput(domain=domain, problem=problem)

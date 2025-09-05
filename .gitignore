@@ -21,3 +21,5 @@ venv/
 
 # Local configuration
 .env.local
+
+.*cache.json
