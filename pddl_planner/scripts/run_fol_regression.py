@@ -4,9 +4,15 @@ import pddl
 from pddl_planner.planner.planner import FOLRegressionPlanner, RegressionPlanner
 from pddl_planner.planner.nl_planner import NLFOLRegressionPlanner
 
-def run_test(domain_path, problem_path, planner_type, max_depth=3):
-    dom = pddl.parse_domain(domain_path)
-    prob = pddl.parse_problem(problem_path)
+def run_test(domain_path, problem_path, planner_type, max_depth=3, problem_index=0):
+    if not planner_type == "nl_fol":
+        dom = pddl.parse_domain(domain_path)
+        prob = pddl.parse_problem(problem_path)
+    else:
+        dom = domain_path
+        prob = problem_path
+        if isinstance(prob, list):
+            prob = prob[problem_index] # take the first problem
 
     if planner_type == "fol":
         planner_cls = FOLRegressionPlanner
@@ -47,7 +53,18 @@ def main():
         "--depth", "-m", type=int, default=3,
         help="Maximum regression depth"
     )
+    parser.add_argument(
+        "--problem_index", "-i", type=int, default=0,
+        help="Problem index", required=False
+    )
     args = parser.parse_args()
+
+    if args.problem_index is None:
+        print("Problem index not provided, using default value 0")
+        problem_index = 0
+    else:
+        problem_index = args.problem_index
+
     if args.planner == "nl_fol":
         # check if the domain file is a json file
         if args.domain.endswith('.json'):
@@ -62,9 +79,9 @@ def main():
         else:
             raise ValueError("Problem file must be a json file")
         # run the test
-        run_test(domain, problem, args.planner, args.depth)
+        run_test(domain, problem, args.planner, args.depth, problem_index=problem_index)
     else:   
-        run_test(args.domain, args.problem, args.planner, args.depth)
+        run_test(args.domain, args.problem, args.planner, args.depth, problem_index=problem_index)
 
 if __name__ == "__main__":
     main()
