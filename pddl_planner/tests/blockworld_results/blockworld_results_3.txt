@@ -1,0 +1,499 @@
+Regressed goals:
+Subgoal: 
+((is on top of(red, orange) ∧ is on top of(yellow, red)))
+[]
+{}
+--------------------
+Subgoal: 
+((i am holding(red) ∧ is clear(orange) ∧ is on top of(yellow, red))
+ ∨ (i am holding(yellow) ∧ is clear(red) ∧ is on top of(red, orange)))
+[Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red}
+--------------------
+Subgoal: 
+((is clear(orange) ∧ is clear(red) ∧ is on the table(red) ∧ is on top of(yellow, red) ∧ the hand is empty())
+ ∨ (is clear(red) ∧ is clear(yellow) ∧ is on the table(yellow) ∧ is on top of(red, orange) ∧ the hand is empty()))
+[Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(red) ∧ is on top of(yellow, red))
+ ∨ (i am holding(red) ∧ i am holding(yellow) ∧ is on top of(red, orange)))
+[Action('put down ?b'([?V271])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V271: red}
+--------------------
+Subgoal: 
+((i am holding(red) ∧ i am holding(yellow) ∧ is clear(orange)))
+[Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange}
+--------------------
+Subgoal: 
+((is clear(red) ∧ is clear(yellow) ∧ is on top of(red, orange) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is on the table(red) ∧ is on top of(yellow, red))
+ ∨ (i am holding(red) ∧ is clear(yellow) ∧ is on the table(yellow) ∧ is on top of(red, orange))
+ ∨ (i am holding(yellow) ∧ is clear(orange) ∧ is clear(red) ∧ is on the table(red) ∧ is on top of(yellow, red)))
+[Action('put down ?b'([?V277])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V277: yellow}
+--------------------
+Subgoal: 
+((i am holding(red) ∧ is clear(orange) ∧ is clear(yellow) ∧ is on the table(yellow)))
+[Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(red) ∧ i am holding(yellow) ∧ is clear(red)))
+[Action('stack ?b1 on top of ?b2'([?V284, ?V285])), Action('put down ?b'([?V271])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V271: red, ?V284: red, ?V285: orange}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is on top of(red, ?V287) ∧ is on top of(yellow, red) ∧ the hand is empty())
+ ∨ (i am holding(red) ∧ is clear(yellow) ∧ is on top of(red, orange) ∧ is on top of(yellow, ?V287) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V286, ?V287])), Action('put down ?b'([?V271])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V271: red, ?V286: red}
+--------------------
+Subgoal: 
+((i am holding(yellow) ∧ is clear(orange) ∧ is clear(red) ∧ is on the table(red) ∧ the hand is empty()))
+[Action('pick up ?b'([?V288])), Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange, ?V288: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(red) ∧ i am holding(yellow)))
+[Action('put down ?b'([?V289])), Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange, ?V289: orange}
+--------------------
+Subgoal: 
+((i am holding(red) ∧ is clear(yellow) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V292, ?V293])), Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange, ?V292: yellow, ?V293: orange}
+--------------------
+Subgoal: 
+((i am holding(red) ∧ is clear(yellow) ∧ is on top of(red, orange) ∧ is on top of(yellow, orange)))
+[Action('put down ?b'([?V295])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V295: yellow}
+--------------------
+Subgoal: 
+((i am holding(red) ∧ is clear(orange) ∧ is clear(yellow) ∧ is on top of(yellow, orange)))
+[Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange}
+--------------------
+Subgoal: 
+((is clear(orange) ∧ is on the table(red) ∧ is on top of(orange, red) ∧ is on top of(yellow, red) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V304, ?V305])), Action('put down ?b'([?V277])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V277: yellow, ?V304: yellow, ?V305: red}
+--------------------
+Subgoal: 
+((is clear(orange) ∧ is clear(red) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on the table(yellow) ∧ the hand is empty()))
+[Action('pick up ?b'([?V306])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V306: red}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(red) ∧ is clear(yellow) ∧ is on the table(yellow)))
+[Action('put down ?b'([?V307])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V307: yellow}
+--------------------
+Subgoal: 
+((is clear(orange) ∧ is clear(red) ∧ is on the table(yellow) ∧ is on top of(red, yellow) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V310, ?V311])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V310: red, ?V311: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(yellow) ∧ is clear(red) ∧ is on top of(red, red) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V316, ?V317])), Action('stack ?b1 on top of ?b2'([?V284, ?V285])), Action('put down ?b'([?V271])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V271: red, ?V284: red, ?V285: orange, ?V316: yellow, ?V317: red}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(yellow) ∧ is clear(red) ∧ is on top of(red, ?V287) ∧ is on top of(yellow, red)))
+[Action('put down ?b'([?V319])), Action('unstack ?b1 from ?b2'([?V286, ?V287])), Action('put down ?b'([?V271])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V271: red, ?V286: red, ?V319: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(yellow) ∧ is clear(red) ∧ is on the table(red)))
+[Action('put down ?b'([?V325])), Action('pick up ?b'([?V288])), Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange, ?V288: yellow, ?V325: red}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(red) ∧ is clear(yellow) ∧ is on top of(yellow, ?V335) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V334, ?V335])), Action('put down ?b'([?V289])), Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange, ?V289: orange, ?V334: yellow}
+--------------------
+Subgoal: 
+((i am holding(red) ∧ i am holding(yellow) ∧ is on top of(yellow, orange)))
+[Action('put down ?b'([?V337])), Action('unstack ?b1 from ?b2'([?V292, ?V293])), Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange, ?V292: yellow, ?V293: orange, ?V337: yellow}
+--------------------
+Subgoal: 
+((is clear(orange) ∧ is clear(red) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('pick up ?b'([?V348])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V348: red}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(red) ∧ is clear(yellow) ∧ is on top of(yellow, orange)))
+[Action('put down ?b'([?V349])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V349: yellow}
+--------------------
+Subgoal: 
+((is clear(orange) ∧ is clear(red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V352, ?V353])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V352: red, ?V353: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is on the table(red) ∧ is on top of(orange, red) ∧ is on top of(yellow, red)))
+[Action('put down ?b'([?V355])), Action('unstack ?b1 from ?b2'([?V304, ?V305])), Action('put down ?b'([?V277])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V277: yellow, ?V304: yellow, ?V305: red, ?V355: red}
+--------------------
+Subgoal: 
+((i am holding(yellow) ∧ is clear(orange) ∧ is clear(red) ∧ is on the table(red) ∧ is on top of(orange, red)))
+[Action('stack ?b1 on top of ?b2'([?V356, ?V357])), Action('unstack ?b1 from ?b2'([?V304, ?V305])), Action('put down ?b'([?V277])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V277: yellow, ?V304: yellow, ?V305: red, ?V356: yellow, ?V357: red}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on the table(yellow))
+ ∨ (i am holding(yellow) ∧ is clear(orange) ∧ is clear(red) ∧ is on the table(red)))
+[Action('put down ?b'([?V361])), Action('pick up ?b'([?V306])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V306: red, ?V361: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is on the table(yellow) ∧ is on top of(red, yellow) ∧ the hand is empty())
+ ∨ (i am holding(red) ∧ is clear(orange) ∧ is on the table(yellow) ∧ is on top of(orange, yellow) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V370, ?V371])), Action('put down ?b'([?V307])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V307: yellow, ?V370: red, ?V371: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is on the table(yellow) ∧ is on top of(red, yellow))
+ ∨ (i am holding(red) ∧ is clear(orange) ∧ is on the table(yellow) ∧ is on top of(red, yellow))
+ ∨ (i am holding(yellow) ∧ is clear(orange) ∧ is clear(red) ∧ is on top of(red, yellow)))
+[Action('put down ?b'([?V373])), Action('unstack ?b1 from ?b2'([?V310, ?V311])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V310: red, ?V311: yellow, ?V373: yellow}
+--------------------
+Subgoal: 
+((i am holding(yellow) ∧ is clear(orange) ∧ is clear(red) ∧ is on the table(orange) ∧ is on top of(red, ?V287) ∧ is on top of(yellow, red) ∧ the hand is empty()))
+[Action('pick up ?b'([?V384])), Action('put down ?b'([?V319])), Action('unstack ?b1 from ?b2'([?V286, ?V287])), Action('put down ?b'([?V271])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V271: red, ?V286: red, ?V319: yellow, ?V384: yellow}
+--------------------
+Subgoal: 
+((i am holding(yellow) ∧ is clear(orange) ∧ is on top of(orange, red) ∧ is on top of(red, ?V287) ∧ is on top of(yellow, red) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V388, ?V389])), Action('put down ?b'([?V319])), Action('unstack ?b1 from ?b2'([?V286, ?V287])), Action('put down ?b'([?V271])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V271: red, ?V286: red, ?V319: yellow, ?V388: yellow, ?V389: red}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on top of(yellow, red) ∧ the hand is empty())
+ ∨ (i am holding(yellow) ∧ is clear(orange) ∧ is on the table(red) ∧ is on top of(orange, red) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V394, ?V395])), Action('put down ?b'([?V325])), Action('pick up ?b'([?V288])), Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange, ?V288: yellow, ?V325: red, ?V394: yellow, ?V395: red}
+--------------------
+Subgoal: 
+((i am holding(yellow) ∧ is clear(red) ∧ is on the table(red) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('pick up ?b'([?V402])), Action('put down ?b'([?V337])), Action('unstack ?b1 from ?b2'([?V292, ?V293])), Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange, ?V292: yellow, ?V293: orange, ?V337: yellow, ?V402: yellow}
+--------------------
+Subgoal: 
+((i am holding(yellow) ∧ is clear(red) ∧ is on top of(red, ?V407) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V406, ?V407])), Action('put down ?b'([?V337])), Action('unstack ?b1 from ?b2'([?V292, ?V293])), Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange, ?V292: yellow, ?V293: orange, ?V337: yellow, ?V406: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on top of(yellow, orange)))
+[Action('put down ?b'([?V409])), Action('pick up ?b'([?V348])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V348: red, ?V409: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, orange) ∧ the hand is empty())
+ ∨ (i am holding(red) ∧ is clear(orange) ∧ is on top of(orange, yellow) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V418, ?V419])), Action('put down ?b'([?V349])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V349: yellow, ?V418: red, ?V419: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, orange))
+ ∨ (i am holding(red) ∧ is clear(orange) ∧ is on top of(red, yellow) ∧ is on top of(yellow, orange)))
+[Action('put down ?b'([?V421])), Action('unstack ?b1 from ?b2'([?V352, ?V353])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V352: red, ?V353: yellow, ?V421: red}
+--------------------
+Subgoal: 
+((is clear(red) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on top of(orange, red) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V436, ?V437])), Action('stack ?b1 on top of ?b2'([?V356, ?V357])), Action('unstack ?b1 from ?b2'([?V304, ?V305])), Action('put down ?b'([?V277])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V277: yellow, ?V304: yellow, ?V305: red, ?V356: yellow, ?V357: red, ?V436: yellow, ?V437: red}
+--------------------
+Subgoal: 
+((is clear(orange) ∧ is clear(red) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on top of(yellow, yellow) ∧ the hand is empty())
+ ∨ (is clear(orange) ∧ is clear(red) ∧ is on the table(red) ∧ is on the table(yellow) ∧ is on top of(orange, yellow) ∧ the hand is empty())
+ ∨ (is clear(orange) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on the table(yellow) ∧ is on top of(orange, red) ∧ the hand is empty())
+ ∨ (is clear(orange) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on top of(yellow, red) ∧ the hand is empty())
+ ∨ (is clear(red) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V442, ?V443])), Action('put down ?b'([?V361])), Action('pick up ?b'([?V306])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V306: red, ?V361: yellow, ?V442: yellow, ?V443: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(red) ∧ is on the table(yellow) ∧ is on top of(orange, yellow))
+ ∨ (i am holding(orange) ∧ i am holding(red) ∧ is on the table(yellow) ∧ is on top of(red, yellow))
+ ∨ (i am holding(orange) ∧ i am holding(yellow) ∧ is clear(red) ∧ is on top of(red, yellow)))
+[Action('put down ?b'([?V445])), Action('unstack ?b1 from ?b2'([?V370, ?V371])), Action('put down ?b'([?V307])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V307: yellow, ?V370: red, ?V371: yellow, ?V445: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(yellow) ∧ is on the table(yellow) ∧ is on top of(red, yellow) ∧ is on top of(yellow, red) ∧ the hand is empty())
+ ∨ (is clear(orange) ∧ is clear(yellow) ∧ is on top of(red, yellow) ∧ is on top of(yellow, red) ∧ the hand is empty())
+ ∨ (is clear(orange) ∧ is on the table(yellow) ∧ is on top of(orange, red) ∧ is on top of(red, yellow) ∧ the hand is empty())
+ ∨ (is clear(red) ∧ is clear(yellow) ∧ is on top of(red, yellow) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V454, ?V455])), Action('put down ?b'([?V373])), Action('unstack ?b1 from ?b2'([?V310, ?V311])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V310: red, ?V311: yellow, ?V373: yellow, ?V454: yellow, ?V455: red}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(yellow) ∧ is on top of(orange, red) ∧ is on top of(red, ?V287) ∧ is on top of(yellow, red)))
+[Action('put down ?b'([?V463])), Action('unstack ?b1 from ?b2'([?V388, ?V389])), Action('put down ?b'([?V319])), Action('unstack ?b1 from ?b2'([?V286, ?V287])), Action('put down ?b'([?V271])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V271: red, ?V286: red, ?V319: yellow, ?V388: yellow, ?V389: red, ?V463: orange}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(yellow) ∧ is on the table(red) ∧ is on top of(orange, red))
+ ∨ (i am holding(orange) ∧ i am holding(yellow) ∧ is on the table(red) ∧ is on top of(yellow, red)))
+[Action('put down ?b'([?V469])), Action('unstack ?b1 from ?b2'([?V394, ?V395])), Action('put down ?b'([?V325])), Action('pick up ?b'([?V288])), Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange, ?V288: yellow, ?V325: red, ?V394: yellow, ?V395: red, ?V469: red}
+--------------------
+Subgoal: 
+((is clear(orange) ∧ is clear(red) ∧ is on the table(red) ∧ is on top of(orange, yellow) ∧ is on top of(yellow, orange) ∧ the hand is empty())
+ ∨ (is clear(orange) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on top of(orange, red) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V490, ?V491])), Action('put down ?b'([?V409])), Action('pick up ?b'([?V348])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V348: red, ?V409: yellow, ?V490: orange, ?V491: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(red) ∧ is on top of(orange, yellow) ∧ is on top of(yellow, orange))
+ ∨ (i am holding(orange) ∧ i am holding(red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, orange)))
+[Action('put down ?b'([?V493])), Action('unstack ?b1 from ?b2'([?V418, ?V419])), Action('put down ?b'([?V349])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V349: yellow, ?V418: red, ?V419: yellow, ?V493: orange}
+--------------------
+Subgoal: 
+((is clear(orange) ∧ is on top of(orange, red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V502, ?V503])), Action('put down ?b'([?V421])), Action('unstack ?b1 from ?b2'([?V352, ?V353])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V352: red, ?V353: yellow, ?V421: red, ?V502: red, ?V503: red}
+--------------------
+Subgoal: 
+((i am holding(red) ∧ is clear(yellow) ∧ is on top of(orange, red) ∧ is on top of(yellow, orange))
+ ∨ (i am holding(yellow) ∧ is clear(red) ∧ is on the table(red) ∧ is on top of(orange, red) ∧ is on top of(yellow, orange)))
+[Action('put down ?b'([?V505])), Action('unstack ?b1 from ?b2'([?V436, ?V437])), Action('stack ?b1 on top of ?b2'([?V356, ?V357])), Action('unstack ?b1 from ?b2'([?V304, ?V305])), Action('put down ?b'([?V277])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V277: yellow, ?V304: yellow, ?V305: red, ?V356: yellow, ?V357: red, ?V436: yellow, ?V437: red, ?V505: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on top of(yellow, yellow))
+ ∨ (i am holding(orange) ∧ is clear(red) ∧ is on the table(red) ∧ is on the table(yellow) ∧ is on top of(orange, yellow))
+ ∨ (i am holding(orange) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on the table(yellow) ∧ is on top of(orange, red))
+ ∨ (i am holding(orange) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on top of(yellow, red))
+ ∨ (i am holding(red) ∧ is clear(orange) ∧ is clear(yellow) ∧ is on top of(yellow, yellow))
+ ∨ (i am holding(red) ∧ is clear(orange) ∧ is on the table(yellow) ∧ is on top of(orange, yellow))
+ ∨ (i am holding(red) ∧ is clear(yellow) ∧ is on top of(yellow, orange))
+ ∨ (i am holding(yellow) ∧ is clear(orange) ∧ is on the table(red) ∧ is on top of(orange, red))
+ ∨ (i am holding(yellow) ∧ is clear(orange) ∧ is on the table(red) ∧ is on top of(yellow, red))
+ ∨ (i am holding(yellow) ∧ is clear(red) ∧ is on the table(red) ∧ is on top of(yellow, orange)))
+[Action('put down ?b'([?V511])), Action('unstack ?b1 from ?b2'([?V442, ?V443])), Action('put down ?b'([?V361])), Action('pick up ?b'([?V306])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V306: red, ?V361: yellow, ?V442: yellow, ?V443: yellow, ?V511: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is on the table(yellow) ∧ is on top of(orange, yellow) ∧ is on top of(red, red) ∧ the hand is empty())
+ ∨ (i am holding(orange) ∧ is clear(yellow) ∧ is on top of(red, yellow) ∧ is on top of(yellow, red) ∧ the hand is empty())
+ ∨ (i am holding(yellow) ∧ is clear(orange) ∧ is on top of(orange, red) ∧ is on top of(red, yellow) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V520, ?V521])), Action('put down ?b'([?V445])), Action('unstack ?b1 from ?b2'([?V370, ?V371])), Action('put down ?b'([?V307])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V307: yellow, ?V370: red, ?V371: yellow, ?V445: yellow, ?V520: yellow, ?V521: red}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(yellow) ∧ is on top of(red, yellow) ∧ is on top of(yellow, red))
+ ∨ (i am holding(orange) ∧ is clear(yellow) ∧ is on top of(red, yellow) ∧ is on top of(yellow, red))
+ ∨ (i am holding(orange) ∧ is on the table(yellow) ∧ is on top of(orange, red) ∧ is on top of(red, yellow))
+ ∨ (i am holding(yellow) ∧ is clear(orange) ∧ is on top of(orange, red) ∧ is on top of(red, yellow))
+ ∨ (i am holding(yellow) ∧ is clear(orange) ∧ is on top of(red, yellow) ∧ is on top of(yellow, red))
+ ∨ (i am holding(yellow) ∧ is clear(red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, orange)))
+[Action('put down ?b'([?V523])), Action('unstack ?b1 from ?b2'([?V454, ?V455])), Action('put down ?b'([?V373])), Action('unstack ?b1 from ?b2'([?V310, ?V311])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V310: red, ?V311: yellow, ?V373: yellow, ?V454: yellow, ?V455: red, ?V523: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(yellow) ∧ is on the table(yellow) ∧ is on top of(orange, red) ∧ is on top of(red, ?V287) ∧ is on top of(yellow, red) ∧ the hand is empty()))
+[Action('pick up ?b'([?V528])), Action('put down ?b'([?V463])), Action('unstack ?b1 from ?b2'([?V388, ?V389])), Action('put down ?b'([?V319])), Action('unstack ?b1 from ?b2'([?V286, ?V287])), Action('put down ?b'([?V271])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V271: red, ?V286: red, ?V319: yellow, ?V388: yellow, ?V389: red, ?V463: orange, ?V528: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on top of(orange, red) ∧ is on top of(yellow, ?V539) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V538, ?V539])), Action('put down ?b'([?V469])), Action('unstack ?b1 from ?b2'([?V394, ?V395])), Action('put down ?b'([?V325])), Action('pick up ?b'([?V288])), Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange, ?V288: yellow, ?V325: red, ?V394: yellow, ?V395: red, ?V469: red, ?V538: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is on the table(red) ∧ is on top of(orange, yellow) ∧ is on top of(yellow, orange))
+ ∨ (i am holding(orange) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on top of(orange, red) ∧ is on top of(yellow, orange))
+ ∨ (i am holding(red) ∧ is clear(orange) ∧ is on top of(orange, yellow) ∧ is on top of(yellow, orange)))
+[Action('put down ?b'([?V541])), Action('unstack ?b1 from ?b2'([?V490, ?V491])), Action('put down ?b'([?V409])), Action('pick up ?b'([?V348])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V348: red, ?V409: yellow, ?V490: orange, ?V491: yellow, ?V541: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is on top of(orange, yellow) ∧ is on top of(red, ?V551) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V550, ?V551])), Action('put down ?b'([?V493])), Action('unstack ?b1 from ?b2'([?V418, ?V419])), Action('put down ?b'([?V349])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V349: yellow, ?V418: red, ?V419: yellow, ?V493: orange, ?V550: red}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is on top of(orange, red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, orange)))
+[Action('put down ?b'([?V553])), Action('unstack ?b1 from ?b2'([?V502, ?V503])), Action('put down ?b'([?V421])), Action('unstack ?b1 from ?b2'([?V352, ?V353])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V352: red, ?V353: yellow, ?V421: red, ?V502: red, ?V503: red, ?V553: orange}
+--------------------
+Subgoal: 
+((is clear(red) ∧ is on top of(orange, red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V562, ?V563])), Action('put down ?b'([?V505])), Action('unstack ?b1 from ?b2'([?V436, ?V437])), Action('stack ?b1 on top of ?b2'([?V356, ?V357])), Action('unstack ?b1 from ?b2'([?V304, ?V305])), Action('put down ?b'([?V277])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V277: yellow, ?V304: yellow, ?V305: red, ?V356: yellow, ?V357: red, ?V436: yellow, ?V437: red, ?V505: yellow, ?V562: yellow, ?V563: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(red) ∧ is clear(yellow) ∧ is on top of(yellow, yellow)))
+[Action('put down ?b'([?V565])), Action('put down ?b'([?V511])), Action('unstack ?b1 from ?b2'([?V442, ?V443])), Action('put down ?b'([?V361])), Action('pick up ?b'([?V306])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V306: red, ?V361: yellow, ?V442: yellow, ?V443: yellow, ?V511: yellow, ?V565: red}
+--------------------
+Subgoal: 
+((is clear(orange) ∧ is clear(red) ∧ is on the table(red) ∧ is on top of(orange, yellow) ∧ is on top of(yellow, yellow) ∧ the hand is empty())
+ ∨ (is clear(orange) ∧ is clear(red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, yellow) ∧ the hand is empty())
+ ∨ (is clear(orange) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on top of(orange, red) ∧ is on top of(yellow, yellow) ∧ the hand is empty())
+ ∨ (is clear(orange) ∧ is on the table(red) ∧ is on top of(orange, yellow) ∧ is on top of(yellow, red) ∧ the hand is empty())
+ ∨ (is clear(red) ∧ is clear(yellow) ∧ is on top of(red, orange) ∧ is on top of(yellow, yellow) ∧ the hand is empty())
+ ∨ (is clear(red) ∧ is on the table(yellow) ∧ is on top of(orange, yellow) ∧ is on top of(red, orange) ∧ the hand is empty())
+ ∨ (is clear(red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, orange) ∧ the hand is empty())
+ ∨ (is clear(yellow) ∧ is on the table(red) ∧ is on top of(orange, red) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V568, ?V569])), Action('put down ?b'([?V511])), Action('unstack ?b1 from ?b2'([?V442, ?V443])), Action('put down ?b'([?V361])), Action('pick up ?b'([?V306])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V306: red, ?V361: yellow, ?V442: yellow, ?V443: yellow, ?V511: yellow, ?V568: yellow, ?V569: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(yellow) ∧ is clear(red) ∧ is on top of(orange, yellow) ∧ is on top of(red, red))
+ ∨ (i am holding(orange) ∧ i am holding(yellow) ∧ is on top of(orange, red) ∧ is on top of(red, yellow)))
+[Action('put down ?b'([?V571])), Action('unstack ?b1 from ?b2'([?V520, ?V521])), Action('put down ?b'([?V445])), Action('unstack ?b1 from ?b2'([?V370, ?V371])), Action('put down ?b'([?V307])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V307: yellow, ?V370: red, ?V371: yellow, ?V445: yellow, ?V520: yellow, ?V521: red, ?V571: orange}
+--------------------
+Subgoal: 
+((is clear(orange) ∧ is clear(yellow) ∧ is on top of(orange, red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, yellow) ∧ the hand is empty())
+ ∨ (is clear(orange) ∧ is on top of(orange, yellow) ∧ is on top of(red, yellow) ∧ is on top of(yellow, red) ∧ the hand is empty())
+ ∨ (is clear(yellow) ∧ is on top of(orange, red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V580, ?V581])), Action('put down ?b'([?V523])), Action('unstack ?b1 from ?b2'([?V454, ?V455])), Action('put down ?b'([?V373])), Action('unstack ?b1 from ?b2'([?V310, ?V311])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V310: red, ?V311: yellow, ?V373: yellow, ?V454: yellow, ?V455: red, ?V523: yellow, ?V580: yellow, ?V581: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(red) ∧ is clear(yellow) ∧ is on top of(orange, red) ∧ is on top of(yellow, ?V539)))
+[Action('put down ?b'([?V589])), Action('unstack ?b1 from ?b2'([?V538, ?V539])), Action('put down ?b'([?V469])), Action('unstack ?b1 from ?b2'([?V394, ?V395])), Action('put down ?b'([?V325])), Action('pick up ?b'([?V288])), Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange, ?V288: yellow, ?V325: red, ?V394: yellow, ?V395: red, ?V469: red, ?V538: yellow, ?V589: yellow}
+--------------------
+Subgoal: 
+((is clear(red) ∧ is on top of(orange, yellow) ∧ is on top of(red, orange) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V598, ?V599])), Action('put down ?b'([?V541])), Action('unstack ?b1 from ?b2'([?V490, ?V491])), Action('put down ?b'([?V409])), Action('pick up ?b'([?V348])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V348: red, ?V409: yellow, ?V490: orange, ?V491: yellow, ?V541: yellow, ?V598: red, ?V599: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(yellow) ∧ is clear(orange) ∧ is clear(red) ∧ is on top of(orange, yellow) ∧ is on top of(red, ?V551)))
+[Action('stack ?b1 on top of ?b2'([?V602, ?V603])), Action('unstack ?b1 from ?b2'([?V550, ?V551])), Action('put down ?b'([?V493])), Action('unstack ?b1 from ?b2'([?V418, ?V419])), Action('put down ?b'([?V349])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V349: yellow, ?V418: red, ?V419: yellow, ?V493: orange, ?V550: red, ?V603: orange, ?V602: yellow}
+--------------------
+Subgoal: 
+((i am holding(red) ∧ is on top of(orange, red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, orange)))
+[Action('put down ?b'([?V613])), Action('unstack ?b1 from ?b2'([?V562, ?V563])), Action('put down ?b'([?V505])), Action('unstack ?b1 from ?b2'([?V436, ?V437])), Action('stack ?b1 on top of ?b2'([?V356, ?V357])), Action('unstack ?b1 from ?b2'([?V304, ?V305])), Action('put down ?b'([?V277])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V277: yellow, ?V304: yellow, ?V305: red, ?V356: yellow, ?V357: red, ?V436: yellow, ?V437: red, ?V505: yellow, ?V562: yellow, ?V563: yellow, ?V613: red}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, yellow) ∧ the hand is empty())
+ ∨ (i am holding(red) ∧ is clear(orange) ∧ is on top of(orange, yellow) ∧ is on top of(yellow, yellow) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V622, ?V623])), Action('put down ?b'([?V565])), Action('put down ?b'([?V511])), Action('unstack ?b1 from ?b2'([?V442, ?V443])), Action('put down ?b'([?V361])), Action('pick up ?b'([?V306])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V306: red, ?V361: yellow, ?V442: yellow, ?V443: yellow, ?V511: yellow, ?V565: red, ?V622: red, ?V623: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is on the table(red) ∧ is on top of(orange, yellow) ∧ is on top of(yellow, yellow))
+ ∨ (i am holding(orange) ∧ is clear(red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, yellow))
+ ∨ (i am holding(orange) ∧ is clear(yellow) ∧ is on the table(red) ∧ is on top of(orange, red) ∧ is on top of(yellow, yellow))
+ ∨ (i am holding(orange) ∧ is on the table(red) ∧ is on top of(orange, yellow) ∧ is on top of(yellow, red))
+ ∨ (i am holding(red) ∧ is clear(orange) ∧ is on top of(orange, yellow) ∧ is on top of(yellow, yellow))
+ ∨ (i am holding(red) ∧ is clear(orange) ∧ is on top of(red, yellow) ∧ is on top of(yellow, yellow))
+ ∨ (i am holding(red) ∧ is clear(yellow) ∧ is on top of(red, orange) ∧ is on top of(yellow, yellow))
+ ∨ (i am holding(red) ∧ is on the table(yellow) ∧ is on top of(orange, yellow) ∧ is on top of(red, orange))
+ ∨ (i am holding(red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, orange))
+ ∨ (i am holding(yellow) ∧ is on the table(red) ∧ is on top of(orange, red) ∧ is on top of(yellow, orange)))
+[Action('put down ?b'([?V625])), Action('unstack ?b1 from ?b2'([?V568, ?V569])), Action('put down ?b'([?V511])), Action('unstack ?b1 from ?b2'([?V442, ?V443])), Action('put down ?b'([?V361])), Action('pick up ?b'([?V306])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V306: red, ?V361: yellow, ?V442: yellow, ?V443: yellow, ?V511: yellow, ?V568: yellow, ?V569: yellow, ?V625: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is clear(yellow) ∧ is on the table(yellow) ∧ is on top of(red, orange)))
+[Action('stack ?b1 on top of ?b2'([?V626, ?V627])), Action('unstack ?b1 from ?b2'([?V568, ?V569])), Action('put down ?b'([?V511])), Action('unstack ?b1 from ?b2'([?V442, ?V443])), Action('put down ?b'([?V361])), Action('pick up ?b'([?V306])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V306: red, ?V361: yellow, ?V442: yellow, ?V443: yellow, ?V511: yellow, ?V568: yellow, ?V569: yellow, ?V626: yellow, ?V627: yellow}
+--------------------
+Subgoal: 
+((i am holding(yellow) ∧ is clear(orange) ∧ is clear(red) ∧ is on the table(orange) ∧ is on top of(orange, yellow) ∧ is on top of(red, red) ∧ the hand is empty()))
+[Action('pick up ?b'([?V630])), Action('put down ?b'([?V571])), Action('unstack ?b1 from ?b2'([?V520, ?V521])), Action('put down ?b'([?V445])), Action('unstack ?b1 from ?b2'([?V370, ?V371])), Action('put down ?b'([?V307])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V307: yellow, ?V370: red, ?V371: yellow, ?V445: yellow, ?V520: yellow, ?V521: red, ?V571: orange, ?V630: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(yellow) ∧ is on top of(orange, yellow) ∧ is on top of(red, red) ∧ is on top of(yellow, red) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V634, ?V635])), Action('put down ?b'([?V571])), Action('unstack ?b1 from ?b2'([?V520, ?V521])), Action('put down ?b'([?V445])), Action('unstack ?b1 from ?b2'([?V370, ?V371])), Action('put down ?b'([?V307])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V307: yellow, ?V370: red, ?V371: yellow, ?V445: yellow, ?V520: yellow, ?V521: red, ?V571: orange, ?V634: yellow, ?V635: red}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(yellow) ∧ is on top of(orange, red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, yellow))
+ ∨ (i am holding(orange) ∧ is on top of(orange, yellow) ∧ is on top of(red, yellow) ∧ is on top of(yellow, red))
+ ∨ (i am holding(yellow) ∧ is on top of(orange, red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, orange)))
+[Action('put down ?b'([?V637])), Action('unstack ?b1 from ?b2'([?V580, ?V581])), Action('put down ?b'([?V523])), Action('unstack ?b1 from ?b2'([?V454, ?V455])), Action('put down ?b'([?V373])), Action('unstack ?b1 from ?b2'([?V310, ?V311])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V310: red, ?V311: yellow, ?V373: yellow, ?V454: yellow, ?V455: red, ?V523: yellow, ?V580: yellow, ?V581: yellow, ?V637: yellow}
+--------------------
+Subgoal: 
+((i am holding(red) ∧ is clear(orange) ∧ is clear(yellow) ∧ is on the table(orange) ∧ is on top of(orange, red) ∧ is on top of(yellow, ?V539) ∧ the hand is empty()))
+[Action('pick up ?b'([?V642])), Action('put down ?b'([?V589])), Action('unstack ?b1 from ?b2'([?V538, ?V539])), Action('put down ?b'([?V469])), Action('unstack ?b1 from ?b2'([?V394, ?V395])), Action('put down ?b'([?V325])), Action('pick up ?b'([?V288])), Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange, ?V288: yellow, ?V325: red, ?V394: yellow, ?V395: red, ?V469: red, ?V538: yellow, ?V589: yellow, ?V642: red}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is on top of(orange, red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, ?V539) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V646, ?V647])), Action('put down ?b'([?V589])), Action('unstack ?b1 from ?b2'([?V538, ?V539])), Action('put down ?b'([?V469])), Action('unstack ?b1 from ?b2'([?V394, ?V395])), Action('put down ?b'([?V325])), Action('pick up ?b'([?V288])), Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange, ?V288: yellow, ?V325: red, ?V394: yellow, ?V395: red, ?V469: red, ?V538: yellow, ?V589: yellow, ?V646: red, ?V647: yellow}
+--------------------
+Subgoal: 
+((i am holding(red) ∧ is on top of(orange, yellow) ∧ is on top of(red, orange) ∧ is on top of(yellow, orange)))
+[Action('put down ?b'([?V649])), Action('unstack ?b1 from ?b2'([?V598, ?V599])), Action('put down ?b'([?V541])), Action('unstack ?b1 from ?b2'([?V490, ?V491])), Action('put down ?b'([?V409])), Action('pick up ?b'([?V348])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V348: red, ?V409: yellow, ?V490: orange, ?V491: yellow, ?V541: yellow, ?V598: red, ?V599: yellow, ?V649: red}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red) ∧ is clear(yellow) ∧ is on top of(red, orange) ∧ is on top of(yellow, orange)))
+[Action('stack ?b1 on top of ?b2'([?V650, ?V651])), Action('unstack ?b1 from ?b2'([?V598, ?V599])), Action('put down ?b'([?V541])), Action('unstack ?b1 from ?b2'([?V490, ?V491])), Action('put down ?b'([?V409])), Action('pick up ?b'([?V348])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V348: red, ?V409: yellow, ?V490: orange, ?V491: yellow, ?V541: yellow, ?V598: red, ?V599: yellow, ?V650: yellow, ?V651: orange}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(orange) ∧ is clear(red) ∧ is clear(yellow) ∧ is on the table(yellow) ∧ is on top of(orange, yellow) ∧ is on top of(red, ?V551) ∧ the hand is empty()))
+[Action('pick up ?b'([?V654])), Action('stack ?b1 on top of ?b2'([?V602, ?V603])), Action('unstack ?b1 from ?b2'([?V550, ?V551])), Action('put down ?b'([?V493])), Action('unstack ?b1 from ?b2'([?V418, ?V419])), Action('put down ?b'([?V349])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V349: yellow, ?V418: red, ?V419: yellow, ?V493: orange, ?V550: red, ?V603: orange, ?V602: yellow, ?V654: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(orange) ∧ is clear(yellow) ∧ is on top of(orange, yellow) ∧ is on top of(red, ?V551) ∧ is on top of(yellow, red) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V658, ?V659])), Action('stack ?b1 on top of ?b2'([?V602, ?V603])), Action('unstack ?b1 from ?b2'([?V550, ?V551])), Action('put down ?b'([?V493])), Action('unstack ?b1 from ?b2'([?V418, ?V419])), Action('put down ?b'([?V349])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V349: yellow, ?V418: red, ?V419: yellow, ?V493: orange, ?V550: red, ?V603: orange, ?V602: yellow, ?V658: yellow, ?V659: red}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(red) ∧ is on top of(orange, yellow) ∧ is on top of(yellow, yellow))
+ ∨ (i am holding(orange) ∧ i am holding(red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, yellow)))
+[Action('put down ?b'([?V667])), Action('unstack ?b1 from ?b2'([?V622, ?V623])), Action('put down ?b'([?V565])), Action('put down ?b'([?V511])), Action('unstack ?b1 from ?b2'([?V442, ?V443])), Action('put down ?b'([?V361])), Action('pick up ?b'([?V306])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V306: red, ?V361: yellow, ?V442: yellow, ?V443: yellow, ?V511: yellow, ?V565: red, ?V622: red, ?V623: yellow, ?V667: orange}
+--------------------
+Subgoal: 
+((is clear(orange) ∧ is on top of(orange, red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, yellow) ∧ the hand is empty())
+ ∨ (is clear(red) ∧ is on top of(orange, yellow) ∧ is on top of(red, orange) ∧ is on top of(yellow, yellow) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V676, ?V677])), Action('put down ?b'([?V625])), Action('unstack ?b1 from ?b2'([?V568, ?V569])), Action('put down ?b'([?V511])), Action('unstack ?b1 from ?b2'([?V442, ?V443])), Action('put down ?b'([?V361])), Action('pick up ?b'([?V306])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V306: red, ?V361: yellow, ?V442: yellow, ?V443: yellow, ?V511: yellow, ?V568: yellow, ?V569: yellow, ?V625: yellow, ?V676: red, ?V677: yellow}
+--------------------
+Subgoal: 
+((is clear(orange) ∧ is clear(yellow) ∧ is on the table(yellow) ∧ is on top of(orange, red) ∧ is on top of(red, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V682, ?V683])), Action('stack ?b1 on top of ?b2'([?V626, ?V627])), Action('unstack ?b1 from ?b2'([?V568, ?V569])), Action('put down ?b'([?V511])), Action('unstack ?b1 from ?b2'([?V442, ?V443])), Action('put down ?b'([?V361])), Action('pick up ?b'([?V306])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V306: red, ?V361: yellow, ?V442: yellow, ?V443: yellow, ?V511: yellow, ?V568: yellow, ?V569: yellow, ?V626: yellow, ?V627: yellow, ?V682: orange, ?V683: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(yellow) ∧ is on top of(orange, yellow) ∧ is on top of(red, red) ∧ is on top of(yellow, red)))
+[Action('put down ?b'([?V691])), Action('unstack ?b1 from ?b2'([?V634, ?V635])), Action('put down ?b'([?V571])), Action('unstack ?b1 from ?b2'([?V520, ?V521])), Action('put down ?b'([?V445])), Action('unstack ?b1 from ?b2'([?V370, ?V371])), Action('put down ?b'([?V307])), Action('stack ?b1 on top of ?b2'([?V278, ?V279])), Action('pick up ?b'([?V270])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V270: yellow, ?V278: yellow, ?V279: orange, ?V307: yellow, ?V370: red, ?V371: yellow, ?V445: yellow, ?V520: yellow, ?V521: red, ?V571: orange, ?V634: yellow, ?V635: red, ?V691: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(red) ∧ is on top of(orange, red) ∧ is on top of(red, yellow) ∧ is on top of(yellow, ?V539)))
+[Action('put down ?b'([?V709])), Action('unstack ?b1 from ?b2'([?V646, ?V647])), Action('put down ?b'([?V589])), Action('unstack ?b1 from ?b2'([?V538, ?V539])), Action('put down ?b'([?V469])), Action('unstack ?b1 from ?b2'([?V394, ?V395])), Action('put down ?b'([?V325])), Action('pick up ?b'([?V288])), Action('stack ?b1 on top of ?b2'([?V272, ?V273])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V272: red, ?V273: orange, ?V288: yellow, ?V325: red, ?V394: yellow, ?V395: red, ?V469: red, ?V538: yellow, ?V589: yellow, ?V646: red, ?V647: yellow, ?V709: red}
+--------------------
+Subgoal: 
+((is clear(orange) ∧ is clear(yellow) ∧ is on top of(orange, red) ∧ is on top of(red, orange) ∧ is on top of(yellow, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V724, ?V725])), Action('stack ?b1 on top of ?b2'([?V650, ?V651])), Action('unstack ?b1 from ?b2'([?V598, ?V599])), Action('put down ?b'([?V541])), Action('unstack ?b1 from ?b2'([?V490, ?V491])), Action('put down ?b'([?V409])), Action('pick up ?b'([?V348])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V348: red, ?V409: yellow, ?V490: orange, ?V491: yellow, ?V541: yellow, ?V598: red, ?V599: yellow, ?V650: yellow, ?V651: orange, ?V724: orange, ?V725: yellow}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(yellow) ∧ is clear(orange) ∧ is on top of(orange, yellow) ∧ is on top of(red, ?V551) ∧ is on top of(yellow, red)))
+[Action('put down ?b'([?V733])), Action('unstack ?b1 from ?b2'([?V658, ?V659])), Action('stack ?b1 on top of ?b2'([?V602, ?V603])), Action('unstack ?b1 from ?b2'([?V550, ?V551])), Action('put down ?b'([?V493])), Action('unstack ?b1 from ?b2'([?V418, ?V419])), Action('put down ?b'([?V349])), Action('stack ?b1 on top of ?b2'([?V296, ?V297])), Action('unstack ?b1 from ?b2'([?V274, ?V275])), Action('stack ?b1 on top of ?b2'([?V266, ?V267]))]
+{?V266: yellow, ?V267: red, ?V274: red, ?V275: orange, ?V296: yellow, ?V297: orange, ?V349: yellow, ?V418: red, ?V419: yellow, ?V493: orange, ?V550: red, ?V603: orange, ?V602: yellow, ?V658: yellow, ?V659: red, ?V733: yellow}
+--------------------

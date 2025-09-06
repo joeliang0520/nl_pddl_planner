@@ -25,12 +25,6 @@ if __name__ == "__main__":
     with open('files/NL_goals_new.json', 'r') as f:
         all_blocks = json.load(f)
 
-    #save with indent 4
-    with open('files/NL_actions_new.json', 'w') as f:
-        json.dump(domain, f, indent=4)
-    with open('files/NL_goals_new.json', 'w') as f:
-        json.dump(all_blocks, f, indent=4)
-
     # create a directory to store the results
     current_dir = os.path.dirname(os.path.abspath(__file__))
     save_path = os.path.join(current_dir, f'alfworldtext_results')

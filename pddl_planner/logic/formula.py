@@ -532,7 +532,7 @@ class ConjunctiveFormula(Formula):
 
 
     def simplify_plan(self) -> Formula:
-        """Simplify the conjunction by simplifying each clause and removing contradictions.
+        """Simplify the conjunction by simplifying each clause and removing contradictions in the regression planning stage.
         
         If any two clauses contradict, the result is False.
         
@@ -547,16 +547,22 @@ class ConjunctiveFormula(Formula):
         for disj in self._clauses:
             s = disj.simplify() if hasattr(disj, 'simplify') else disj
             # Exclude disjuncts that are false.
-            if isinstance(s, Equality) and s.is_neq and s.term1.name != s.term2.name and isinstance(s.term1, Variable) and isinstance(s.term2, Variable):
-                    continue
+            if isinstance(s, Equality):
+                if s.is_neq and s.term1.name != s.term2.name and isinstance(s.term1, Constant) and isinstance(s.term2, Constant):
+                        continue
+                if not s.is_neq and s.term1.name == s.term2.name and isinstance(s.term1, Constant) and isinstance(s.term2, Constant):
+                        continue
             if not isinstance(s, FalseFormula):
                 simplified_clauses.append(s)
         
         
         # Check pairwise for contradiction among simplified clauses
         for i in range(len(simplified_clauses)):
-            if isinstance(simplified_clauses[i], Equality) and simplified_clauses[i].is_neq and simplified_clauses[i].term1 == simplified_clauses[i].term2:
-                return FalseFormula()
+            if isinstance(simplified_clauses[i], Equality):
+                if simplified_clauses[i].is_neq and simplified_clauses[i].term1 == simplified_clauses[i].term2:
+                    return FalseFormula()
+                if simplified_clauses[i].term1.name != simplified_clauses[i].term2.name and (isinstance(simplified_clauses[i].term1, Constant) and isinstance(simplified_clauses[i].term2, Constant)):
+                    return FalseFormula()
             for j in range(i + 1, len(simplified_clauses)):
                 if simplified_clauses[i].has_contradiction(simplified_clauses[j]):
                     return FalseFormula()
@@ -582,18 +588,16 @@ class ConjunctiveFormula(Formula):
         # Simplify each clause if possible
             # simplified_clauses = [clause.simplify() if hasattr(clause, 'simplify') else clause 
             #                         for clause in self._clauses]
-
-        simplified_clauses = []
-        for disj in self._clauses:
-            s = disj.simplify() if hasattr(disj, 'simplify') else disj
-            if not isinstance(s, FalseFormula):
-                simplified_clauses.append(s)
-        
-        
+        simplified_clauses = [clause.simplify() if hasattr(clause, 'simplify') else clause 
+                                for clause in self._clauses]
+    
         # Check pairwise for contradiction among simplified clauses
         for i in range(len(simplified_clauses)):
-            if isinstance(simplified_clauses[i], Equality) and simplified_clauses[i].is_neq and simplified_clauses[i].term1 == simplified_clauses[i].term2:
-                return FalseFormula()
+            if isinstance(simplified_clauses[i], Equality):
+                if simplified_clauses[i].is_neq and simplified_clauses[i].term1 == simplified_clauses[i].term2:
+                    return FalseFormula()
+                if simplified_clauses[i].term1.name != simplified_clauses[i].term2.name and (isinstance(simplified_clauses[i].term1, Constant) and isinstance(simplified_clauses[i].term2, Constant)):
+                    return FalseFormula()
             for j in range(i + 1, len(simplified_clauses)):
                 if simplified_clauses[i].has_contradiction(simplified_clauses[j]):
                     return FalseFormula()
@@ -633,9 +637,9 @@ class ConjunctiveFormula(Formula):
                 if isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
                     equality_subst[clause.term2] = clause.term1
                 elif isinstance(clause.term1, Variable) and isinstance(clause.term2, Constant):
-                    equality_subst[clause.term2] = clause.term1
-                elif isinstance(clause.term1, Constant) and isinstance(clause.term2, Variable):
                     equality_subst[clause.term1] = clause.term2
+                elif isinstance(clause.term1, Constant) and isinstance(clause.term2, Variable):
+                    equality_subst[clause.term2] = clause.term1
         
         substituted_clauses = set()
         for clause in simplified_clauses:
@@ -647,7 +651,7 @@ class ConjunctiveFormula(Formula):
         for clause in substituted_clauses:
             if isinstance(clause, Equality):
                 if not clause.is_neq:
-                    if not (isinstance(clause.term1, Constant) and isinstance(clause.term2, Constant)):
+                    if isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
                         continue
                 elif isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
                     if clause.term1.name != clause.term2.name:
@@ -711,11 +715,11 @@ class DisjunctiveFormula(Formula):
             if isinstance(s, ConjunctiveFormula):
                 kept = []
                 for c in s.clauses:
-                    if isinstance(c, Equality) and c.is_neq and isinstance(c.term1, Variable) and isinstance(c.term2, Variable) and c.term1.name != c.term2.name:
+                    if isinstance(c, Equality) and c.is_neq and isinstance(c.term1, Constant) and isinstance(c.term2, Constant) and c.term1.name != c.term2.name:
                         # Drop pure variable-inequalities as they add no constraint under UNA in planning
                         continue
                     kept.append(c)
-                s = ConjunctiveFormula(*kept) if kept else FalseFormula()
+                s = ConjunctiveFormula(*kept)
                 if isinstance(s, FalseFormula):
                     continue
             simplified_disjuncts.append(s)

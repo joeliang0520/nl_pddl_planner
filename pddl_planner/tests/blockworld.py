@@ -37,12 +37,12 @@ if __name__ == "__main__":
     os.makedirs(save_path, exist_ok=True)
 
     # initialize the planner
-    for i, block in enumerate(all_blocks[:1]):
+    for i, block in enumerate(all_blocks[:4]):
         print(f'Problem {block} =========================================')
         planner = NLFOLRegressionPlanner(domain.copy(), block.copy(), max_depth=10)
         regressed_plans = planner.regress_plan()
         # create a empty text file to store the results
-        save_file_path = os.path.join(save_path, f'alfworldtext_results_{i}.txt')
+        save_file_path = os.path.join(save_path, f'blockworld_results_{i}.txt')
         with open(save_file_path, 'w') as f:
             # print the regressed plans
             print("Regressed goals:")

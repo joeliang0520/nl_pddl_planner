@@ -324,7 +324,8 @@ class NLFOLRegressionPlanner(NLPlanner):
         flattened_regressed_goal = DisjunctiveFormula(*regressed_disjunct_list).distribute_and_over_or()
         return flattened_regressed_goal
     
-    def regress_plan(self, simplify_equality: bool = True, simplify_contradiction: bool = True, simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True) -> List[Tuple[Formula, List[Action]]]:
+    def regress_plan(self, simplify_equality: bool = True, simplify_contradiction: bool = True, 
+    simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True) -> List[Tuple[Formula, List[Action]]]:
         """
         Generate a regressed plan by iteratively regressing the goal through applicable actions.
 
@@ -395,6 +396,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                 substitution = Substitution()
                 if isinstance(regressed_goal, Predicate):
                     continue
+                
                 if simplify_equality:
                     for clause in regressed_goal.clauses:
                         if isinstance(clause, ConjunctiveFormula):
@@ -402,6 +404,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                             clause, clause_substitution = clause.simplify_equality()
                             substitution.update(clause_substitution)
                         simplified_goals.append(clause)
+
                     regressed_goal = (
                         DisjunctiveFormula(*simplified_goals)
                         .substitute(substitution)
@@ -412,6 +415,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                         .substitute(substitution)
                         .distribute_and_over_or()
                     )
+                    print(f"substitution: {substitution}")
                 if (simplify_typing and self._domain.has_type_conflict(regressed_goal)) or isinstance(regressed_goal, FalseFormula):
                     # skip if there is a type conflict or the formula simplifes to false
                     continue

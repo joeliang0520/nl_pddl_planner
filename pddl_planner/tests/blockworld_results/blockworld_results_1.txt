@@ -1,0 +1,41 @@
+Regressed goals:
+Subgoal: 
+((is on top of(orange, red)))
+[]
+{}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ is clear(red)))
+[Action('stack ?b1 on top of ?b2'([?V110, ?V111]))]
+{?V110: orange, ?V111: red}
+--------------------
+Subgoal: 
+((is clear(orange) ∧ is clear(red) ∧ is on the table(orange) ∧ the hand is empty()))
+[Action('pick up ?b'([?V114])), Action('stack ?b1 on top of ?b2'([?V110, ?V111]))]
+{?V110: orange, ?V111: red, ?V114: orange}
+--------------------
+Subgoal: 
+((i am holding(orange) ∧ i am holding(red)))
+[Action('put down ?b'([?V115])), Action('stack ?b1 on top of ?b2'([?V110, ?V111]))]
+{?V110: orange, ?V111: red, ?V115: red}
+--------------------
+Subgoal: 
+((i am holding(red) ∧ is clear(orange) ∧ is on the table(orange)))
+[Action('put down ?b'([?V121])), Action('pick up ?b'([?V114])), Action('stack ?b1 on top of ?b2'([?V110, ?V111]))]
+{?V110: orange, ?V111: red, ?V114: orange, ?V121: red}
+--------------------
+Subgoal: 
+((i am holding(red) ∧ is clear(orange) ∧ is on top of(orange, ?V131) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V130, ?V131])), Action('put down ?b'([?V115])), Action('stack ?b1 on top of ?b2'([?V110, ?V111]))]
+{?V110: orange, ?V111: red, ?V115: red, ?V130: red}
+--------------------
+Subgoal: 
+((is clear(red) ∧ is on the table(orange) ∧ is on top of(red, orange) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V136, ?V137])), Action('put down ?b'([?V121])), Action('pick up ?b'([?V114])), Action('stack ?b1 on top of ?b2'([?V110, ?V111]))]
+{?V110: orange, ?V111: red, ?V114: orange, ?V121: red, ?V136: red, ?V137: orange}
+--------------------
+Subgoal: 
+((i am holding(red) ∧ is on the table(orange) ∧ is on top of(red, orange)))
+[Action('put down ?b'([?V145])), Action('unstack ?b1 from ?b2'([?V136, ?V137])), Action('put down ?b'([?V121])), Action('pick up ?b'([?V114])), Action('stack ?b1 on top of ?b2'([?V110, ?V111]))]
+{?V110: orange, ?V111: red, ?V114: orange, ?V121: red, ?V136: red, ?V137: orange, ?V145: red}
+--------------------
