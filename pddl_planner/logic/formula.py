@@ -552,8 +552,7 @@ class ConjunctiveFormula(Formula):
                         continue
                 if not s.is_neq and s.term1.name == s.term2.name and isinstance(s.term1, Constant) and isinstance(s.term2, Constant):
                         continue
-            if not isinstance(s, FalseFormula):
-                simplified_clauses.append(s)
+            simplified_clauses.append(s)
         
         
         # Check pairwise for contradiction among simplified clauses

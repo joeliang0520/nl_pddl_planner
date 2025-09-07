@@ -48,7 +48,8 @@ if __name__ == "__main__":
                 f.write(str(plan[0]) + '\n')
                 reversed_plan = plan[1]
                 reversed_plan.reverse()
-                print("Action: ", reversed_plan)
+                actions = [p.substitute(plan[2]) for p in reversed_plan]
+                print("Action: ", actions)
                 f.write(str(reversed_plan) + '\n')
                 print("Substitution: ", plan[2])
                 f.write(str(plan[2]) + '\n')

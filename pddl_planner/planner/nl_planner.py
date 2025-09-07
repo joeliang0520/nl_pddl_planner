@@ -38,8 +38,8 @@ class NLPlanner():
         pass
 
 class NLFOLRegressionPlanner(NLPlanner):
-    def __init__(self, nl_domain: str, nl_problem: str, max_depth: int = 10, 
-    llm_model: str = "gpt-4o-mini", llm_api_key: str = os.getenv("OPENAI_API_KEY")) -> None:
+    def __init__(self, nl_domain: str, nl_problem: str, max_depth: int = 16, 
+    llm_model: str = "gpt-4o-mini", llm_api_key: str = os.getenv("OPENAI_API_KEY"), verbose: bool = True) -> None:
         """
         Initialize a FOL-RegressionPlanner based on First-Order Logic (FOL) and uses SSA from Situation Calculus.
 
@@ -53,7 +53,8 @@ class NLFOLRegressionPlanner(NLPlanner):
         super().__init__(nl_domain, nl_problem)
         self._max_depth = max_depth
         self._ssa = self.create_SSA()
-        self._llm = LLM(model_name=llm_model, api_key=llm_api_key)
+        self._verbose = verbose
+        self._llm = LLM(model_name=llm_model, api_key=llm_api_key, verbose=verbose)
         
     @dataclass
     class SSA_Node:
@@ -178,7 +179,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         if predicates is None:
             predicates = self._domain.predicates
         for pred in predicates:
-            print(f"Processing predicate: {pred.name}")
+            print(f"Processing predicate: {pred.name}") 
             pred_ssa: Dict[str, NLFOLRegressionPlanner.SSA_Node] = {}
             for action in self._domain.actions:
                 standardized_action = action.standardize(self._operations)
@@ -251,7 +252,7 @@ class NLFOLRegressionPlanner(NLPlanner):
             ssa_node = self._ssa[predicate.name][action.name]
         else:
             # check if the predicate can be entailed as a domain predicate
-            print(f'Failing to find "{predicate.name}" in domain predicates, attempting to entail it to a domain predicate')
+            print(f'Failing to find "{predicate.name}" in domain predicates, attempting to entail it to a domain predicate') if self._verbose else None
 
             background_predicates = (copy.deepcopy(action), [clause for clause in self._instance.goal.clauses if isinstance(clause, NLPredicate)])
             entailed_pred = self._llm.entailment(predicate, self._domain.predicates, background_predicates=background_predicates)
@@ -262,7 +263,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                 #predicate = entailed_pred
             else:
                 # create a new ssa node with postive and negative effects as none
-                print(f'Failing to entail "{predicate.name}" in domain predicates, creating a new ssa node with postive and negative effects as none')
+                print(f'Failing to entail "{predicate.name}" in domain predicates, creating a new ssa node with postive and negative effects as none') if self._verbose else None
                 self._ssa[predicate.name] = self.create_SSA_as_itself(predicate)
                 ssa_node = self._ssa[predicate.name][action.name]
         # Build a substitution:
@@ -357,7 +358,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                 if pred.name not in goal_predicate_names:
                     return False
                 # Check if a is entailed by b
-                print(f'[Goal Entailment] Checking if "{target.name}" entails the goal "{pred.name}"')
+                print(f'[Checking Entailment Back to the Goal] Checking if "{target.name}" entails the goal "{pred.name}"') if self._verbose else None
                 entailed_predicate = self._llm.entailment(copy.deepcopy(pred), [copy.deepcopy(target)])
                 if entailed_predicate is not None:
                     return True
@@ -384,7 +385,7 @@ class NLFOLRegressionPlanner(NLPlanner):
             current_goal: Formula = current_node.sub_goal
             if current_node.depth >= self._max_depth:
                 # exit if max depth is reached
-                print(f'max depth reached: {current_node.depth}')
+                print(f'max depth reached: {current_node.depth}') if self._verbose else None
                 continue
                 
             for action in self._domain.actions:
@@ -415,7 +416,6 @@ class NLFOLRegressionPlanner(NLPlanner):
                         .substitute(substitution)
                         .distribute_and_over_or()
                     )
-                    print(f"substitution: {substitution}")
                 if (simplify_typing and self._domain.has_type_conflict(regressed_goal)) or isinstance(regressed_goal, FalseFormula):
                     # skip if there is a type conflict or the formula simplifes to false
                     continue
@@ -437,7 +437,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                         if isinstance(conjunct, ConjunctiveFormula):
                             visited_goal.append(conjunct)
                         else:
-                            print(f"Not a conjunctive formula: {conjunct}")
+                            print(f"Not a conjunctive formula: {conjunct}") if self._verbose else None
                     frontier.append(child_node)
                     plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
     

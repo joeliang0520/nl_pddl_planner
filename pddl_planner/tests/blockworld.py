@@ -1,3 +1,4 @@
+import time
 import pddl
 import json
 import os
@@ -39,25 +40,30 @@ if __name__ == "__main__":
     # initialize the planner
     for i, block in enumerate(all_blocks[:4]):
         print(f'Problem {block} =========================================')
-        planner = NLFOLRegressionPlanner(domain.copy(), block.copy(), max_depth=10)
+        planner = NLFOLRegressionPlanner(domain.copy(), block.copy(), max_depth=16)
+        #track time
+        start_time = time.time()
         regressed_plans = planner.regress_plan()
+        end_time = time.time()
+        print(f'Time taken: {end_time - start_time} seconds')
         # create a empty text file to store the results
         save_file_path = os.path.join(save_path, f'blockworld_results_{i}.txt')
         with open(save_file_path, 'w') as f:
             # print the regressed plans
-            print("Regressed goals:")
+            #print("Regressed goals:")
             f.write("Regressed goals:\n")
             for plan in regressed_plans:
-                print("Subgoal: ")
+                #print("Subgoal: ")
                 f.write("Subgoal: \n")
-                print(plan[0])
+                
+                #print(plan[0])
                 f.write(str(plan[0]) + '\n')
                 reversed_plan = plan[1]
                 reversed_plan.reverse()
-                print("Action: ", reversed_plan)
-                f.write(str(reversed_plan) + '\n')
-                print("Substitution: ", plan[2])
+                actions = [p.substitute(plan[2]) for p in reversed_plan]
+                #print("Action: ", actions)
+                f.write(str(actions) + '\n')
+                #print("Substitution: ", plan[2])
                 f.write(str(plan[2]) + '\n')
-                print("--------------------")
+                #print("--------------------")
                 f.write("--------------------\n")
-    #
