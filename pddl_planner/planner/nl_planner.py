@@ -390,7 +390,8 @@ class NLFOLRegressionPlanner(NLPlanner):
         return flattened_regressed_goal
     
     def regress_plan(self, simplify_equality: bool = True, simplify_contradiction: bool = True, 
-    simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True) -> List[Tuple[Formula, List[Action]]]:
+    simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True,
+    split_each_conjunct: bool = True) -> List[Tuple[Formula, List[Action]]]:
         """
         Generate a regressed plan by iteratively regressing the goal through applicable actions.
 
@@ -471,8 +472,11 @@ class NLFOLRegressionPlanner(NLPlanner):
                     subst_map: Dict[str, Substitution] = {}
                     for clause in regressed_goal.clauses:
                         if isinstance(clause, ConjunctiveFormula):
-                            # Build substitution from equality for this conjunct only
-                            clause_simplified, clause_sub = clause.simplify_equality(current_goal)
+                            # Build substitution from equality
+                            if split_each_conjunct:
+                                clause_simplified, clause_sub = clause.simplify_equality(current_goal)
+                            else:
+                                clause_simplified, clause_sub = clause.simplify_equality_variables_only(current_goal)
                             per_conj = (
                                 DisjunctiveFormula(clause_simplified)
                                 .substitute(clause_sub)
@@ -523,7 +527,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                     for conj in regressed_conjuncts
                 ) if 'subst_map' in locals() else False
                 
-                if len(regressed_conjuncts) > 1 and has_any_subst:
+                if split_each_conjunct and len(regressed_conjuncts) > 1 and has_any_subst:
                     # Additional dup detection per conjunct when splitting
                     for conj in regressed_conjuncts:
                         split_goal = DisjunctiveFormula(conj).distribute_and_over_or()
