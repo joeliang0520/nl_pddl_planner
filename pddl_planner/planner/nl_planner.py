@@ -54,7 +54,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         self._max_depth = max_depth
         self._ssa = self.create_SSA()
         self._verbose = verbose
-        self._llm = LLM(model_name=llm_model, api_key=llm_api_key, verbose=verbose)
+        self._llm = LLM(model_name=llm_model, api_key=llm_api_key, verbose=False)
         
     @dataclass
     class SSA_Node:
@@ -252,7 +252,7 @@ class NLFOLRegressionPlanner(NLPlanner):
             ssa_node = self._ssa[predicate.name][action.name]
         else:
             # check if the predicate can be entailed as a domain predicate
-            print(f'Failing to find "{predicate.name}" in domain predicates, attempting to entail it to a domain predicate') if self._verbose else None
+            print(f'[Attempting to Entail] Failing to find "{predicate.name}" in domain predicates, attempting to entail it to a domain predicate') if self._verbose else None
 
             background_predicates = (copy.deepcopy(action), [clause for clause in self._instance.goal.clauses if isinstance(clause, NLPredicate)])
             entailed_pred = self._llm.entailment(predicate, self._domain.predicates, background_predicates=background_predicates)
@@ -422,7 +422,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                 if pred.name not in goal_predicate_names:
                     return False
                 # Check if a is entailed by b
-                print(f'[Checking Entailment Back to the Goal] Checking if "{target.name}" entails the goal "{pred.name}"') if self._verbose else None
+               # print(f'[Checking Entailment Back to the Goal] Checking if "{target.name}" entails the goal "{pred.name}"') if self._verbose else None
                 entailed_predicate = self._llm.entailment(copy.deepcopy(pred), [copy.deepcopy(target)])
                 if entailed_predicate is not None:
                     return True
