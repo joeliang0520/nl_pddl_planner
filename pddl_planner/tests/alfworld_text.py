@@ -3,7 +3,7 @@ import json
 import os
 from dotenv import load_dotenv
 
-from pddl_planner.planner.nl_planner import NLFOLRegressionPlanner
+from pddl_planner.planner.nl_planner  import NLFOLRegressionPlanner
 
 if __name__ == "__main__":
     env_flag = False
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     os.makedirs(save_path, exist_ok=True)
 
     # initialize the planner
-    for i, block in enumerate([all_blocks[2]]):
+    for i, block in enumerate(all_blocks[:1]):
         print(f'Problem {block} =========================================')
         planner = NLFOLRegressionPlanner(domain.copy(), block.copy(), max_depth=10)
         regressed_plans = planner.regress_plan()
@@ -50,9 +50,10 @@ if __name__ == "__main__":
                 reversed_plan.reverse()
                 actions = [p.substitute(plan[2]) for p in reversed_plan]
                 print("Action: ", actions)
-                f.write(str(reversed_plan) + '\n')
+                f.write(f'Action: {str(actions)}\n')
+
                 print("Substitution: ", plan[2])
-                f.write(str(plan[2]) + '\n')
+                f.write(f'Substitution: {str(plan[2])}\n')
                 print("--------------------")
                 f.write("--------------------\n")
     #

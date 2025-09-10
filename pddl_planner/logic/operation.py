@@ -1,5 +1,7 @@
 import copy
+from typing import List
 from pddl_planner.logic.formula import Logic, Substitution, Formula, Predicate, ConjunctiveFormula, DisjunctiveFormula, Variable
+from pddl_planner.logic.nl_formula import NLPredicate
 
 class Operations(Logic):
     """Operations performed to formulas"""
@@ -107,4 +109,75 @@ class Operations(Logic):
         # Apply the substitution to each formula and return the standardized formulas
         standardized_formulas = [formula.substitute(substitution) for formula in formulas]
         return standardized_formulas
+
+    def replace_domain_with_goal_fluents(self, formula: "DisjunctiveFormula", goal: "Formula") -> "DisjunctiveFormula":
+        """
+        Replace predicate names in a formula with matching goal fluent names while preserving terms.
+
+        Matching uses entailment-aware equality via Formula._equals_helper when available (e.g., NLPredicate).
+
+        Args:
+            formula (DisjunctiveFormula): The formula whose predicate names may be replaced.
+            goal (Formula): The overall goal formula from which to collect goal fluents (predicates).
+
+        Returns:
+            DisjunctiveFormula: A new DisjunctiveFormula with predicate names replaced where matches are found.
+        """
+
+        # Gather all goal predicates
+        goal_preds: List[Predicate] = []
+
+        def _gather_preds(f: "Formula") -> None:
+            if isinstance(f, Predicate):
+                goal_preds.append(f)
+                return
+            if hasattr(f, 'clauses') and isinstance(getattr(f, 'clauses'), list):
+                for cl in f.clauses:
+                    _gather_preds(cl)
+
+        _gather_preds(goal)
+
+        def _match_and_replace(pred: Predicate) -> Predicate:
+            # Try match against any goal predicate using entailment-aware equality when available.
+            for gpred in goal_preds:
+                if pred._equals_helper(gpred, {}):
+                    if pred.name == gpred.name:
+                        return pred
+                    gpred_copy = copy.deepcopy(gpred)
+                    # Unify the terms of the predicates, ignoring name
+                    substitution = self.unify_with_different_name(pred, gpred_copy, Substitution())
+                    if substitution is not None:
+                        pred = pred.substitute(substitution)
+                        gpred_copy = gpred_copy.substitute(substitution)
+                    # Prefer preserving NLPredicate fields when present
+                    return NLPredicate(
+                        gpred_copy.name,
+                        gpred_copy.nl_description,
+                        pred.is_neg,
+                        *pred.terms,
+                        term_type_dict=pred.term_type_dict,
+                        inital_terms=getattr(pred, '_inital_terms'),
+                        inital_str=getattr(gpred_copy, '_inital_str_represntation'),
+                    )
+            return pred
+
+        def _replace_in_formula(f: "Formula") -> "Formula":
+            if isinstance(f, Predicate):
+                return _match_and_replace(f)
+            if isinstance(f, ConjunctiveFormula):
+                replaced_children = [_replace_in_formula(cl) for cl in f.clauses]
+                ret = ConjunctiveFormula(*replaced_children)
+                formula._combine_and_propagate_type_dict(ret)  # reuse helper
+                return ret
+            if isinstance(f, DisjunctiveFormula):
+                replaced_children = [_replace_in_formula(cl) for cl in f.clauses]
+                ret = DisjunctiveFormula(*replaced_children)
+                formula._combine_and_propagate_type_dict(ret)
+                return ret
+            return f
+
+        replaced = _replace_in_formula(formula)
+        if isinstance(replaced, DisjunctiveFormula):
+            return replaced
+        return DisjunctiveFormula(replaced)
 

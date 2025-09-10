@@ -27,10 +27,10 @@ if __name__ == "__main__":
         all_blocks = json.load(f)
 
     #save with indent 4
-    with open('files/NL_actions_new.json', 'w') as f:
-        json.dump(domain, f, indent=4)
-    with open('files/NL_goals_new.json', 'w') as f:
-        json.dump(all_blocks, f, indent=4)
+    # with open('files/NL_actions_new.json', 'w') as f:
+    #     json.dump(domain, f, indent=4)
+    # with open('files/NL_goals_new.json', 'w') as f:
+    #     json.dump(all_blocks, f, indent=4)
 
     # create a directory to store the results
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -38,9 +38,9 @@ if __name__ == "__main__":
     os.makedirs(save_path, exist_ok=True)
 
     # initialize the planner
-    for i, block in enumerate(all_blocks[:4]):
+    for i, block in enumerate(all_blocks[3:4]):
         print(f'Problem {block} =========================================')
-        planner = NLFOLRegressionPlanner(domain.copy(), block.copy(), max_depth=16)
+        planner = NLFOLRegressionPlanner(domain.copy(), block.copy(), max_depth=10)
         #track time
         start_time = time.time()
         regressed_plans = planner.regress_plan()
