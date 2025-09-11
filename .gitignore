@@ -23,3 +23,6 @@ venv/
 .env.local
 
 .*cache.json
+
+out_problems/
+out_val/
