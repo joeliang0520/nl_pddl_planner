@@ -5,6 +5,8 @@ import os
 from dotenv import load_dotenv
 
 from pddl_planner.planner.nl_planner import NLFOLRegressionPlanner
+from pddl_planner.logic.nl_parser import NLParser
+from pddl_planner.logic.formula import DisjunctiveFormula
 
 if __name__ == "__main__":
     env_flag = False
@@ -22,8 +24,8 @@ if __name__ == "__main__":
     with open('files/blockworld_domain.json', 'r') as f:
         domain = json.load(f)
 
-    # load the goal blocks from the file    
-    with open('files/blockworld_goal.json', 'r') as f:
+    # load the problems (initial state and goal pairs) from the file
+    with open('files/blockworld_problem.json', 'r') as f:
         all_blocks = json.load(f)
 
     #save with indent 4
@@ -38,32 +40,52 @@ if __name__ == "__main__":
     os.makedirs(save_path, exist_ok=True)
 
     # initialize the planner
-    for i, block in enumerate(all_blocks[3:4]):
-        print(f'Problem {block} =========================================')
-        planner = NLFOLRegressionPlanner(domain.copy(), block.copy(), max_depth=10)
-        #track time
+    for i, problem in enumerate(all_blocks[3:4]):
+        # Expect each problem to be [initial_state, goal]; fall back to goal only
+        if isinstance(problem, list) and len(problem) == 2 and isinstance(problem[0], list):
+            init_state, goal = problem
+        else:
+            init_state = None
+            goal = problem
+
+        print(f'Problem {goal} =========================================')
+        planner = NLFOLRegressionPlanner(domain.copy(), goal.copy(), max_depth=10)
+        # track time
         start_time = time.time()
         regressed_plans = planner.regress_plan()
         end_time = time.time()
         print(f'Time taken: {end_time - start_time} seconds')
+
         # create a empty text file to store the results
         save_file_path = os.path.join(save_path, f'blockworld_results_{i}.txt')
         with open(save_file_path, 'w') as f:
-            # print the regressed plans
-            #print("Regressed goals:")
-            f.write("Regressed goals:\n")
+            if init_state is not None:
+                parser = NLParser()
+                type_tags = {}
+                for pred in init_state:
+                    type_tags.update(pred[1])
+                init_formula = parser.parse_formula(init_state, term_type_dict=type_tags)
+                init_formula = DisjunctiveFormula(init_formula).distribute_and_over_or()
+                print("Initial State:")
+                print(init_formula)
+                print("Actions:", [])
+                print("Substitution:", {})
+                print("--------------------")
+                f.write("Initial State:\n")
+                f.write(str(init_formula) + '\n')
+                f.write(str([]) + '\n')
+                f.write(str({}) + '\n')
+                f.write("--------------------\n")
+                f.write("Regressed goals:\n")
+            else:
+                f.write("Regressed goals:\n")
+
             for plan in regressed_plans:
-                #print("Subgoal: ")
                 f.write("Subgoal: \n")
-                
-                #print(plan[0])
                 f.write(str(plan[0]) + '\n')
                 reversed_plan = plan[1]
                 reversed_plan.reverse()
                 actions = [p.substitute(plan[2]) for p in reversed_plan]
-                #print("Action: ", actions)
                 f.write(str(actions) + '\n')
-                #print("Substitution: ", plan[2])
                 f.write(str(plan[2]) + '\n')
-                #print("--------------------")
                 f.write("--------------------\n")

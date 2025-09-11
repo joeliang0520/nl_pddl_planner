@@ -234,7 +234,8 @@ def convert_text_to_nlpddl_instances(text: str) -> Tuple[Domain, List[Problem]]:
 
     sections = _split_all_sections(text)
     problems: List[Problem] = []
-    for init_text, goal_text in sections:
+    if sections:
+        init_text, goal_text = sections[-1]
         initial = _parse_state(init_text)
         goal = _parse_state(goal_text)
         problems.append(Problem(initial_state=initial, goal_state=goal))

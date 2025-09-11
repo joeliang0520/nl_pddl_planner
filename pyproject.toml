@@ -11,6 +11,7 @@ dependencies = [
   "pydantic",
   "numpy",
   "python-dotenv",
+  "pydatalog",
 ]
 
 [tool.setuptools.packages.find]

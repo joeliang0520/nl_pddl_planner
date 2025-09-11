@@ -1,68 +1,49 @@
+#!/usr/bin/env python3
 import argparse
 import json
 from pathlib import Path
 
-from pddl_planner.llm.translator import goals_to_json
 from pddl_planner.rule_based.translator import convert_text_to_nlpddl_instances
 
 
-def main() -> None:
-    """Convert a Blocksworld NL description to NL-PDDL using rule-based rules."""
+def state_to_jsonable(state):
+    return [a.to_list() if hasattr(a, "to_list") else a for a in state]
 
+
+def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
-            "Use a rule-based converter to translate a natural language "
-            "Blocksworld description into NL-PDDL domain and problem JSON files."
+            "Parse a benchmark JSON of NL Blocksworld descriptions and emit "
+            "problems.json ([init, goal] per problem) and goals.json (goal per problem) "
+            "using the rule-based converter."
         )
     )
-    parser.add_argument(
-        "--input", "-i", required=True,
-        help="Path to a text file containing the natural language description",
-    )
-    parser.add_argument(
-        "--domain-out", "-d", default="domain.json",
-        help="Where to write the generated domain JSON",
-    )
-    parser.add_argument(
-        "--problem-out", "-p", default="problem.json",
-        help="Where to write the generated problem JSON",
-    )
-    parser.add_argument(
-        "--goal-out", "-g", default="goal.json",
-        help="Where to write the generated goals JSON",
-    )
+    parser.add_argument("--input", "-i", required=True, help="Path to the benchmark JSON file")
+    parser.add_argument("--output-dir", "-o", required=True, help="Directory to write outputs")
     args = parser.parse_args()
 
-    description = Path(args.input).read_text()
-    domain, problems = convert_text_to_nlpddl_instances(description)
+    data = json.loads(Path(args.input).read_text())
+    out_dir = Path(args.output_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
 
-    domain_json = [{"Predicate": [p.to_list() for p in domain.predicates]}]
-    domain_json.extend([a.to_dict() for a in domain.actions])
+    all_problem_pairs = []  # each element: [ init_state_json, goal_state_json ]
+    all_goals = []          # each element: goal_state_json
 
-    if len(problems) == 1:
-        problem_json = [
-            [p.to_list() for p in problems[0].initial_state],
-            [p.to_list() for p in problems[0].goal_state],
-        ]
-        goal_json = goals_to_json(problems[0])
-    else:
-        problem_json = []
+    for inst in data.get("instances", []):
+        description = inst.get("query", "")
+        _, problems = convert_text_to_nlpddl_instances(description)
+
         for pr in problems:
-            problem_json.append(
-                [
-                    [p.to_list() for p in pr.initial_state],
-                    [p.to_list() for p in pr.goal_state],
-                ]
-            )
-        goal_json = goals_to_json(problems)
+            init_json = state_to_jsonable(pr.initial_state)
+            goal_json = state_to_jsonable(pr.goal_state)
+            all_problem_pairs.append([init_json, goal_json])
+            all_goals.append(goal_json)
 
-    Path(args.domain_out).write_text(json.dumps(domain_json, indent=2))
-    Path(args.problem_out).write_text(json.dumps(problem_json, indent=2))
-    Path(args.goal_out).write_text(json.dumps(goal_json, indent=2))
+    (out_dir / "problem.json").write_text(json.dumps(all_problem_pairs, indent=2))
+    (out_dir / "goal.json").write_text(json.dumps(all_goals, indent=2))
 
-    print(f"Domain written to {args.domain_out}")
-    print(f"Problem written to {args.problem_out}")
-    print(f"Goals written to {args.goal_out}")
+    print(f"Wrote {out_dir / 'problem.json'}")
+    print(f"Wrote {out_dir / 'goal.json'}")
 
 
 if __name__ == "__main__":
