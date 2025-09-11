@@ -1,5 +1,5 @@
 from typing import Set, Dict, List, Any, Optional, Callable
-from pddl_planner.logic.formula import Predicate, Term, Substitution
+from pddl_planner.logic.formula import Predicate, Term, Substitution, DisjunctiveFormula, ConjunctiveFormula
 import re
 import copy
 class NLPredicate(Predicate):
@@ -26,6 +26,8 @@ class NLPredicate(Predicate):
             self._inital_terms = copy.deepcopy(inital_terms)
         self._inital_str_represntation = copy.deepcopy(inital_str if inital_str is not None else self._str_represntation)
         self._entailed_by: "NLPredicate"|List["NLPredicate"] = entailed_by if entailed_by is not None else self
+        # Map from entailed predicate name -> Substitution used for entailment (target_var -> candidate_var)
+        self._entailed_substitutions: Dict[str, Substitution] = {}
         
     # Optional, planner-injected entailment checker: (a, b) -> bool if a is entailed by b or vice versa
     _entailment_checker: Optional[Callable[["NLPredicate", "NLPredicate"], bool]] = None

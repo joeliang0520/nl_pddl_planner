@@ -6,28 +6,9 @@
             {}
          ],
          [
-            "the agent is holding ?o",
-            {
-               "?o": "object"
-            }
-         ],
-         [
-            "?r can contain ?o",
-            {
-               "?r": "object",
-               "?o": "object"
-            }
-         ],
-         [
             "?o is in ?r",
             {
                "?o": "object",
-               "?r": "object"
-            }
-         ],
-         [
-            "?r is a heating device",
-            {
                "?r": "object"
             }
          ],
@@ -39,65 +20,91 @@
             }
          ],
          [
-            "?o is hot",
+            "?o is heated",
             {
                "?o": "object"
             }
          ],
          [
-            "?r is a cleaning device",
-            {
-               "?r": "object"
-            }
-         ],
-         [
-            "?r can clean ?o",
+            "?r can wash ?o",
             {
                "?r": "object",
                "?o": "object"
             }
          ],
          [
-            "?o is clean",
+            "?o is washed",
             {
                "?o": "object"
             }
          ],
          [
-            "?r is a cooling device",
-            {
-               "?r": "object"
-            }
-         ],
-         [
-            "?r can cool ?o",
+            "?r can chill ?o",
             {
                "?r": "object",
                "?o": "object"
             }
          ],
          [
-            "?o is cool",
+            "?o is chilled",
             {
                "?o": "object"
             }
          ],
          [
-            "?r is a light",
+            "the agent is holding ?o",
+            {
+               "?o": "object"
+            }
+         ],
+         [
+            "?r can light ?o",
+            {
+               "?r": "object",
+               "?o": "object"
+            }
+         ],
+         [
+            "?r is turned on",
             {
                "?r": "object"
             }
          ],
          [
-            "the agent is holding ?r",
+            "?r is a washing device",
             {
                "?r": "object"
             }
          ],
          [
-            "?r is on",
+            "?r is a heating device",
             {
                "?r": "object"
+            }
+         ],
+         [
+            "?r is a chilling device",
+            {
+               "?r": "object"
+            }
+         ],
+         [
+            "?r is a lighting device",
+            {
+               "?r": "object"
+            }
+         ],
+         [
+            "?o is under light ?r",
+            {
+               "?o": "object",
+               "?r": "object"
+            }
+         ],
+         [
+            "the agent is holding ?o",
+            {
+               "?o": "object"
             }
          ]
       ]
@@ -151,13 +158,6 @@
       },
       "Preconditions": [
          [
-            "?r can contain ?o",
-            {
-               "?r": "object",
-               "?o": "object"
-            }
-         ],
-         [
             "the agent is holding ?o",
             {
                "?o": "object"
@@ -203,12 +203,6 @@
       },
       "Preconditions": [
          [
-            "?r is a heating device",
-            {
-               "?r": "object"
-            }
-         ],
-         [
             "?r can heat ?o",
             {
                "?r": "object",
@@ -220,12 +214,18 @@
             {
                "?o": "object"
             }
+         ],
+         [
+            "?r is a heating device",
+            {
+               "?r": "object"
+            }
          ]
       ],
       "Effects": {
          "Positive": [
             [
-               "?o is hot",
+               "?o is heated",
                {
                   "?o": "object"
                }
@@ -234,9 +234,9 @@
       }
    },
    {
-      "Action": "Clean",
+      "Action": "Wash",
       "Action name": [
-         "clean ?o using ?r",
+         "wash ?o using ?r",
          {
             "?o": "object",
             "?r": "object"
@@ -248,13 +248,7 @@
       },
       "Preconditions": [
          [
-            "?r is a cleaning device",
-            {
-               "?r": "object"
-            }
-         ],
-         [
-            "?r can clean ?o",
+            "?r can wash ?o",
             {
                "?r": "object",
                "?o": "object"
@@ -265,12 +259,18 @@
             {
                "?o": "object"
             }
+         ],
+         [
+            "?r is a washing device",
+            {
+               "?r": "object"
+            }
          ]
       ],
       "Effects": {
          "Positive": [
             [
-               "?o is clean",
+               "?o is washed",
                {
                   "?o": "object"
                }
@@ -279,9 +279,9 @@
       }
    },
    {
-      "Action": "Cool",
+      "Action": "Chill",
       "Action name": [
-         "cool ?o using ?r",
+         "chill ?o using ?r",
          {
             "?o": "object",
             "?r": "object"
@@ -293,13 +293,7 @@
       },
       "Preconditions": [
          [
-            "?r is a cooling device",
-            {
-               "?r": "object"
-            }
-         ],
-         [
-            "?r can cool ?o",
+            "?r can chill ?o",
             {
                "?r": "object",
                "?o": "object"
@@ -310,12 +304,18 @@
             {
                "?o": "object"
             }
+         ],
+         [
+            "?r is a chilling device",
+            {
+               "?r": "object"
+            }
          ]
       ],
       "Effects": {
          "Positive": [
             [
-               "?o is cool",
+               "?o is chilled",
                {
                   "?o": "object"
                }
@@ -326,33 +326,43 @@
    {
       "Action": "Light",
       "Action name": [
-         "turn on ?r",
+         "light ?o using ?r",
          {
-            "?r": "object"
+            "?r": "object",
+            "?o": "object"
          }
       ],
       "Parameters": {
-         "?r": "object"
+         "?r": "object",
+         "?o": "object"
       },
       "Preconditions": [
          [
-            "?r is a light",
+            "the agent is holding ?o",
+            {
+               "?o": "object"
+            }
+         ],
+         [
+            "?r is a lighting device",
             {
                "?r": "object"
             }
          ],
          [
-            "the agent is holding ?r",
+            "?r can light ?o",
             {
-               "?r": "object"
+               "?r": "object",
+               "?o": "object"
             }
          ]
       ],
       "Effects": {
          "Positive": [
             [
-               "?r is on",
+               "?o is under light ?r",
                {
+                  "?o": "object",
                   "?r": "object"
                }
             ]

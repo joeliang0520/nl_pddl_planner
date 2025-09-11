@@ -9,6 +9,7 @@ import json
 import copy
 import time
 import random
+import itertools
 
 class LLM:
     """
@@ -64,35 +65,58 @@ class LLM:
 
             print(f'[Substitution] Existing substitution: {substitution} between "{str(predicate_copy)}" and "{str(pred_copy)}"') if self._verbose else None
             
-            # Apply extended substitution to both predicates to get their substituted string representations
-            substituted_target = predicate_copy.substitute(substitution)
-            substituted_pred = pred_copy.substitute(substitution)
+            # Build and try all permutations of value assignments if multiple variables are present
+            keys = list(substitution.keys())
+            values = list(substitution.values())
+            permuted_values_list = [tuple(values)]
+            if len(values) > 1:
+                # Deduplicate permutations in case of repeated values
+                permuted_values_list = list({tuple(p) for p in itertools.permutations(values, len(values))})
+                print(f"[Substitution] Trying {len(permuted_values_list)} permutations for substitution keys {keys}") if self._verbose else None
 
-            # Conduct entailment between the substituted string representations
-            target_str = substituted_target.nl_description
-            pred_str = substituted_pred.nl_description
+            entailed_for_this_pred = False
+            winning_perm_sub = None
+            for perm_vals in permuted_values_list:
+                perm_sub = Substitution({k: v for k, v in zip(keys, perm_vals)})
 
-            if predicate_copy._is_neg:
-                # reverse the entailment check for negative predicates
-                entailment_result, response_text = self._entailment_check(
-                    pred_str,
-                    target_str,
-                    background_predicates,
-                    target_predicate_name=pred_copy.name,
-                )
-            else:
-                # conduct entailment check
-                entailment_result, response_text = self._entailment_check(
-                    target_str,
-                    pred_str,
-                    background_predicates,
-                    target_predicate_name=predicate_copy.name,
-                )
+                # Apply substitution on fresh copies to avoid cross-permutation side effects
+                perm_target = copy.deepcopy(predicate_copy).substitute(perm_sub)
+                perm_pred = copy.deepcopy(pred_copy).substitute(perm_sub)
 
-            if entailment_result:
-                # if the predicate is entailed, update the cache
+                # Conduct entailment between the substituted string representations
+                target_str = perm_target.nl_description
+                pred_str = perm_pred.nl_description
+
+                if predicate_copy._is_neg:
+                    # reverse the entailment check for negative predicates
+                    entailment_result, response_text = self._entailment_check(
+                        pred_str,
+                        target_str,
+                        background_predicates,
+                        target_predicate_name=pred_copy.name,
+                    )
+                else:
+                    # conduct entailment check
+                    entailment_result, response_text = self._entailment_check(
+                        target_str,
+                        pred_str,
+                        background_predicates,
+                        target_predicate_name=predicate_copy.name,
+                    )
+
+                if entailment_result:
+                    entailed_for_this_pred = True
+                    winning_perm_sub = perm_sub
+                    break
+
+            if entailed_for_this_pred:
                 print(f"[Success] Predicate {str(predicate)} is entailed by {pred.name} from LLM") if self._verbose else None
-                entailed_preds.append(pred)
+                entailed_preds.append(perm_pred)
+                # Record the substitution used for entailment for later SSA alignment
+                try:
+                    predicate.add_entailed_substitution(pred.name, winning_perm_sub if winning_perm_sub is not None else Substitution())
+                except Exception:
+                    pass
         if len(entailed_preds) == 1:
             # if there is only one entailed predicate, overwrite the original predicate's entailment with the entailed predicate
             predicate.entailed = entailed_preds[0]

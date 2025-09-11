@@ -2,7 +2,6 @@ import textwrap, warnings, re, copy
 from typing import List, Set, Dict, Union, Any, Tuple
 import pddl_planner.logic.formula as formula
 import numpy as np
-
 class Logic:
     """Class capturing logical utilities and global variable generation.
 
@@ -529,9 +528,10 @@ class ConjunctiveFormula(Formula):
         """
         #print(f'get_negation dnf: {self._clauses}' if np.any([isinstance(clause, Equality) for clause in self.clauses]) else None)
         return DisjunctiveFormula(*[clause.get_negation() for clause in self.clauses])
-    
-    def simplify(self) -> Formula:
-        """Simplify the conjunction by simplifying each clause and removing contradictions.
+
+
+    def simplify_plan(self) -> Formula:
+        """Simplify the conjunction by simplifying each clause and removing contradictions in the regression planning stage.
         
         If any two clauses contradict, the result is False.
         
@@ -539,13 +539,28 @@ class ConjunctiveFormula(Formula):
             Formula: The simplified conjunctive formula, or FalseFormula if a contradiction was found.
         """
         # Simplify each clause if possible
-        simplified_clauses = [clause.simplify() if hasattr(clause, 'simplify') else clause 
-                                for clause in self._clauses]
+            # simplified_clauses = [clause.simplify() if hasattr(clause, 'simplify') else clause 
+            #                         for clause in self._clauses]
+
+        simplified_clauses = []
+        for disj in self._clauses:
+            s = disj.simplify() if hasattr(disj, 'simplify') else disj
+            # Exclude disjuncts that are false.
+            if isinstance(s, Equality):
+                if s.is_neq and s.term1.name != s.term2.name and isinstance(s.term1, Constant) and isinstance(s.term2, Constant):
+                        continue
+                if not s.is_neq and s.term1.name == s.term2.name and isinstance(s.term1, Constant) and isinstance(s.term2, Constant):
+                        continue
+            simplified_clauses.append(s)
+        
         
         # Check pairwise for contradiction among simplified clauses
         for i in range(len(simplified_clauses)):
-            if isinstance(simplified_clauses[i], Equality) and simplified_clauses[i].is_neq and simplified_clauses[i].term1 == simplified_clauses[i].term2:
-                return FalseFormula()
+            if isinstance(simplified_clauses[i], Equality):
+                if simplified_clauses[i].is_neq and simplified_clauses[i].term1 == simplified_clauses[i].term2:
+                    return FalseFormula()
+                if simplified_clauses[i].term1.name != simplified_clauses[i].term2.name and (isinstance(simplified_clauses[i].term1, Constant) and isinstance(simplified_clauses[i].term2, Constant)):
+                    return FalseFormula()
             for j in range(i + 1, len(simplified_clauses)):
                 if simplified_clauses[i].has_contradiction(simplified_clauses[j]):
                     return FalseFormula()
@@ -560,7 +575,45 @@ class ConjunctiveFormula(Formula):
         self._combine_and_propagate_type_dict(ret_formula)
         return ret_formula
     
-    def simplify_equality(self) -> Tuple["Formula", "Substitution"]:
+    def simplify(self) -> Formula:
+        """Simplify the conjunction by simplifying each clause and removing contradictions.
+        
+        If any two clauses contradict, the result is False.
+        
+        Returns:
+            Formula: The simplified conjunctive formula, or FalseFormula if a contradiction was found.
+        """
+        # Simplify each clause if possible
+            # simplified_clauses = [clause.simplify() if hasattr(clause, 'simplify') else clause 
+            #                         for clause in self._clauses]
+        simplified_clauses = [clause.simplify() if hasattr(clause, 'simplify') else clause 
+                                for clause in self._clauses]
+    
+        # Check pairwise for contradiction among simplified clauses
+        for i in range(len(simplified_clauses)):
+            if isinstance(simplified_clauses[i], Equality):
+                if simplified_clauses[i].is_neq and simplified_clauses[i].term1 == simplified_clauses[i].term2:
+                    return FalseFormula()
+                if simplified_clauses[i].term1.name != simplified_clauses[i].term2.name and (isinstance(simplified_clauses[i].term1, Constant) and isinstance(simplified_clauses[i].term2, Constant)):
+                    return FalseFormula()
+                # for j in range(i + 1, len(simplified_clauses)):
+                #     if simplified_clauses[i].has_contradiction(simplified_clauses[j]):
+                #         return FalseFormula()
+            for j in range(i + 1, len(simplified_clauses)):
+                if simplified_clauses[i].has_contradiction(simplified_clauses[j]):
+                    return FalseFormula()
+        # Remove duplicates (optional) and return single clause if only one remains
+        unique = list({str(clause): clause for clause in simplified_clauses}.values())
+        if not unique:
+            return FalseFormula()
+        # if len(unique) == 1:
+        #     return unique[0]
+
+        ret_formula = ConjunctiveFormula(*unique)
+        self._combine_and_propagate_type_dict(ret_formula)
+        return ret_formula
+
+    def simplify_equality_variables_only(self, current_goal: "Formula") -> Tuple["Formula", "Substitution"]:
         """
         Simplify equalities in this conjunctive formula.
         
@@ -574,7 +627,6 @@ class ConjunctiveFormula(Formula):
             Tuple[Formula, Substitution]: The simplified conjunctive formula with substitutions
             applied, and the substitution mapping.
         """
-        # First, simplify each clause if possible.
         simplified_clauses = [clause.simplify() if hasattr(clause, 'simplify') else clause 
                                 for clause in self._clauses]
         
@@ -584,10 +636,71 @@ class ConjunctiveFormula(Formula):
             if isinstance(clause, Equality) and not clause.is_neq:
                 if isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
                     equality_subst[clause.term2] = clause.term1
-                elif isinstance(clause.term1, Variable) and isinstance(clause.term2, Constant):
-                    equality_subst[clause.term2] = clause.term1
-                elif isinstance(clause.term1, Constant) and isinstance(clause.term2, Variable):
-                    equality_subst[clause.term1] = clause.term2
+        
+        substituted_clauses = set()
+        for clause in simplified_clauses:
+            # Apply the substitution to every clause.
+            substituted_clauses.add(clause.substitute(equality_subst))
+        
+        # Remove equality clauses (only those where both terms are Variables) from the result.
+        final_clauses = []
+        for clause in substituted_clauses:
+            if isinstance(clause, Equality) and not clause.is_neq:
+                if isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
+                    continue
+            final_clauses.append(clause)
+        
+        # Remove duplicates
+        unique = list({str(clause): clause for clause in final_clauses}.values())
+        if not unique:
+            return (FalseFormula(), equality_subst)
+        # if len(unique) == 1:
+        #     return (unique[0], equality_subst)
+        return (ConjunctiveFormula(*unique), equality_subst)
+    
+    def simplify_equality(self, current_goal: "Formula") -> Tuple["Formula", "Substitution"]:
+        """
+        Simplify equalities in this conjunctive formula.
+        
+        For each such equality, it selects the representative variable (the one with the
+        lower alphabetical value), adds a substitution mapping (using Substitution class),
+        and then applies the substitution to every clause in the formula.
+        Equality clauses used for substitution are then removed.
+        
+        Returns:
+            Tuple[Formula, Substitution]: The simplified conjunctive formula with substitutions
+            applied, and the substitution mapping.
+        """
+        # First, simplify each clause if possible.
+        simplified_clauses = [clause.simplify() if hasattr(clause, 'simplify') else clause 
+                                for clause in self._clauses]
+        
+        # Build the substitution from equality clauses (goal-aware where possible)
+        equality_subst = Substitution()
+
+        # Collect all terms present in the current goal (variables and constants)
+        goal_terms = current_goal.collect_terms()
+        for clause in simplified_clauses:
+            if isinstance(clause, Equality) and not clause.is_neq:
+                
+                t1, t2 = clause.term1, clause.term2
+                # Prefer aligning to goal terms: if exactly one side is in goal, substitute the other side to it
+                in_goal_1 = t1 in goal_terms
+                in_goal_2 = t2 in goal_terms
+                if in_goal_1 and not in_goal_2:
+                    # if isinstance(t2, Variable):
+                        equality_subst[t2] = t1
+                elif in_goal_2 and not in_goal_1:
+                    # if isinstance(t1, Variable):
+                        equality_subst[t1] = t2
+                else:
+                    # Fallback: original equalities
+                    if isinstance(t1, Variable) and isinstance(t2, Variable):
+                        equality_subst[t2] = t1
+                    elif isinstance(t1, Variable) and isinstance(t2, Constant):
+                        equality_subst[t1] = t2
+                    elif isinstance(t1, Constant) and isinstance(t2, Variable):
+                        equality_subst[t2] = t1
         
         substituted_clauses = set()
         for clause in simplified_clauses:
@@ -599,9 +712,9 @@ class ConjunctiveFormula(Formula):
         for clause in substituted_clauses:
             if isinstance(clause, Equality):
                 if not clause.is_neq:
-                    if not (isinstance(clause.term1, Constant) and isinstance(clause.term2, Constant)):
+                    if isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
                         continue
-                elif isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
+                elif isinstance(clause.term1, Constant) and isinstance(clause.term2, Constant):
                     if clause.term1.name != clause.term2.name:
                         continue # remove due to unique name axiom
             final_clauses.append(clause)
@@ -638,6 +751,76 @@ class ConjunctiveFormula(Formula):
 class DisjunctiveFormula(Formula):
     """Disjunctive formula (OR)."""
 
+
+    def simplify_plan(self) -> "Formula":
+        """
+        Planner-aware simplification.
+
+        - Applies standard simplify() on each disjunct
+        - Removes duplicate/superset disjuncts
+        - Additionally removes tautological variable-inequalities (X != Y) under the Unique Name Axiom context
+          when they do not constrain any other clause in the disjunct.
+
+        Returns:
+            Formula: The simplified disjunctive formula.
+        """
+        simplified_disjuncts: List[Formula] = []
+        for disj in self._clauses:
+            if hasattr(disj, 'simplify_plan'):
+                s = disj.simplify_plan()
+            elif hasattr(disj, 'simplify'):
+                s = disj.simplify()
+            else:
+                s = disj
+            if isinstance(s, FalseFormula):
+                continue
+            if isinstance(s, ConjunctiveFormula):
+                kept = []
+                for c in s.clauses:
+                    if isinstance(c, Equality) and c.is_neq and isinstance(c.term1, Constant) and isinstance(c.term2, Constant) and c.term1.name != c.term2.name:
+                        # Drop pure variable-inequalities as they add no constraint under UNA in planning
+                        continue
+                    kept.append(c)
+                s = ConjunctiveFormula(*kept)
+                if isinstance(s, FalseFormula):
+                    continue
+            simplified_disjuncts.append(s)
+
+        # Remove duplicate clauses.
+        unique_disjuncts: List[Formula] = []
+        for clause in simplified_disjuncts:
+            is_dup = False
+            for u in unique_disjuncts:
+                if clause.is_duplicate(u):
+                    is_dup = True
+                    break
+            if not is_dup:
+                unique_disjuncts.append(clause)
+
+        if not unique_disjuncts:
+            return FalseFormula()
+
+        # Remove any disjunct that is a superset of another disjunct.
+        minimal_disjuncts: List[Formula] = []
+        for i, di in enumerate(unique_disjuncts):
+            di_clauses = di.clauses if isinstance(di, ConjunctiveFormula) else [di]
+            di_set = set(str(cl) for cl in di_clauses)
+            subsumed = False
+            for j, dj in enumerate(unique_disjuncts):
+                if i == j:
+                    continue
+                dj_clauses = dj.clauses if isinstance(dj, ConjunctiveFormula) else [dj]
+                dj_set = set(str(cl) for cl in dj_clauses)
+                if dj_set.issubset(di_set) and dj_set != di_set:
+                    subsumed = True
+                    break
+            if not subsumed:
+                minimal_disjuncts.append(di)
+
+        ret_formula = DisjunctiveFormula(*minimal_disjuncts)
+        self._combine_and_propagate_type_dict(ret_formula)
+        return ret_formula
+
     def simplify(self) -> Formula:
         """Simplify the disjunction by simplifying each disjunct, eliminating false
         ones, and removing duplicate clauses.
@@ -651,6 +834,8 @@ class DisjunctiveFormula(Formula):
         for disj in self._clauses:
             s = disj.simplify() if hasattr(disj, 'simplify') else disj
             # Exclude disjuncts that are false.
+            # if isinstance(s, Equality) and s.is_neq and s.term1.name != s.term2.name and isinstance(s.term1, Variable) and isinstance(s.term2, Variable):
+            #         continue
             if not isinstance(s, FalseFormula):
                 simplified_disjuncts.append(s)
         
@@ -828,6 +1013,22 @@ class Equality(Operator):
     
     def __len__(self):
         return len(str(self))
+
+    def has_contradiction(self, other:"Equality") -> bool:
+        if isinstance(other, Equality):
+            if self._term1 == other._term1 and self._term2 == other._term2 and self._is_neq != other._is_neq:
+                # check if the have same type
+                if type(self._term1) != type(other._term1) or type(self._term2) != type(other._term2):
+                    return False
+                return True
+            if self._term1 == other._term2 and self._term2 == other._term1 and self._is_neq != other._is_neq:
+                if type(self._term1) != type(other._term1) or type(self._term2) != type(other._term2):
+                    return False
+                return True
+            if self._term1 == other._term1 and self._term2 != other._term2 and not self._is_neq and not other._is_neq:
+                if isinstance(self._term1, Variable) and type(self._term1) == type(other._term1) and isinstance(self._term2, Constant) and type(self._term2) == type(other._term2):
+                    return True
+        return False
     
     @property
     def term_type_dict(self) -> Dict["Term", Set[str]]:
@@ -984,7 +1185,6 @@ class Predicate(Atomic):
             Predicate: A new Predicate with substitutions applied.
         """
         # combine the term_type_dict from the substitution with the term_type_dict of the predicate
-        print(f'sub pred name: {self.name} substitution: {substitution}')
         if self.term_type_dict is not None:
             for term1, term2 in substitution.items():
                 if term1 in self.term_type_dict and term2 in self.term_type_dict:
@@ -1180,4 +1380,7 @@ class   Substitution(dict):
                 raise ValueError(f"Key {key} is not a Variable")
             if not (isinstance(value, Variable) or isinstance(value, Constant)):
                 raise ValueError(f"Value {value} is not a Term")
+
+    def empty(self) -> bool:
+        return len(self) == 0
             
