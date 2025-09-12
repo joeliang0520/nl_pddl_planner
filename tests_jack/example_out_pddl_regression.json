@@ -1,0 +1,687 @@
+{
+  "initial_state": [
+    "(handempty)",
+    "(ontable a)",
+    "(ontable b)",
+    "(on c b)",
+    "(on d a)",
+    "(clear c)",
+    "(clear d)"
+  ],
+  "plans": [
+    {
+      "subgoal_predicates": [
+        "(on a d)",
+        "(on b c)"
+      ],
+      "action": []
+    },
+    {
+      "subgoal_predicates": [
+        "(holding a)",
+        "(clear d)",
+        "(on b c)"
+      ],
+      "action": [
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear c)",
+        "(on a d)"
+      ],
+      "action": [
+        "stack(b, c)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear a)",
+        "(clear d)",
+        "(ontable a)",
+        "(on b c)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(a)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear b)",
+        "(clear c)",
+        "(ontable b)",
+        "(on a d)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(b)",
+        "stack(b, c)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding a)",
+        "(holding d)",
+        "(on b c)"
+      ],
+      "action": [
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding b)",
+        "(holding c)",
+        "(on a d)"
+      ],
+      "action": [
+        "put-down(c)",
+        "stack(b, c)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear b)",
+        "(on b c)",
+        "(on a d)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(b, c)",
+        "stack(b, c)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear a)",
+        "(on a d)",
+        "(on b c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(a, d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding d)",
+        "(on b c)"
+      ],
+      "action": [
+        "put-down(d)",
+        "pick-up(a)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding c)",
+        "(on a d)"
+      ],
+      "action": [
+        "put-down(c)",
+        "pick-up(b)",
+        "stack(b, c)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear d)",
+        "(ontable d)",
+        "(on b c)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(d)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear c)",
+        "(ontable c)",
+        "(on a d)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(c)",
+        "put-down(c)",
+        "stack(b, c)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding a)",
+        "(holding d)",
+        "(holding b)",
+        "(clear c)"
+      ],
+      "action": [
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear d)",
+        "(on d ?V53)",
+        "(on b c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(d, ?V53)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear c)",
+        "(on c ?V53)",
+        "(on a d)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(c, ?V53)",
+        "put-down(c)",
+        "stack(b, c)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding b)",
+        "(on b c)",
+        "(on a d)"
+      ],
+      "action": [
+        "put-down(b)",
+        "unstack(b, c)",
+        "stack(b, c)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding a)",
+        "(on a d)",
+        "(on b c)"
+      ],
+      "action": [
+        "put-down(a)",
+        "unstack(a, d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding d)",
+        "(holding b)",
+        "(clear c)"
+      ],
+      "action": [
+        "stack(b, c)",
+        "put-down(d)",
+        "pick-up(a)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear d)",
+        "(clear c)",
+        "(ontable d)"
+      ],
+      "action": [
+        "stack(b, c)",
+        "pick-up(d)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding d)",
+        "(holding b)",
+        "(clear a)",
+        "(clear c)",
+        "(ontable a)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(b)",
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear d)",
+        "(clear c)",
+        "(ontable d)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(b)",
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear b)",
+        "(clear c)",
+        "(ontable b)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(b)",
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding a)",
+        "(holding d)",
+        "(holding b)",
+        "(holding c)"
+      ],
+      "action": [
+        "put-down(c)",
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding d)",
+        "(holding b)",
+        "(clear a)",
+        "(on a c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(b, c)",
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear d)",
+        "(on d c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(b, c)",
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear b)",
+        "(on b c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(b, c)",
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding b)",
+        "(holding a)",
+        "(clear d)",
+        "(on b c)"
+      ],
+      "action": [
+        "stack(a, d)",
+        "put-down(b)",
+        "unstack(b, c)",
+        "stack(b, c)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear d)",
+        "(clear c)",
+        "(ontable d)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(b)",
+        "stack(b, c)",
+        "put-down(d)",
+        "pick-up(a)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear b)",
+        "(clear c)",
+        "(ontable b)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(b)",
+        "stack(b, c)",
+        "put-down(d)",
+        "pick-up(a)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding d)",
+        "(holding b)",
+        "(holding c)"
+      ],
+      "action": [
+        "put-down(c)",
+        "stack(b, c)",
+        "put-down(d)",
+        "pick-up(a)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear d)",
+        "(on d c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(b, c)",
+        "stack(b, c)",
+        "put-down(d)",
+        "pick-up(a)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear b)",
+        "(on b c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(b, c)",
+        "stack(b, c)",
+        "put-down(d)",
+        "pick-up(a)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear d)",
+        "(clear b)",
+        "(clear c)",
+        "(ontable d)",
+        "(ontable b)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(b)",
+        "stack(b, c)",
+        "pick-up(d)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding b)",
+        "(holding c)"
+      ],
+      "action": [
+        "put-down(c)",
+        "stack(b, c)",
+        "pick-up(d)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding d)",
+        "(holding b)",
+        "(clear c)"
+      ],
+      "action": [
+        "put-down(c)",
+        "stack(b, c)",
+        "pick-up(d)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear b)",
+        "(clear c)",
+        "(ontable d)",
+        "(on b d)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(b, c)",
+        "stack(b, c)",
+        "pick-up(d)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear b)",
+        "(ontable d)",
+        "(on b c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(b, c)",
+        "stack(b, c)",
+        "pick-up(d)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding d)",
+        "(holding b)",
+        "(clear c)"
+      ],
+      "action": [
+        "put-down(c)",
+        "pick-up(b)",
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear c)"
+      ],
+      "action": [
+        "put-down(c)",
+        "pick-up(b)",
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding c)"
+      ],
+      "action": [
+        "put-down(c)",
+        "pick-up(b)",
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear c)",
+        "(ontable c)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(c)",
+        "put-down(c)",
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear c)",
+        "(on c ?V113)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(c, ?V113)",
+        "put-down(c)",
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding a)",
+        "(holding d)",
+        "(holding b)",
+        "(on a c)"
+      ],
+      "action": [
+        "put-down(b)",
+        "unstack(b, c)",
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding d)",
+        "(holding b)",
+        "(on d c)"
+      ],
+      "action": [
+        "put-down(b)",
+        "unstack(b, c)",
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding b)",
+        "(on b c)"
+      ],
+      "action": [
+        "put-down(b)",
+        "unstack(b, c)",
+        "stack(b, c)",
+        "put-down(d)",
+        "stack(a, d)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding a)",
+        "(clear b)",
+        "(clear d)",
+        "(ontable b)",
+        "(on b c)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(a)",
+        "stack(a, d)",
+        "put-down(b)",
+        "unstack(b, c)",
+        "stack(b, c)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(clear a)",
+        "(clear d)",
+        "(ontable a)",
+        "(on b c)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(a)",
+        "stack(a, d)",
+        "put-down(b)",
+        "unstack(b, c)",
+        "stack(b, c)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding b)",
+        "(holding a)",
+        "(holding d)",
+        "(on b c)"
+      ],
+      "action": [
+        "put-down(d)",
+        "stack(a, d)",
+        "put-down(b)",
+        "unstack(b, c)",
+        "stack(b, c)"
+      ]
+    },
+    {
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear a)",
+        "(on b c)",
+        "(on a d)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(a, d)",
+        "stack(a, d)",
+        "put-down(b)",
+        "unstack(b, c)",
+        "stack(b, c)"
+      ]
+    }
+  ]
+}

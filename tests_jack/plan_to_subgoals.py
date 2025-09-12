@@ -234,7 +234,8 @@ class PlanSubgoalConverter:
           {
             'subgoal': { 'disjoint_1': [...] },
             'action': [...],
-            'subgoal_predicates': ['(clear a)', '(on a b)', ...]
+            'subgoal_predicates': ['(clear a)', '(on a b)', ...],
+            'actions_pddl': ['(stack a d)', '(pick-up a)', ...]
           }
         """
         out: List[Dict[str, Any]] = []
@@ -245,10 +246,63 @@ class PlanSubgoalConverter:
             if isinstance(sub, dict):
                 clauses = sub.get('disjoint_1', []) or []
             pddl_preds = self._clauses_to_pddl_predicates(clauses)
+            actions = item.get('action', []) or []
+            pddl_actions = self._actions_to_pddl(actions)
             new_item = dict(item)
             new_item['subgoal_predicates'] = pddl_preds
+            new_item['actions_pddl'] = pddl_actions
             out.append(new_item)
         return out
+
+    @staticmethod
+    def _actions_to_pddl(actions: List[str]) -> List[str]:
+        """Convert grounded action strings into PDDL operator calls using the
+        provided domain operator names and parameter order.
+
+        Mapping rules (case-insensitive on action name):
+          - pick up ... -> pick-up(x)
+          - put down ... -> put-down(x)
+          - stack ?b1 on top of ?b2(x, y) -> stack(x, y)
+          - unstack ?b1 from ?b2(x, y) -> unstack(x, y)
+        """
+        result: List[str] = []
+        for s in actions:
+            m = re.match(r"^(.*)\((.*)\)$", s.strip())
+            if not m:
+                result.append(s)
+                continue
+            name = m.group(1).strip().lower()
+            args_str = m.group(2).strip()
+            args = [a.strip() for a in args_str.split(',') if a.strip()]
+
+            if 'pick up' in name or 'pick-up' in name:
+                if args:
+                    result.append(f"pick-up({args[0]})")
+                else:
+                    result.append("pick-up()")
+            elif 'put down' in name or 'put-down' in name:
+                if args:
+                    result.append(f"put-down({args[0]})")
+                else:
+                    result.append("put-down()")
+            elif name.startswith('stack'):
+                if len(args) >= 2:
+                    result.append(f"stack({args[0]}, {args[1]})")
+                elif len(args) == 1:
+                    result.append(f"stack({args[0]})")
+                else:
+                    result.append("stack()")
+            elif name.startswith('unstack'):
+                if len(args) >= 2:
+                    result.append(f"unstack({args[0]}, {args[1]})")
+                elif len(args) == 1:
+                    result.append(f"unstack({args[0]})")
+                else:
+                    result.append("unstack()")
+            else:
+                # Fallback to original if cannot map
+                result.append(s)
+        return result
 
 
 def main():

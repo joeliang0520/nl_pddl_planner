@@ -53,31 +53,53 @@ if __name__ == "__main__":
         converted = converter.convert_regressed_plans(regressed_plans)
         pddlized = converter.converted_items_to_pddl(converted)
 
-        for item in converted:
-            print(item)
+        # Prepare output JSON with initial state and pddlized plans
+        # Flatten initial state dict to a list of predicate strings
+        init_predicates = []
+        if isinstance(test_init, dict):
+            for preds in test_init.values():
+                if isinstance(preds, list):
+                    init_predicates.extend(preds)
+        else:
+            # Fallback: if already a list
+            init_predicates = list(test_init)
+
+        plans_out = []
         for item in pddlized:
-            print(item)
+            plans_out.append({
+                'subgoal_predicates': item.get('subgoal_predicates', []),
+                # Save actions as PDDL operator calls (e.g., unstack(b, c))
+                'action': item.get('actions_pddl', []),
+            })
 
-        pass
+        out_payload = {
+            'initial_state': init_predicates,
+            'plans': plans_out,
+        }
 
-        # create a empty text file to store the results
-        save_file_path = os.path.join(save_path, f'alfworldtext_results_{i}.txt')
-        with open(save_file_path, 'w') as f:
-            # print the regressed plans
-            print("Regressed goals:")
-            f.write("Regressed goals:\n")
-            for plan in regressed_plans:
-                print("Subgoal: ")
-                f.write("Subgoal: \n")
-                print(plan[0])
-                f.write(str(plan[0]) + '\n')
-                reversed_plan = plan[1]
-                reversed_plan.reverse()
-                print("Action: ", reversed_plan)
-                f.write(str(reversed_plan) + '\n')
-                print("Substitution: ", plan[2])
-                f.write(str(plan[2]) + '\n')
-                print("--------------------")
-                f.write("--------------------\n")
-        # break
+        out_path = os.path.join(current_dir, 'example_out_pddl_regression.json')
+        with open(out_path, 'w') as f:
+            json.dump(out_payload, f, indent=2)
+        print(f"Saved PDDL regression output -> {out_path}")
+
+        # # create a empty text file to store the results
+        # save_file_path = os.path.join(save_path, f'alfworldtext_results_{i}.txt')
+        # with open(save_file_path, 'w') as f:
+        #     # print the regressed plans
+        #     print("Regressed goals:")
+        #     f.write("Regressed goals:\n")
+        #     for plan in regressed_plans:
+        #         print("Subgoal: ")
+        #         f.write("Subgoal: \n")
+        #         print(plan[0])
+        #         f.write(str(plan[0]) + '\n')
+        #         reversed_plan = plan[1]
+        #         reversed_plan.reverse()
+        #         print("Action: ", reversed_plan)
+        #         f.write(str(reversed_plan) + '\n')
+        #         print("Substitution: ", plan[2])
+        #         f.write(str(plan[2]) + '\n')
+        #         print("--------------------")
+        #         f.write("--------------------\n")
+        # # break
     #
