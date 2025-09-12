@@ -57,3 +57,111 @@ Subgoal:
 [Action('put down ?b'([?V55])), Action('unstack ?b1 from ?b2'([?V40, ?V41])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
 {?V40: ?V32, ?V41: ?V33, ?V55: ?V32}
 --------------------
+Subgoal: 
+((?V32 != ?V33 ∧ ?V32 == a ∧ ?V33 != ?V62 ∧ ?V33 == d ∧ ?V62 == b ∧ ?V63 == c ∧ i am holding(?V33) ∧ i am holding(?V62) ∧ is clear(?V63)))
+[Action('stack ?b1 on top of ?b2'([?V62, ?V63])), Action('put down ?b'([?V43])), Action('pick up ?b'([?V36])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V36: ?V32, ?V43: ?V33}
+--------------------
+Subgoal: 
+((?V32 != ?V33 ∧ ?V32 == a ∧ ?V33 != ?V68 ∧ ?V33 != ?V69 ∧ ?V33 == d ∧ ?V68 == b ∧ ?V69 == c ∧ i am holding(?V68) ∧ is clear(?V33) ∧ is clear(?V69) ∧ is on the table(?V33)))
+[Action('stack ?b1 on top of ?b2'([?V68, ?V69])), Action('pick up ?b'([?V48])), Action('put down ?b'([?V37])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V37: ?V33, ?V48: ?V33}
+--------------------
+Subgoal: 
+((?V32 != ?V33 ∧ ?V32 != ?V50 ∧ ?V32 != ?V51 ∧ ?V32 == a ∧ ?V33 != ?V50 ∧ ?V33 == d ∧ ?V50 == b ∧ ?V51 == c ∧ i am holding(?V33) ∧ i am holding(?V50) ∧ is clear(?V32) ∧ is clear(?V51) ∧ is on the table(?V32) ∧ the hand is empty())
+ ∨ (?V32 != ?V33 ∧ ?V32 != ?V50 ∧ ?V32 == a ∧ ?V33 != ?V50 ∧ ?V33 != ?V51 ∧ ?V33 == d ∧ ?V50 == b ∧ ?V51 == c ∧ i am holding(?V50) ∧ is clear(?V33) ∧ is clear(?V51) ∧ is on the table(?V33) ∧ the hand is empty())
+ ∨ (?V32 != ?V33 ∧ ?V32 != ?V50 ∧ ?V32 == a ∧ ?V33 != ?V50 ∧ ?V33 == d ∧ ?V50 != ?V51 ∧ ?V50 == b ∧ ?V51 == c ∧ is clear(?V50) ∧ is clear(?V51) ∧ is on the table(?V50) ∧ the hand is empty()))
+[Action('pick up ?b'([?V72])), Action('stack ?b1 on top of ?b2'([?V50, ?V51])), Action('put down ?b'([?V37])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V37: ?V33, ?V72: ?V50}
+--------------------
+Subgoal: 
+((?V32 != ?V33 ∧ ?V32 != ?V50 ∧ ?V32 != ?V51 ∧ ?V32 == a ∧ ?V33 != ?V50 ∧ ?V33 != ?V51 ∧ ?V33 == d ∧ ?V50 != ?V51 ∧ ?V50 == b ∧ ?V51 == c ∧ i am holding(?V32) ∧ i am holding(?V33) ∧ i am holding(?V50) ∧ i am holding(?V51)))
+[Action('put down ?b'([?V73])), Action('stack ?b1 on top of ?b2'([?V50, ?V51])), Action('put down ?b'([?V37])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V37: ?V33, ?V73: ?V51}
+--------------------
+Subgoal: 
+((?V32 != ?V33 ∧ ?V32 != ?V50 ∧ ?V32 == a ∧ ?V33 != ?V50 ∧ ?V33 == d ∧ ?V50 == b ∧ ?V51 == c ∧ i am holding(?V33) ∧ i am holding(?V50) ∧ is clear(?V32) ∧ is on top of(?V32, ?V51) ∧ the hand is empty())
+ ∨ (?V32 != ?V33 ∧ ?V32 != ?V50 ∧ ?V32 == a ∧ ?V33 != ?V50 ∧ ?V33 == d ∧ ?V50 == b ∧ ?V51 == c ∧ i am holding(?V50) ∧ is clear(?V33) ∧ is on top of(?V33, ?V51) ∧ the hand is empty())
+ ∨ (?V32 != ?V33 ∧ ?V32 != ?V50 ∧ ?V32 == a ∧ ?V33 != ?V50 ∧ ?V33 == d ∧ ?V50 == b ∧ ?V51 == c ∧ is clear(?V50) ∧ is on top of(?V50, ?V51) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V76, ?V77])), Action('stack ?b1 on top of ?b2'([?V50, ?V51])), Action('put down ?b'([?V37])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V37: ?V33, ?V76: ?V50, ?V77: ?V51}
+--------------------
+Subgoal: 
+((?V32 != ?V86 ∧ ?V32 != a ∧ ?V32 == b ∧ ?V33 == c ∧ ?V86 == a ∧ ?V87 == d ∧ i am holding(?V32) ∧ i am holding(?V86) ∧ is clear(?V87) ∧ is on top of(?V32, ?V33)))
+[Action('stack ?b1 on top of ?b2'([?V86, ?V87])), Action('put down ?b'([?V55])), Action('unstack ?b1 from ?b2'([?V40, ?V41])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V40: ?V32, ?V41: ?V33, ?V55: ?V32}
+--------------------
+Subgoal: 
+((?V32 != ?V33 ∧ ?V32 == a ∧ ?V33 != ?V62 ∧ ?V33 != ?V63 ∧ ?V33 == d ∧ ?V62 == b ∧ ?V63 == c ∧ i am holding(?V62) ∧ is clear(?V33) ∧ is clear(?V63) ∧ is on the table(?V33) ∧ the hand is empty())
+ ∨ (?V32 != ?V33 ∧ ?V32 == a ∧ ?V33 != ?V62 ∧ ?V33 == d ∧ ?V62 != ?V63 ∧ ?V62 == b ∧ ?V63 == c ∧ is clear(?V62) ∧ is clear(?V63) ∧ is on the table(?V62) ∧ the hand is empty()))
+[Action('pick up ?b'([?V90])), Action('stack ?b1 on top of ?b2'([?V62, ?V63])), Action('put down ?b'([?V43])), Action('pick up ?b'([?V36])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V36: ?V32, ?V43: ?V33, ?V90: ?V62}
+--------------------
+Subgoal: 
+((?V32 != ?V33 ∧ ?V32 == a ∧ ?V33 != ?V62 ∧ ?V33 != ?V63 ∧ ?V33 == d ∧ ?V62 != ?V63 ∧ ?V62 == b ∧ ?V63 == c ∧ i am holding(?V33) ∧ i am holding(?V62) ∧ i am holding(?V63)))
+[Action('put down ?b'([?V91])), Action('stack ?b1 on top of ?b2'([?V62, ?V63])), Action('put down ?b'([?V43])), Action('pick up ?b'([?V36])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V36: ?V32, ?V43: ?V33, ?V91: ?V63}
+--------------------
+Subgoal: 
+((?V32 != ?V33 ∧ ?V32 == a ∧ ?V33 != ?V62 ∧ ?V33 == d ∧ ?V62 == b ∧ ?V63 == c ∧ i am holding(?V62) ∧ is clear(?V33) ∧ is on top of(?V33, ?V63) ∧ the hand is empty())
+ ∨ (?V32 != ?V33 ∧ ?V32 == a ∧ ?V33 != ?V62 ∧ ?V33 == d ∧ ?V62 == b ∧ ?V63 == c ∧ is clear(?V62) ∧ is on top of(?V62, ?V63) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V94, ?V95])), Action('stack ?b1 on top of ?b2'([?V62, ?V63])), Action('put down ?b'([?V43])), Action('pick up ?b'([?V36])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V36: ?V32, ?V43: ?V33, ?V94: ?V62, ?V95: ?V63}
+--------------------
+Subgoal: 
+((?V32 != ?V33 ∧ ?V32 == a ∧ ?V33 != ?V68 ∧ ?V33 != ?V69 ∧ ?V33 == d ∧ ?V68 != ?V69 ∧ ?V68 == b ∧ ?V69 == c ∧ is clear(?V33) ∧ is clear(?V68) ∧ is clear(?V69) ∧ is on the table(?V33) ∧ is on the table(?V68) ∧ the hand is empty()))
+[Action('pick up ?b'([?V96])), Action('stack ?b1 on top of ?b2'([?V68, ?V69])), Action('pick up ?b'([?V48])), Action('put down ?b'([?V37])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V37: ?V33, ?V48: ?V33, ?V96: ?V68}
+--------------------
+Subgoal: 
+((?V32 != ?V33 ∧ ?V32 == a ∧ ?V33 != ?V68 ∧ ?V33 != ?V69 ∧ ?V33 == d ∧ ?V68 != ?V69 ∧ ?V68 == b ∧ ?V69 == c ∧ i am holding(?V68) ∧ i am holding(?V69))
+ ∨ (?V32 != ?V33 ∧ ?V32 == a ∧ ?V33 != ?V68 ∧ ?V33 != ?V69 ∧ ?V33 == d ∧ ?V68 == b ∧ ?V69 == c ∧ i am holding(?V33) ∧ i am holding(?V68) ∧ is clear(?V69)))
+[Action('put down ?b'([?V97])), Action('stack ?b1 on top of ?b2'([?V68, ?V69])), Action('pick up ?b'([?V48])), Action('put down ?b'([?V37])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V37: ?V33, ?V48: ?V33, ?V97: ?V69}
+--------------------
+Subgoal: 
+((?V32 != ?V33 ∧ ?V32 == a ∧ ?V33 != ?V68 ∧ ?V33 != ?V69 ∧ ?V33 == d ∧ ?V68 == b ∧ ?V69 == c ∧ is clear(?V68) ∧ is clear(?V69) ∧ is on the table(?V33) ∧ is on top of(?V68, ?V33) ∧ the hand is empty())
+ ∨ (?V32 != ?V33 ∧ ?V32 == a ∧ ?V33 != ?V68 ∧ ?V33 != ?V69 ∧ ?V33 == d ∧ ?V68 == b ∧ ?V69 == c ∧ is clear(?V68) ∧ is on the table(?V33) ∧ is on top of(?V68, ?V69) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V100, ?V101])), Action('stack ?b1 on top of ?b2'([?V68, ?V69])), Action('pick up ?b'([?V48])), Action('put down ?b'([?V37])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V37: ?V33, ?V48: ?V33, ?V101: ?V69, ?V100: ?V68}
+--------------------
+Subgoal: 
+((?V32 != ?V33 ∧ ?V32 != ?V50 ∧ ?V32 == a ∧ ?V33 != ?V50 ∧ ?V33 != ?V51 ∧ ?V33 == d ∧ ?V50 == b ∧ ?V51 == c ∧ i am holding(?V33) ∧ i am holding(?V50) ∧ is clear(?V51))
+ ∨ (?V32 != ?V33 ∧ ?V32 != ?V50 ∧ ?V32 == a ∧ ?V33 != ?V50 ∧ ?V33 == d ∧ ?V50 != ?V51 ∧ ?V50 == b ∧ ?V51 == c ∧ i am holding(?V50) ∧ is clear(?V51))
+ ∨ (?V32 != ?V33 ∧ ?V32 != ?V50 ∧ ?V32 == a ∧ ?V33 != ?V50 ∧ ?V33 == d ∧ ?V50 != ?V51 ∧ ?V50 == b ∧ ?V51 == c ∧ i am holding(?V51)))
+[Action('put down ?b'([?V103])), Action('pick up ?b'([?V72])), Action('stack ?b1 on top of ?b2'([?V50, ?V51])), Action('put down ?b'([?V37])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V37: ?V33, ?V72: ?V50, ?V103: ?V51}
+--------------------
+Subgoal: 
+((?V32 != ?V33 ∧ ?V32 != ?V50 ∧ ?V32 != ?V51 ∧ ?V32 == a ∧ ?V33 != ?V50 ∧ ?V33 != ?V51 ∧ ?V33 == d ∧ ?V50 != ?V51 ∧ ?V50 == b ∧ ?V51 == c ∧ is clear(?V51) ∧ is on the table(?V51) ∧ the hand is empty()))
+[Action('pick up ?b'([?V108])), Action('put down ?b'([?V73])), Action('stack ?b1 on top of ?b2'([?V50, ?V51])), Action('put down ?b'([?V37])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V37: ?V33, ?V73: ?V51, ?V108: ?V51}
+--------------------
+Subgoal: 
+((?V32 != ?V33 ∧ ?V32 != ?V50 ∧ ?V32 != ?V51 ∧ ?V32 == a ∧ ?V33 != ?V50 ∧ ?V33 != ?V51 ∧ ?V33 == d ∧ ?V50 != ?V51 ∧ ?V50 == b ∧ ?V51 == c ∧ is clear(?V51) ∧ is on top of(?V51, ?V113) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V112, ?V113])), Action('put down ?b'([?V73])), Action('stack ?b1 on top of ?b2'([?V50, ?V51])), Action('put down ?b'([?V37])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V37: ?V33, ?V73: ?V51, ?V112: ?V51}
+--------------------
+Subgoal: 
+((?V32 != ?V33 ∧ ?V32 != ?V50 ∧ ?V32 == a ∧ ?V33 != ?V50 ∧ ?V33 == d ∧ ?V50 == b ∧ ?V51 == c ∧ i am holding(?V32) ∧ i am holding(?V33) ∧ i am holding(?V50) ∧ is on top of(?V32, ?V51))
+ ∨ (?V32 != ?V33 ∧ ?V32 != ?V50 ∧ ?V32 == a ∧ ?V33 != ?V50 ∧ ?V33 == d ∧ ?V50 == b ∧ ?V51 == c ∧ i am holding(?V33) ∧ i am holding(?V50) ∧ is on top of(?V33, ?V51))
+ ∨ (?V32 != ?V33 ∧ ?V32 != ?V50 ∧ ?V32 == a ∧ ?V33 != ?V50 ∧ ?V33 == d ∧ ?V50 == b ∧ ?V51 == c ∧ i am holding(?V50) ∧ is on top of(?V50, ?V51)))
+[Action('put down ?b'([?V115])), Action('unstack ?b1 from ?b2'([?V76, ?V77])), Action('stack ?b1 on top of ?b2'([?V50, ?V51])), Action('put down ?b'([?V37])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V37: ?V33, ?V76: ?V50, ?V77: ?V51, ?V115: ?V50}
+--------------------
+Subgoal: 
+((?V32 != ?V86 ∧ ?V32 != ?V87 ∧ ?V32 != a ∧ ?V32 == b ∧ ?V33 == c ∧ ?V86 == a ∧ ?V87 == d ∧ i am holding(?V86) ∧ is clear(?V32) ∧ is clear(?V87) ∧ is on the table(?V32) ∧ is on top of(?V32, ?V33) ∧ the hand is empty())
+ ∨ (?V32 != ?V86 ∧ ?V32 != a ∧ ?V32 == b ∧ ?V33 == c ∧ ?V86 != ?V87 ∧ ?V86 == a ∧ ?V87 == d ∧ is clear(?V86) ∧ is clear(?V87) ∧ is on the table(?V86) ∧ is on top of(?V32, ?V33) ∧ the hand is empty()))
+[Action('pick up ?b'([?V120])), Action('stack ?b1 on top of ?b2'([?V86, ?V87])), Action('put down ?b'([?V55])), Action('unstack ?b1 from ?b2'([?V40, ?V41])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V40: ?V32, ?V41: ?V33, ?V55: ?V32, ?V120: ?V86}
+--------------------
+Subgoal: 
+((?V32 != ?V86 ∧ ?V32 != ?V87 ∧ ?V32 != a ∧ ?V32 == b ∧ ?V33 == c ∧ ?V86 != ?V87 ∧ ?V86 == a ∧ ?V87 == d ∧ i am holding(?V32) ∧ i am holding(?V86) ∧ i am holding(?V87) ∧ is on top of(?V32, ?V33)))
+[Action('put down ?b'([?V121])), Action('stack ?b1 on top of ?b2'([?V86, ?V87])), Action('put down ?b'([?V55])), Action('unstack ?b1 from ?b2'([?V40, ?V41])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V40: ?V32, ?V41: ?V33, ?V55: ?V32, ?V121: ?V87}
+--------------------
+Subgoal: 
+((?V32 != ?V86 ∧ ?V32 != a ∧ ?V32 == b ∧ ?V33 == c ∧ ?V86 == a ∧ ?V87 == d ∧ i am holding(?V32) ∧ is clear(?V86) ∧ is on top of(?V32, ?V33) ∧ is on top of(?V86, ?V87) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V124, ?V125])), Action('stack ?b1 on top of ?b2'([?V86, ?V87])), Action('put down ?b'([?V55])), Action('unstack ?b1 from ?b2'([?V40, ?V41])), Action('stack ?b1 on top of ?b2'([?V32, ?V33]))]
+{?V40: ?V32, ?V41: ?V33, ?V55: ?V32, ?V124: ?V86, ?V125: ?V87}
+--------------------

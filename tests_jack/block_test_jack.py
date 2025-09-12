@@ -7,6 +7,8 @@ import pdb
 
 from pddl_planner.planner.nl_planner import NLFOLRegressionPlanner
 
+from plan_to_subgoals import PlanSubgoalConverter
+
 if __name__ == "__main__":
     env_flag = False
     try:
@@ -27,7 +29,7 @@ if __name__ == "__main__":
     with open('./instance-10.json', 'r') as f:
         block_dict = json.load(f)
 
-    test_goal = block_dict["goal"]
+    test_goal = [block_dict["goal"]]
     test_init = block_dict["initial_state"]
 
     # pdb.set_trace()
@@ -37,11 +39,24 @@ if __name__ == "__main__":
     save_path = os.path.join(current_dir, f'alfworldtext_results')
     os.makedirs(save_path, exist_ok=True)
 
+    converter = PlanSubgoalConverter()
+
     # initialize the planner
     for i, block in enumerate(test_goal):
+        print(i, block )
         print(f'Problem {block} =========================================')
-        planner = NLFOLRegressionPlanner(domain.copy(), test_goal.copy(), max_depth=3)
+        print("Initial state:")
+        print(test_init)
+        planner = NLFOLRegressionPlanner(domain.copy(), test_goal[i].copy(), max_depth=5)
         regressed_plans = planner.regress_plan()
+
+        converted = converter.convert_regressed_plans(regressed_plans)
+
+        for item in converted:
+            print(item)
+
+        pass
+
         # create a empty text file to store the results
         save_file_path = os.path.join(save_path, f'alfworldtext_results_{i}.txt')
         with open(save_file_path, 'w') as f:
@@ -61,5 +76,5 @@ if __name__ == "__main__":
                 f.write(str(plan[2]) + '\n')
                 print("--------------------")
                 f.write("--------------------\n")
-        break
+        # break
     #
