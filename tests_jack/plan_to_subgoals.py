@@ -148,6 +148,11 @@ class PlanSubgoalConverter:
 
             # Split output: one item per disjunct, each paired with the same action list
             for conj in conjuncts:
+                # Build raw subgoal only for this specific disjunct
+                if isinstance(conj, ConjunctiveFormula):
+                    raw_clauses = [str(c) for c in conj.clauses]
+                else:
+                    raw_clauses = [str(conj)]
                 varmap = self._extract_var_const_map_from_conj(conj)
                 # Normalize to a ConjunctiveFormula
                 if not isinstance(conj, ConjunctiveFormula):
@@ -166,7 +171,11 @@ class PlanSubgoalConverter:
                 # Reverse the action list as requested
                 action_list_rev = list(reversed(action_list))
                 action_list_disj = [self._apply_name_mapping_to_str(s, varmap) for s in action_list_rev]
-                converted.append({'subgoal': {"disjoint_1": clauses}, 'action': action_list_disj})
+                converted.append({
+                    'subgoal_raw': {"disjoint": raw_clauses},  # only the matching disjunct
+                    'subgoal': {"disjoint": clauses},
+                    'action': action_list_disj
+                })
         return converted
 
     def convert_from_domain_and_goal(self, domain: List[Dict[str, Any]], goal: List[Any], max_depth: int = 3) -> List[Dict[str, Any]]:
@@ -178,6 +187,49 @@ class PlanSubgoalConverter:
         return self.convert_regressed_plans(regressed_plans)
 
     # ---------- PDDL predicate conversion utilities ----------
+    @staticmethod
+    def goal_entries_to_pddl(goal_items: List[Any]) -> List[str]:
+        """Convert overall NL goal entries of the form ["sentence", {...}] to
+        PDDL predicate strings like (on a b), (ontable a), etc.
+
+        Supported patterns:
+          - "a is on top of d"      -> (on a d)
+          - "a is on the table"     -> (ontable a)
+          - "the hand is empty"     -> (handempty)
+          - "i am holding a"        -> (holding a)
+          - "a is clear"            -> (clear a)
+        """
+        preds: List[str] = []
+        for entry in goal_items:
+            if not isinstance(entry, (list, tuple)) or not entry:
+                continue
+            sent = str(entry[0]).strip()
+            s = re.sub(r"\s+", " ", sent)
+            # a is on top of d -> (on a d)
+            m = re.match(r"^([A-Za-z0-9_]+) is on top of ([A-Za-z0-9_]+)$", s)
+            if m:
+                preds.append(f"(on {m.group(1)} {m.group(2)})")
+                continue
+            # a is on the table -> (ontable a)
+            m = re.match(r"^([A-Za-z0-9_]+) is on the table$", s)
+            if m:
+                preds.append(f"(ontable {m.group(1)})")
+                continue
+            # the hand is empty -> (handempty)
+            if s.lower() == "the hand is empty":
+                preds.append("(handempty)")
+                continue
+            # i am holding a -> (holding a)
+            m = re.match(r"^i am holding ([A-Za-z0-9_]+)$", s, flags=re.IGNORECASE)
+            if m:
+                preds.append(f"(holding {m.group(1)})")
+                continue
+            # a is clear -> (clear a)
+            m = re.match(r"^([A-Za-z0-9_]+) is clear$", s)
+            if m:
+                preds.append(f"(clear {m.group(1)})")
+                continue
+        return preds
     @staticmethod
     def _clauses_to_pddl_predicates(clauses: List[str]) -> List[str]:
         """Convert NL-style clause strings into canonical PDDL predicate strings.
@@ -241,10 +293,11 @@ class PlanSubgoalConverter:
         out: List[Dict[str, Any]] = []
         for item in converted:
             sub = item.get('subgoal', {})
-            # We generate predicates from the single disjoint_1 list we emit per item
+            # We generate predicates from the single 'disjoint' list we emit per item
             clauses = []
             if isinstance(sub, dict):
-                clauses = sub.get('disjoint_1', []) or []
+                # prefer new key, but support legacy 'disjoint_1' for backward compat
+                clauses = sub.get('disjoint') or sub.get('disjoint_1', []) or []
             pddl_preds = self._clauses_to_pddl_predicates(clauses)
             actions = item.get('action', []) or []
             pddl_actions = self._actions_to_pddl(actions)

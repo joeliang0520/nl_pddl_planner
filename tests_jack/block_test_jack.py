@@ -1,6 +1,7 @@
 import pddl
 import json
 import os
+import re
 from dotenv import load_dotenv
 
 import pdb
@@ -47,13 +48,13 @@ if __name__ == "__main__":
         print(f'Problem {block} =========================================')
         print("Initial state:")
         print(test_init)
-        planner = NLFOLRegressionPlanner(domain.copy(), test_goal[i].copy(), max_depth=5)
+        planner = NLFOLRegressionPlanner(domain.copy(), test_goal[i].copy(), max_depth=10)
         regressed_plans = planner.regress_plan()
 
         converted = converter.convert_regressed_plans(regressed_plans)
         pddlized = converter.converted_items_to_pddl(converted)
 
-        # Prepare output JSON with initial state and pddlized plans
+        # Prepare output JSON with initial state, overall goal predicates, and pddlized plans
         # Flatten initial state dict to a list of predicate strings
         init_predicates = []
         if isinstance(test_init, dict):
@@ -64,9 +65,13 @@ if __name__ == "__main__":
             # Fallback: if already a list
             init_predicates = list(test_init)
 
+        # Convert overall NL goal to PDDL predicates via converter
+        goal_predicates = converter.goal_entries_to_pddl(block)
+
         plans_out = []
         for item in pddlized:
             plans_out.append({
+                'subgoal_raw': item.get('subgoal_raw', {}),  # disjuncts with original clause strings
                 'subgoal_predicates': item.get('subgoal_predicates', []),
                 # Save actions as PDDL operator calls (e.g., unstack(b, c))
                 'action': item.get('actions_pddl', []),
@@ -74,6 +79,7 @@ if __name__ == "__main__":
 
         out_payload = {
             'initial_state': init_predicates,
+            'goal_predicates': goal_predicates,
             'plans': plans_out,
         }
 
