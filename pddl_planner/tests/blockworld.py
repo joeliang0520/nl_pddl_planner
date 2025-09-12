@@ -24,7 +24,7 @@ if __name__ == "__main__":
     with open('files/blockworld_domain.json', 'r') as f:
         domain = json.load(f)
 
-    # load the problems (initial state and goal pairs) from the file
+    # load the goal blocks from the file    
     with open('files/blockworld_problem.json', 'r') as f:
         all_blocks = json.load(f)
 
@@ -36,17 +36,13 @@ if __name__ == "__main__":
 
     # create a directory to store the results
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    save_path = os.path.join(current_dir, f'blockworld_results')
-    os.makedirs(save_path, exist_ok=True)
 
     # initialize the planner
-    for i, problem in enumerate(all_blocks[3:4]):
-        # Expect each problem to be [initial_state, goal]; fall back to goal only
-        if isinstance(problem, list) and len(problem) == 2 and isinstance(problem[0], list):
-            init_state, goal = problem
-        else:
-            init_state = None
-            goal = problem
+    max_depth = 10
+    save_path = os.path.join(current_dir, f'blockworld_results_depth{max_depth}')
+    os.makedirs(save_path, exist_ok=True)
+    for i, problem in enumerate(all_blocks[6:7]):
+        init_state, goal = problem
 
         print(f'Problem {goal} =========================================')
         planner = NLFOLRegressionPlanner(domain.copy(), goal.copy(), max_depth=10)

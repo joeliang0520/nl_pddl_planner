@@ -1,174 +1,366 @@
 #!/usr/bin/env python3
-import argparse, json, re, sys
+import os, re, json, argparse, csv, sys
 from pathlib import Path
-from pyDatalog import pyDatalog
+from collections import defaultdict
+from typing import List, Tuple, Dict, Optional, Set
 
-pyDatalog.create_terms('on, ontable, clear, holding, handempty, eq, neq, A, B, Z')
-_var_re = re.compile(r'^v\d+$')
+class PDDLFolderParser:
+    ATOM_IN_PDDL = re.compile(r'\([^\(\)]+\)')
+    VLOW_RE = re.compile(r'^v[0-9]+$', re.I)
 
-def parse_pddl_init(pddl_text: str):
-    s = re.sub(r';[^\n]*', '', pddl_text)
-    m = re.search(r'\(:init(.*?)\)\s*\)\s*$', s, flags=re.DOTALL | re.IGNORECASE)
-    if not m:
-        return []
-    body = m.group(1)
-    atoms = []
-    for t in re.findall(r'\([^\(\)]+\)', body):
-        t = t.strip()[1:-1].strip()
-        parts = t.split()
-        if not parts:
-            continue
-        head, args = parts[0].lower(), [a.lower() for a in parts[1:]]
-        if head == 'handempty':
-            atoms.append('handempty')
-        else:
-            atoms.append(f"{head} {' '.join(args)}")
-    return atoms
+    @staticmethod
+    def _read_text(p: Path) -> str:
+        return p.read_text(encoding="utf-8")
 
-def _reset_logic():
-    pyDatalog.clear()
-    eq(A, B)  <= (A == B)
-    neq(A, B) <= ~(A == B)
-    on(A, B)    <= eq(A, '__none__') & neq(A, '__none__')
-    ontable(A)  <= eq(A, '__none__') & neq(A, '__none__')
-    clear(A)    <= eq(A, '__none__') & neq(A, '__none__')
-    holding(A)  <= eq(A, '__none__') & neq(A, '__none__')
-    handempty() <= eq(Z, '__none__') & neq(Z, '__none__')
+    @staticmethod
+    def _strip_pddl_comments(s: str) -> str:
+        return re.sub(r";[^\n]*", "", s)
 
-def _assert_world(init_atoms):
-    for a in init_atoms:
-        if a == 'handempty':
-            +handempty(); continue
-        head, *args = a.split()
-        if head == 'on' and len(args) == 2:
-            +on(args[0], args[1])
-        elif head == 'ontable' and len(args) == 1:
-            +ontable(args[0])
-        elif head == 'clear' and len(args) == 1:
-            +clear(args[0])
-        elif head == 'holding' and len(args) == 1:
-            +holding(args[0])
+    @classmethod
+    def parse_pddl_init_atoms_from_text(cls, pddl_text: str) -> List[Tuple[str, List[str]]]:
+        s = cls._strip_pddl_comments(pddl_text)
+        m = re.search(r"\(:\s*init\b", s, flags=re.IGNORECASE)
+        if not m:
+            return []
+        i = m.start()
+        depth = 0
+        start = None
+        end = None
+        for k in range(i, len(s)):
+            ch = s[k]
+            if ch == '(':
+                depth += 1
+                if start is None:
+                    start = k
+            elif ch == ')':
+                depth -= 1
+                if depth == 0:
+                    end = k
+                    break
+        if start is None or end is None:
+            return []
+        body = s[m.end():end]
+        atoms: List[Tuple[str, List[str]]] = []
+        for t in cls.ATOM_IN_PDDL.findall(body):
+            t2 = t.strip()[1:-1].strip()
+            parts = t2.split()
+            if not parts:
+                continue
+            head = parts[0].lower()
+            args = [a.lower() for a in parts[1:]]
+            atoms.append((head, args))
+        return atoms
 
-def _term(tok, var_env):
-    if _var_re.match(tok):
-        name = 'V' + tok[1:]
-        if name not in var_env:
-            var_env[name] = pyDatalog.Variable()
-        return var_env[name]
-    return tok
+    @staticmethod
+    def atoms_to_kb_strings(atoms: List[Tuple[str, List[str]]]) -> Set[str]:
+        out = set()
+        for pred, args in atoms:
+            if args:
+                out.add(f"{pred}({', '.join(args)})")
+            else:
+                out.add(f"{pred}()")
+        return out
 
-def _literal(a, var_env):
-    if a == 'handempty':
-        return handempty()
-    head, *args = a.split()
-    if head == 'on':
-        return on(_term(args[0], var_env), _term(args[1], var_env))
-    if head == 'ontable':
-        return ontable(_term(args[0], var_env))
-    if head == 'clear':
-        return clear(_term(args[0], var_env))
-    if head == 'holding':
-        return holding(_term(args[0], var_env))
-    raise ValueError(head)
+    @staticmethod
+    def _strip_quotes(s: str) -> str:
+        s = s.strip()
+        return s[1:-1] if len(s) >= 2 and s[0] == s[-1] and s[0] in "'\"" else s
 
-def _constraint_literal(pred, t1, t2, var_env):
-    return (eq if pred == 'eq' else neq)(_term(t1, var_env), _term(t2, var_env))
+    @classmethod
+    def _const_or_var_token(cls, a: str) -> str:
+        return a if not cls.VLOW_RE.match(a) else a.upper()
 
-def disjunct_holds(init_atoms, disjunct_atoms, constraints=None):
-    _reset_logic()
-    _assert_world(init_atoms)
-    var_env, conjunct = {}, None
-    for a in disjunct_atoms:
-        lit = _literal(a.lower(), var_env)
-        conjunct = lit if conjunct is None else (conjunct & lit)
-    if constraints:
-        for t1, t2 in (constraints.get('eq') or []):
-            lit = _constraint_literal('eq', t1, t2, var_env)
-            conjunct = lit if conjunct is None else (conjunct & lit)
-        for t1, t2 in (constraints.get('neq') or []):
-            lit = _constraint_literal('neq', t1, t2, var_env)
-            conjunct = lit if conjunct is None else (conjunct & lit)
-    if conjunct is None:
-        return False, None
-    ans = conjunct.ask()
-    if not ans:
-        return False, None
-    binding = {}
-    sample = ans[0]
-    for k, v in var_env.items():
-        try:
-            if v in sample:
-                binding[k] = sample[v]
-        except Exception:
-            if k in sample:
-                binding[k] = sample[k]
-    return True, (binding or sample)
+    @classmethod
+    def build_query_from_problem_init_atoms(cls, atoms: List[Tuple[str, List[str]]], constraints: Dict) -> str:
+        parts: List[str] = []
+        for pred, args in atoms:
+            if args:
+                a2 = [cls._const_or_var_token(x) for x in args]
+                parts.append(f"{pred}({', '.join(a2)})")
+            else:
+                parts.append(f"{pred}()")
+        if constraints:
+            for v, c in constraints.get("eq", []):
+                vtok = cls._const_or_var_token(str(v))
+                parts.append(f"({vtok} == '{cls._strip_quotes(str(c))}')")
+            for a, b in constraints.get("neq", []):
+                atok = cls._const_or_var_token(str(a))
+                btok = cls._const_or_var_token(str(b))
+                if cls.VLOW_RE.match(str(b)):
+                    parts.append(f"({atok} != {btok})")
+                else:
+                    parts.append(f"({atok} != '{cls._strip_quotes(str(b))}')")
+        return " &\n    ".join(parts)
 
-def process_one_case(case_dir: Path, out_dir: Path) -> dict:
+    def load_kb(self, folder: Path) -> Optional[Set[str]]:
+        init_pddl = folder / "initial_state.pddl"
+        if not init_pddl.exists():
+            return None
+        atoms = self.parse_pddl_init_atoms_from_text(self._read_text(init_pddl))
+        return self.atoms_to_kb_strings(atoms)
+
+    def load_manifest(self, folder: Path) -> Optional[List[Dict]]:
+        manifest_json = folder / "manifest.json"
+        if not manifest_json.exists():
+            return None
+        return json.loads(self._read_text(manifest_json))
+
+    def build_problem_query(self, folder: Path, manifest_item: Dict) -> Optional[Tuple[str, List[Tuple[str, List[str]]]]]:
+        problem_path = folder / manifest_item.get("problem", "")
+        if not problem_path.exists():
+            return None
+        atoms = self.parse_pddl_init_atoms_from_text(self._read_text(problem_path))
+        query = self.build_query_from_problem_init_atoms(atoms, manifest_item.get("constraints", {}))
+        return query, atoms
+
+
+class DatalogEquivalenceChecker:
+    ATOM_RE = re.compile(r"([a-z][a-z0-9_]*)\s*\(([^()]*)\)|\b([a-z][a-z0-9_]*)\s*\(\s*\)", re.I)
+    VAR_RE  = re.compile(r'^[A-Z]\w*$')
+
+    @staticmethod
+    def _strip_quotes(s: str) -> str:
+        s = s.strip()
+        return s[1:-1] if len(s) >= 2 and s[0] == s[-1] and s[0] in "'\"" else s
+
+    @classmethod
+    def parse_atom(cls, s: str) -> Tuple[str, List[str]]:
+        m = re.match(r'\s*([a-z][a-z0-9_]*)\s*\(([^()]*)\)\s*$', s, re.I)
+        if m:
+            pred = m.group(1)
+            args = [a.strip() for a in m.group(2).split(',')] if m.group(2).strip() else []
+            return pred, [cls._strip_quotes(a) for a in args]
+        s = s.strip()
+        if s.endswith("()"):
+            return s[:-2], []
+        raise ValueError(f"bad atom: {s}")
+
+    @classmethod
+    def extract_atoms(cls, query: str) -> List[Tuple[str, List[str]]]:
+        atoms = []
+        for m in cls.ATOM_RE.finditer(query):
+            if m.group(1):
+                pred = m.group(1)
+                args = [a.strip() for a in (m.group(2) or '').split(',')] if m.group(2) else []
+                atoms.append((pred, args))
+            else:
+                atoms.append((m.group(3), []))
+        return atoms
+
+    @classmethod
+    def extract_constraints(cls, query: str):
+        eq_vc = []; eq_vv = []; ne_vc = []; ne_vv = []
+        for v,c in re.findall(r"\(\s*([A-Z]\w*)\s*==\s*'([^']*)'\s*\)", query): eq_vc.append((v,cls._strip_quotes(c)))
+        for c,v in re.findall(r"\(\s*'([^']*)'\s*==\s*([A-Z]\w*)\s*\)", query): eq_vc.append((v,cls._strip_quotes(c)))
+        for v,c in re.findall(r"\(\s*([A-Z]\w*)\s*!=\s*'([^']*)'\s*\)", query): ne_vc.append((v,cls._strip_quotes(c)))
+        for c,v in re.findall(r"\(\s*'([^']*)'\s*!=\s*([A-Z]\w*)\s*\)", query): ne_vc.append((v,cls._strip_quotes(c)))
+        for a,b in re.findall(r"\(\s*([A-Z]\w*)\s*==\s*([A-Z]\w*)\s*\)", query): eq_vv.append((a,b))
+        for a,b in re.findall(r"\(\s*([A-Z]\w*)\s*!=\s*([A-Z]\w*)\s*\)", query): ne_vv.append((a,b))
+        return eq_vc, eq_vv, ne_vc, ne_vv
+
+    @classmethod
+    def vars_in_query(cls, query: str) -> List[str]:
+        vs = set()
+        for _, args in cls.extract_atoms(query):
+            for a in args:
+                if cls.VAR_RE.match(a): vs.add(a)
+        for v in re.findall(r"\b([A-Z]\w*)\b", query):
+            vs.add(v)
+        return sorted(vs)
+
+    @classmethod
+    def parse_kb_facts(cls, kb_set: Set[str]):
+        by_pred = defaultdict(list)
+        consts = set()
+        for s in kb_set:
+            p, args = cls.parse_atom(s)
+            by_pred[(p, len(args))].append(tuple(args))
+            for a in args: consts.add(a)
+        return by_pred, consts
+
+    @classmethod
+    def candidate_domain_for_var(cls, var, atoms, by_pred, forced_consts, universe_consts):
+        domains = []
+        for pred, args in atoms:
+            if var in args:
+                idxs = [k for k,a in enumerate(args) if a == var]
+                pool = by_pred.get((pred, len(args)), [])
+                filtered = []
+                for fact in pool:
+                    ok = True
+                    for j, aj in enumerate(args):
+                        if j in idxs: continue
+                        if not cls.VAR_RE.match(aj):
+                            if cls._strip_quotes(aj) != fact[j]: ok = False; break
+                    if ok: filtered.append(fact)
+                if not filtered: return set()
+                if len(idxs) == 1:
+                    domains.append({f[idxs[0]] for f in filtered})
+                else:
+                    cand = set()
+                    for f in filtered:
+                        vals = {f[j] for j in idxs}
+                        if len(vals) == 1: cand.add(next(iter(vals)))
+                    domains.append(cand)
+        if not domains:
+            return set(forced_consts) if forced_consts else set(universe_consts)
+        dom = set.intersection(*map(set, domains))
+        if forced_consts: dom &= set(forced_consts)
+        return dom
+
+    @classmethod
+    def ground_atoms(cls, atoms, subst):
+        out = set()
+        for pred, args in atoms:
+            g = []
+            for a in args:
+                g.append(subst[a] if cls.VAR_RE.match(a) else cls._strip_quotes(a))
+            out.add(f"{pred}({', '.join(g)})" if g else f"{pred}()")
+        return out
+
+    @classmethod
+    def check_constraints_partial(cls, subst, eq_vc, eq_vv, ne_vc, ne_vv):
+        for v,c in eq_vc:
+            if v in subst and subst[v] != c: return False
+        for a,b in eq_vv:
+            if a in subst and b in subst and subst[a] != subst[b]: return False
+        for v,c in ne_vc:
+            if v in subst and subst[v] == c: return False
+        for a,b in ne_vv:
+            if a in subst and b in subst and subst[a] == subst[b]: return False
+        return True
+
+    @classmethod
+    def _prepare_domains(cls, query: str, KB: Set[str]):
+        atoms = cls.extract_atoms(query)
+        eq_vc, eq_vv, ne_vc, ne_vv = cls.extract_constraints(query)
+        by_pred, all_consts = cls.parse_kb_facts(KB)
+        forced = defaultdict(set)
+        for v,c in eq_vc: forced[v].add(c)
+        vnames = cls.vars_in_query(query)
+        domains = {}
+        for v in vnames:
+            dom = cls.candidate_domain_for_var(v, atoms, by_pred, forced[v], all_consts)
+            if not dom:
+                return None
+            domains[v] = sorted(dom)
+        order = sorted(vnames, key=lambda x: len(domains[x]))
+        return atoms, (eq_vc, eq_vv, ne_vc, ne_vv), vnames, domains, order
+
+    @classmethod
+    def first_substitution(cls, query: str, KB: Set[str]) -> Optional[Dict[str, str]]:
+        prep = cls._prepare_domains(query, KB)
+        if not prep:
+            return None
+        atoms, (eq_vc, eq_vv, ne_vc, ne_vv), vnames, domains, order = prep
+        solution = None
+        subst: Dict[str, str] = {}
+        def dfs(k=0):
+            nonlocal solution
+            if solution is not None:
+                return True
+            if k == len(order):
+                if not cls.check_constraints_partial(subst, eq_vc, eq_vv, ne_vc, ne_vv):
+                    return False
+                if cls.ground_atoms(atoms, subst) == KB:
+                    solution = dict(subst)
+                    return True
+                return False
+            v = order[k]
+            for val in domains[v]:
+                subst[v] = val
+                if cls.check_constraints_partial(subst, eq_vc, eq_vv, ne_vc, ne_vv):
+                    if dfs(k+1):
+                        return True
+            subst.pop(v, None)
+            return False
+        dfs(0)
+        return solution
+
+
+def process_folder(folder: Path, out_root: Path, parser: PDDLFolderParser, checker: DatalogEquivalenceChecker):
+    results = []
+
+    KB = parser.load_kb(folder)
+    manifest = parser.load_manifest(folder)
+
+    if KB is None:
+        results.append({"folder": folder.name, "error": "initial_state.pddl missing"})
+        return results
+    if manifest is None:
+        results.append({"folder": folder.name, "error": "manifest.json missing"})
+        return results
+
+    out_dir = out_root / folder.name
     out_dir.mkdir(parents=True, exist_ok=True)
-    manifest = json.loads((case_dir / 'manifest.json').read_text(encoding='utf-8'))
-    init_atoms = parse_pddl_init((case_dir / 'initial_state.pddl').read_text(encoding='utf-8'))
-    matched = None
+
     for item in manifest:
-        disj_atoms = [x.lower() for x in item['init_atoms']]
-        cons = item.get('constraints') or {"eq": [], "neq": []}
-        ok, binding = disjunct_holds(init_atoms, disj_atoms, cons)
-        if ok:
-            matched = {**item, "status": "PASS", "bindings": binding,
-                       "init_atoms_checked": disj_atoms, "constraints_checked": cons}
-            break
-    if matched:
-        (out_dir / 'matched_case.json').write_text(json.dumps(matched, indent=2), encoding='utf-8')
-        with open(out_dir / 'matched_case.txt', 'w', encoding='utf-8') as f:
-            f.write(f"Matched subgoal s{matched['subgoal_index']} / disjunct d{matched['disjunct_index']}\n")
-            f.write("Atoms: " + ", ".join(matched['init_atoms_checked']) + "\n")
-            if matched.get("constraints_checked"):
-                f.write("Constraints: " + json.dumps(matched["constraints_checked"]) + "\n")
-            if matched.get("bindings"):
-                f.write("One binding: " + json.dumps(matched["bindings"]) + "\n")
-        print(f"[MATCH] {case_dir.name} :: s{matched['subgoal_index']}/d{matched['disjunct_index']}")
-        if matched.get("bindings"):
-            print(f"[BINDING] {matched['bindings']}")
-        return {"case": case_dir.name, "status": "PASS",
-                "subgoal": matched["subgoal_index"], "disjunct": matched["disjunct_index"]}
-    else:
-        print(f"[NO MATCH] {case_dir.name} :: tested {len(manifest)} disjunct(s)")
-        return {"case": case_dir.name, "status": "NO_MATCH", "tested": len(manifest)}
+        entry = {
+            "folder": folder.name,
+            "problem": item.get("problem"),
+            "subgoal_index": item.get("subgoal_index"),
+            "disjunct_index": item.get("disjunct_index"),
+        }
+        built = parser.build_problem_query(folder, item)
+        if built is None:
+            entry.update({"equivalent": False, "num_solutions": 0, "error": "problem file missing"})
+            results.append(entry)
+            continue
+
+        query, _atoms = built
+        subst = checker.first_substitution(query, KB)
+
+        entry.update({
+            "equivalent": subst is not None,
+            "num_solutions": 1 if subst is not None else 0,
+            "witness": subst,
+            "query": query,
+        })
+        results.append(entry)
+
+    (out_dir / "results.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
+    return results
+
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument('--indir',   required=True, help='Parent folder containing many subfolders (e.g., out_val/)')
-    ap.add_argument('--outdir',  default='out_check', help='Parent folder for outputs per case')
+    ap = argparse.ArgumentParser(description="Batch equivalence checker for PDDL folders")
+    ap.add_argument("root", help="Path to the out_val-like root directory")
+    ap.add_argument("--out", default=None, help="Output directory (default: <root>/equiv_results)")
     args = ap.parse_args()
 
-    indir = Path(args.indir)
-    out_parent = Path(args.outdir)
-    out_parent.mkdir(parents=True, exist_ok=True)
+    root = Path(args.root).resolve()
+    out_root = Path(args.out).resolve() if args.out else (root / "equiv_results")
+    out_root.mkdir(parents=True, exist_ok=True)
 
-    subdirs = [p for p in sorted(indir.iterdir()) if p.is_dir()]
-    overall = []
-    for d in subdirs:
-        if not (d / 'manifest.json').exists() or not (d / 'initial_state.pddl').exists():
-            continue
-        res = process_one_case(d, out_parent / d.name)
-        overall.append(res)
+    parser = PDDLFolderParser()
+    checker = DatalogEquivalenceChecker()
 
-    (out_parent / 'overall.json').write_text(json.dumps(overall, indent=2), encoding='utf-8')
-    with open(out_parent / 'overall.csv', 'w', encoding='utf-8') as f:
-        f.write("case,status,subgoal,disjunct,tested\n")
-        for r in overall:
-            f.write(",".join([
-                r.get("case",""),
-                r.get("status",""),
-                str(r.get("subgoal","")),
-                str(r.get("disjunct","")),
-                str(r.get("tested",""))
-            ]) + "\n")
+    all_results = []
+    for entry in sorted(root.iterdir()):
+        if entry.is_dir():
+            res = process_folder(entry, out_root, parser, checker)
+            all_results.extend(res)
 
-    ok = sum(1 for r in overall if r.get("status") == "PASS")
-    nm = sum(1 for r in overall if r.get("status") == "NO_MATCH")
-    print(f"[SUMMARY] {ok} PASS, {nm} NO_MATCH across {len(overall)} case(s)")
-    return 0 if nm == 0 else 1
+    csv_path = out_root / "summary.csv"
+    with csv_path.open("w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["folder","problem","subgoal_index","disjunct_index","equivalent","num_solutions","error"])
+        for r in all_results:
+            w.writerow([
+                r.get("folder"),
+                r.get("problem"),
+                r.get("subgoal_index"),
+                r.get("disjunct_index"),
+                "" if "equivalent" not in r else int(r["equivalent"]),
+                "" if "num_solutions" not in r else r["num_solutions"],
+                r.get("error",""),
+            ])
 
-if __name__ == '__main__':
-    sys.exit(main())
+    total = sum(1 for r in all_results if "error" not in r)
+    ok = sum(1 for r in all_results if r.get("equivalent"))
+    print(f"Processed cases: {total}  |  Equivalent: {ok}")
+    print(f"Wrote per-folder results under: {out_root}")
+    print(f"Summary CSV: {csv_path}")
+
+if __name__ == "__main__":
+    main()
