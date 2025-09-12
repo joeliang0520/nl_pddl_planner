@@ -51,8 +51,11 @@ if __name__ == "__main__":
         regressed_plans = planner.regress_plan()
 
         converted = converter.convert_regressed_plans(regressed_plans)
+        pddlized = converter.converted_items_to_pddl(converted)
 
         for item in converted:
+            print(item)
+        for item in pddlized:
             print(item)
 
         pass

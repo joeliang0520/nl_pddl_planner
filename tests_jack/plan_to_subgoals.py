@@ -177,6 +177,79 @@ class PlanSubgoalConverter:
         regressed_plans = planner.regress_plan()
         return self.convert_regressed_plans(regressed_plans)
 
+    # ---------- PDDL predicate conversion utilities ----------
+    @staticmethod
+    def _clauses_to_pddl_predicates(clauses: List[str]) -> List[str]:
+        """Convert NL-style clause strings into canonical PDDL predicate strings.
+        Supported mappings:
+          - is clear(x)            -> (clear x)
+          - is on the table(x)     -> (ontable x)
+          - the hand is empty()    -> (handempty)
+          - i am holding(x)        -> (holding x)
+          - is on top of(x, y)     -> (on x y)
+        Unrecognized clauses (including inequalities) are ignored.
+        """
+        preds: List[str] = []
+        for s in clauses:
+            t = s.strip()
+            # Normalize whitespace inside
+            t = re.sub(r"\s+", " ", t)
+            # is clear(x)
+            m = re.match(r"^is clear\(([^)]+)\)$", t)
+            if m:
+                arg = m.group(1).strip()
+                preds.append(f"(clear {arg})")
+                continue
+            # is on the table(x)
+            m = re.match(r"^is on the table\(([^)]+)\)$", t)
+            if m:
+                arg = m.group(1).strip()
+                preds.append(f"(ontable {arg})")
+                continue
+            # the hand is empty()
+            m = re.match(r"^the hand is empty\(\)$", t)
+            if m:
+                preds.append("(handempty)")
+                continue
+            # i am holding(x)
+            m = re.match(r"^i am holding\(([^)]+)\)$", t)
+            if m:
+                arg = m.group(1).strip()
+                preds.append(f"(holding {arg})")
+                continue
+            # is on top of(x, y)
+            m = re.match(r"^is on top of\(([^,]+),\s*([^)]+)\)$", t)
+            if m:
+                a = m.group(1).strip()
+                b = m.group(2).strip()
+                preds.append(f"(on {a} {b})")
+                continue
+            # ignore others (e.g., inequalities)
+        return preds
+
+    def converted_items_to_pddl(self, converted: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Given the output from convert_regressed_plans, return a list where
+        each item includes a PDDL-style predicate list for the subgoal.
+        Output item shape:
+          {
+            'subgoal': { 'disjoint_1': [...] },
+            'action': [...],
+            'subgoal_predicates': ['(clear a)', '(on a b)', ...]
+          }
+        """
+        out: List[Dict[str, Any]] = []
+        for item in converted:
+            sub = item.get('subgoal', {})
+            # We generate predicates from the single disjoint_1 list we emit per item
+            clauses = []
+            if isinstance(sub, dict):
+                clauses = sub.get('disjoint_1', []) or []
+            pddl_preds = self._clauses_to_pddl_predicates(clauses)
+            new_item = dict(item)
+            new_item['subgoal_predicates'] = pddl_preds
+            out.append(new_item)
+        return out
+
 
 def main():
     ap = argparse.ArgumentParser(description='Convert regressed plan to disjoint subgoals JSON')
