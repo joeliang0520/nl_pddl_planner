@@ -496,9 +496,9 @@ class NLFOLRegressionPlanner(NLPlanner):
                 if simplify_dnf or dup_detection:
                     for conjunct in regressed_goal.clauses:
                         if isinstance(conjunct, ConjunctiveFormula):
-                            implies_found = any(conjunct.implies(formula) for formula in visited_goal) if simplify_dnf else False
+                            #implies_found = any(conjunct.implies(formula) for formula in visited_goal) if simplify_dnf else False
                             duplicate_found = any(conjunct.is_duplicate(formula) for formula in visited_goal) if dup_detection else False
-                            if not implies_found and not duplicate_found:
+                            if not duplicate_found:
                                 regressed_goal_list.append(conjunct)
                                 visited_goal.append(conjunct)
                     regressed_goal = DisjunctiveFormula(*regressed_goal_list).simplify().distribute_and_over_or() if simplify_contradiction else DisjunctiveFormula(*regressed_goal_list).distribute_and_over_or()
