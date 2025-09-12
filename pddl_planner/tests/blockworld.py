@@ -34,13 +34,14 @@ if __name__ == "__main__":
 
     # create a directory to store the results
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    save_path = os.path.join(current_dir, f'blockworld_results')
-    os.makedirs(save_path, exist_ok=True)
 
     # initialize the planner
-    for i, block in enumerate(all_blocks[3:4]):
+    max_depth = 10
+    save_path = os.path.join(current_dir, f'blockworld_results_depth{max_depth}')
+    os.makedirs(save_path, exist_ok=True)
+    for i, block in enumerate(all_blocks[13:14]):
         print(f'Problem {block} =========================================')
-        planner = NLFOLRegressionPlanner(domain.copy(), block.copy(), max_depth=10)
+        planner = NLFOLRegressionPlanner(domain.copy(), block.copy(), max_depth=max_depth)
         #track time
         start_time = time.time()
         regressed_plans = planner.regress_plan()
