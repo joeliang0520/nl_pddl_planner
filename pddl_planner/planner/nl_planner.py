@@ -54,7 +54,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         self._max_depth = max_depth
         self._ssa = self.create_SSA()
         self._verbose = verbose
-        self._llm = LLM(model_name=llm_model, api_key=llm_api_key, verbose=False)
+        self._llm = LLM(model_name=llm_model, api_key=llm_api_key, verbose=verbose)
         
     @dataclass
     class SSA_Node:
@@ -252,7 +252,7 @@ class NLFOLRegressionPlanner(NLPlanner):
             ssa_node = self._ssa[predicate.name][action.name]
         else:
             # check if the predicate can be entailed as a domain predicate
-            print(f'[Attempting to Entail] Failing to find "{predicate.name}" in domain predicates, attempting to entail it to a domain predicate') if self._verbose else None
+            print(f'Failing to find "{predicate.name}" in domain predicates, attempting to entail it to a domain predicate') if self._verbose else None
 
             background_predicates = (copy.deepcopy(action), [clause for clause in self._instance.goal.clauses if isinstance(clause, NLPredicate)])
             entailed_pred = self._llm.entailment(predicate, self._domain.predicates, background_predicates=background_predicates)
@@ -319,11 +319,18 @@ class NLFOLRegressionPlanner(NLPlanner):
             for node in ssa_node:
                 node_sub = Substitution()
                 # Honor recorded entailment permutation per entailed predicate name
-                recorded = predicate.get_entailed_substitution(node.predicate_name)
+                recorded = None
+                try:
+                    recorded = predicate.get_entailed_substitution(node.predicate_name)
+                except Exception:
+                    recorded = None
                 inv_name_map = {}
                 if recorded is not None:
                     for k, v in recorded.items():
-                        inv_name_map[v.name] = k.name
+                        try:
+                            inv_name_map[v.name] = k.name
+                        except Exception:
+                            pass
                 target_name_to_term = {getattr(t, 'name', str(t)): t for t in predicate.terms}
                 for idx, stored_pred_var in enumerate(node.predicate_params):
                     mapped_target_name = inv_name_map.get(getattr(stored_pred_var, 'name', str(stored_pred_var)))
@@ -383,8 +390,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         return flattened_regressed_goal
     
     def regress_plan(self, simplify_equality: bool = True, simplify_contradiction: bool = True, 
-    simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True,
-    split_each_conjunct: bool = False) -> List[Tuple[Formula, List[Action]]]:
+    simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True) -> List[Tuple[Formula, List[Action]]]:
         """
         Generate a regressed plan by iteratively regressing the goal through applicable actions.
 
@@ -392,14 +398,6 @@ class NLFOLRegressionPlanner(NLPlanner):
         and then iteratively regresses it using the available actions up to a maximum depth.
         At each regression step, it creates new plan tree nodes and tracks visited subgoals to avoid duplication.
         
-        Args:
-            simplify_equality (bool): Whether to simplify the goal with equality.
-            simplify_contradiction (bool): Whether to simplify the goal with contradiction.
-            simplify_typing (bool): Whether to simplify the goal with typing.
-            simplify_dnf (bool): Whether to simplify the goal with DNF.
-            dup_detection (bool): Whether to detect duplicates in the goal.
-            split_each_conjunct (bool): Whether to split each conjunct of the goal into separate goals by eliminating the equality constraints.
-
         Returns:
             List[Tuple[Formula, List[Action]]]: A list of tuples where each tuple contains:
                 - A subgoal (Formula) that represents a regressed goal state.
@@ -424,7 +422,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                 if pred.name not in goal_predicate_names:
                     return False
                 # Check if a is entailed by b
-               # print(f'[Checking Entailment Back to the Goal] Checking if "{target.name}" entails the goal "{pred.name}"') if self._verbose else None
+                print(f'[Checking Entailment Back to the Goal] Checking if "{target.name}" entails the goal "{pred.name}"') if self._verbose else None
                 entailed_predicate = self._llm.entailment(copy.deepcopy(pred), [copy.deepcopy(target)])
                 if entailed_predicate is not None:
                     return True
@@ -449,6 +447,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         while frontier:
             current_node: NLFOLRegressionPlanner.PlanNode = frontier.pop(0)
             current_goal: Formula = current_node.sub_goal
+            # Progress bar for current depth
             if self._verbose:
                 bar_len = 20
                 filled = int((current_node.depth / max(1, self._max_depth)) * bar_len)
@@ -465,61 +464,29 @@ class NLFOLRegressionPlanner(NLPlanner):
                 if simplify_contradiction:
                     regressed_goal = regressed_goal.simplify()
                 simplified_goals = []
+                substitution = Substitution()
                 if isinstance(regressed_goal, Predicate):
                     continue
 
                 if simplify_equality:
-                    if split_each_conjunct:
-                        # simplify with equality for each conjunct
-                        per_conjunct_results = []
-                        subst_map: Dict[str, Substitution] = {}
-                        for clause in regressed_goal.clauses:
-                            if isinstance(clause, ConjunctiveFormula):
-                                # Build substitution from equality
-                                clause_simplified, clause_sub = clause.simplify_equality(current_goal)
-                                per_conj = (
-                                    DisjunctiveFormula(clause_simplified)
-                                    .substitute(clause_sub)
-                                )
-                                per_conj = self._operations.replace_domain_with_goal_fluents(per_conj, self._instance.goal)
-                                if simplify_contradiction:
-                                    per_conj = per_conj.simplify_plan().distribute_and_over_or()
-                                else:
-                                    per_conj = per_conj.distribute_and_over_or()
-                                per_conjunct_results.append(per_conj)
-                                # Record substitution for each resulting conjunct separately
-                                for conj in per_conj.clauses:
-                                    if isinstance(conj, ConjunctiveFormula):
-                                        subst_map[str(conj)] = clause_sub
-                            else:
-                                df = clause if isinstance(clause, DisjunctiveFormula) else DisjunctiveFormula(clause)
-                                per_conjunct_results.append(df)
-                                # Map empty substitution for non-processed clauses
-                                for conj in df.clauses if isinstance(df, DisjunctiveFormula) else [df]:
-                                    if isinstance(conj, ConjunctiveFormula):
-                                        subst_map[str(conj)] = Substitution()
+                    for clause in regressed_goal.clauses:
+                        if isinstance(clause, ConjunctiveFormula):
+                            # if clause is conjunction, simplify with equality further to get a substitution
+                            clause, clause_substitution = clause.simplify_equality_variables_only(current_goal)
+                            substitution.update(clause_substitution)
+                        simplified_goals.append(clause)
 
-                    else:
-                        # simplify with equality variables only
-                        substitution = Substitution()
-                        for clause in regressed_goal.clauses:
-                            if isinstance(clause, ConjunctiveFormula):
-                                # if clause is conjunction, simplify with equality further to get a substitution
-                                clause, clause_substitution = clause.simplify_equality_variables_only(current_goal)
-                                substitution.update(clause_substitution)
-                            simplified_goals.append(clause)
-                        regressed_goal = DisjunctiveFormula(*simplified_goals).substitute(substitution).simplify().distribute_and_over_or() if simplify_contradiction else DisjunctiveFormula(*simplified_goals).substitute(substitution).distribute_and_over_or()
-                        regressed_goal = self._operations.replace_domain_with_goal_fluents(regressed_goal, self._instance.goal)
-                
-                if (simplify_typing and self._domain.has_type_conflict(regressed_goal)) or isinstance(regressed_goal, FalseFormula):
-                    # skip if there is a type conflict or the formula simplifes to false
-                    continue
-                    # Recombine per-conjunct processed results
-                    regressed_goal = DisjunctiveFormula(*per_conjunct_results).distribute_and_over_or()
-                else:
-                    # No equality processing; create an empty mapping for child substitutions
-                    subst_map = {}
-
+                    regressed_goal = (
+                        DisjunctiveFormula(*simplified_goals)
+                        .substitute(substitution)
+                        .simplify_plan()
+                        .distribute_and_over_or()
+                        if simplify_contradiction
+                        else DisjunctiveFormula(*simplified_goals)
+                        .substitute(substitution)
+                        .distribute_and_over_or()
+                    )
+                regressed_goal = self._operations.replace_domain_with_goal_fluents(regressed_goal, self._instance.goal)
                 
                 if (simplify_typing and self._domain.has_type_conflict(regressed_goal)) or isinstance(regressed_goal, FalseFormula):
                     # skip if there is a type conflict or the formula simplifes to false
@@ -535,56 +502,15 @@ class NLFOLRegressionPlanner(NLPlanner):
                                 regressed_goal_list.append(conjunct)
                                 visited_goal.append(conjunct)
                     regressed_goal = DisjunctiveFormula(*regressed_goal_list).simplify().distribute_and_over_or() if simplify_contradiction else DisjunctiveFormula(*regressed_goal_list).distribute_and_over_or()
-                # If regressed_goal contains multiple conjuncts, split only if there are non-empty per-conjunct substitutions
-                regressed_conjuncts = [c for c in regressed_goal.clauses if isinstance(c, ConjunctiveFormula)]
-               
-                if split_each_conjunct: 
-                    # split discuo nbvnjuct of conjuncts into separate goals if there exists any more than one possible substitution across conjuncts for the regressed goal
-                    has_any_subst = any(
-                    bool(subst_map.get(str(conj), Substitution()))
-                    for conj in regressed_conjuncts
-                        ) if 'subst_map' in locals() else False
-                
-                    if len(regressed_conjuncts) > 1 and has_any_subst:
-                        # Additional dup detection per conjunct when splitting
-                        for conj in regressed_conjuncts:
-                            split_goal = DisjunctiveFormula(conj).distribute_and_over_or()
-                            conj_sub = subst_map.get(str(conj), Substitution())
-                            child_subst = {**current_node.substitution, **conj_sub}
-                            child_node = NLFOLRegressionPlanner.PlanNode(standardized_action, split_goal, current_node, current_node.depth + 1, child_subst)
-                            if not isinstance(child_node.sub_goal, FalseFormula):
-                                for c in child_node.sub_goal.clauses:
-                                    if isinstance(c, ConjunctiveFormula):
-                                        visited_goal.append(c)
-                                frontier.append(child_node)
-                                plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
-                    else:
-                        conj = regressed_conjuncts[0] if regressed_conjuncts else None
-                        conj_sub = subst_map.get(str(conj), Substitution()) if conj is not None and 'subst_map' in locals() else Substitution()
-                        child_subst = {**current_node.substitution, **conj_sub}
-                        child_node = NLFOLRegressionPlanner.PlanNode(standardized_action, regressed_goal, current_node, current_node.depth + 1, child_subst)
-                        # add to the frontier and plan if the subgoal hasn't visited before
-                        if not isinstance(child_node.sub_goal, FalseFormula):
-                            for conjunct in child_node.sub_goal.clauses:
-                                if isinstance(conjunct, ConjunctiveFormula):
-                                    visited_goal.append(conjunct)
-                                else:
-                                    print(f"Not a conjunctive formula: {conjunct}") if self._verbose else None
-                            frontier.append(child_node)
-                            plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
-                else:
-                    # consider the whole goal as one goal
-                    child_node = NLFOLRegressionPlanner.PlanNode(standardized_action, regressed_goal, current_node, current_node.depth + 1, {**current_node.substitution, **substitution})
-                    # add to the frontier and plan if the subgoal hasn't visited before
-                    if not isinstance(child_node.sub_goal, FalseFormula):
-                        for conjunct in child_node.sub_goal.clauses:
-                            if isinstance(conjunct, ConjunctiveFormula):
-                                visited_goal.append(conjunct)
-                            else:
-                                print(f"Not a conjunctive formula: {conjunct}")
-                        frontier.append(child_node)
-                        plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
-        
-        if self._verbose:
-            print("")
+                child_node = NLFOLRegressionPlanner.PlanNode(standardized_action, regressed_goal, current_node, current_node.depth + 1, {**current_node.substitution, **substitution})
+                # add to the frontier and plan if the subgoal hasn't visited before
+                if not isinstance(child_node.sub_goal, FalseFormula):
+                    for conjunct in child_node.sub_goal.clauses:
+                        if isinstance(conjunct, ConjunctiveFormula):
+                            visited_goal.append(conjunct)
+                        else:
+                            print(f"Not a conjunctive formula: {conjunct}") if self._verbose else None
+                    frontier.append(child_node)
+                    plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
+    
         return plan
