@@ -359,7 +359,8 @@ def process_single_file(infile: Path, outdir: Path, domain_path: Path, validator
         for dj_idx, (atoms, acts, cons) in enumerate(zip(disjs, acts_per_dj, cons_per_dj), start=1):
             prob_name = f"problem_s{si:02d}_d{dj_idx:02d}.pddl"
             plan_name = f"plan_s{si:02d}_d{dj_idx:02d}.soln"
-            pddl = make_problem_pddl(objects, atoms, goal_atoms, domain_name=domain_name)
+            combined_init = sorted(set(init_atoms) | set(atoms))
+            pddl = make_problem_pddl(objects, combined_init, goal_atoms, domain_name=domain_name)
             (outdir / prob_name).write_text(pddl, encoding="utf-8")
             (outdir / plan_name).write_text(make_plan_file(acts), encoding="utf-8")
             manifest.append({
