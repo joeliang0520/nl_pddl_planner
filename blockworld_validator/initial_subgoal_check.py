@@ -356,9 +356,17 @@ def main():
                 r.get("error",""),
             ])
 
-    total = sum(1 for r in all_results if "error" not in r)
-    ok = sum(1 for r in all_results if r.get("equivalent"))
-    print(f"Processed cases: {total}  |  Equivalent: {ok}")
+    all_folders = {r.get("folder") for r in all_results if r.get("folder")}
+    ok_folders = {r.get("folder") for r in all_results if r.get("equivalent")}
+    missing_match = sorted(all_folders - ok_folders)
+
+    if missing_match:
+        print("Folders without a matching substitution:")
+        for name in missing_match:
+            print(name)
+    else:
+        print("All folders have at least one matching substitution.")
+
     print(f"Wrote per-folder results under: {out_root}")
     print(f"Summary CSV: {csv_path}")
 
