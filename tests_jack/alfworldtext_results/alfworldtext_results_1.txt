@@ -1,0 +1,37 @@
+Regressed goals:
+Subgoal: 
+((is on top of(a, d) ∧ is on top of(b, c)))
+[]
+{}
+--------------------
+Subgoal: 
+((i am holding(?V104) ∧ is clear(?V105))
+ ∨ (is on top of(?V104, ?V105)))
+[Action('stack ?b1 on top of ?b2'([?V104, ?V105]))]
+{a: ?V104, b: ?V104, c: ?V105, d: ?V105}
+--------------------
+Subgoal: 
+((is clear(?V104) ∧ is clear(?V105) ∧ is on the table(?V104) ∧ the hand is empty()))
+[Action('pick up ?b'([?V108])), Action('stack ?b1 on top of ?b2'([?V104, ?V105]))]
+{a: ?V104, b: ?V104, c: ?V105, d: ?V105, ?V108: ?V104}
+--------------------
+Subgoal: 
+((i am holding(?V104) ∧ i am holding(?V105)))
+[Action('put down ?b'([?V109])), Action('stack ?b1 on top of ?b2'([?V104, ?V105]))]
+{a: ?V104, b: ?V104, c: ?V105, d: ?V105, ?V109: ?V105}
+--------------------
+Subgoal: 
+((i am holding(?V105)))
+[Action('put down ?b'([?V115])), Action('pick up ?b'([?V108])), Action('stack ?b1 on top of ?b2'([?V104, ?V105]))]
+{a: ?V104, b: ?V104, c: ?V105, d: ?V105, ?V108: ?V104, ?V115: ?V105}
+--------------------
+Subgoal: 
+((is clear(?V105) ∧ is on the table(?V105) ∧ the hand is empty()))
+[Action('pick up ?b'([?V120])), Action('put down ?b'([?V109])), Action('stack ?b1 on top of ?b2'([?V104, ?V105]))]
+{a: ?V104, b: ?V104, c: ?V105, d: ?V105, ?V109: ?V105, ?V120: ?V104}
+--------------------
+Subgoal: 
+((is clear(?V105) ∧ is on top of(?V105, ?V125) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V124, ?V125])), Action('put down ?b'([?V109])), Action('stack ?b1 on top of ?b2'([?V104, ?V105]))]
+{a: ?V104, b: ?V104, c: ?V105, d: ?V105, ?V109: ?V105, ?V124: ?V104}
+--------------------

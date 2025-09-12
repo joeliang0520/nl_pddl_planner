@@ -1,0 +1,46 @@
+[
+  [
+    [
+      "orange is on top of blue",
+      {
+        "orange": "object",
+        "blue": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "orange is on top of red",
+      {
+        "orange": "object",
+        "red": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "orange is on top of red",
+      {
+        "orange": "object",
+        "red": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "red is on top of orange",
+      {
+        "red": "object",
+        "orange": "object"
+      }
+    ],
+    [
+      "yellow is on top of red",
+      {
+        "yellow": "object",
+        "red": "object"
+      }
+    ]
+  ]
+]
+ 
