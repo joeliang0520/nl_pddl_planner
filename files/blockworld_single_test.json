@@ -1,0 +1,27 @@
+[
+  [[
+    [
+      "a is on top of d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b is on top of c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ], [
+    [
+      "c is on top of b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ]
+]
+]

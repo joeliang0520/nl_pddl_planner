@@ -4,7 +4,7 @@ import json
 import os
 from dotenv import load_dotenv
 
-from pddl_planner.planner.nl_planner import NLFOLRegressionPlanner
+from pddl_planner.planner.nl_planner_sub import NLFOLRegressionPlanner
 from pddl_planner.logic.nl_parser import NLParser
 from pddl_planner.logic.formula import DisjunctiveFormula
 
@@ -25,9 +25,8 @@ if __name__ == "__main__":
         domain = json.load(f)
 
     # load the goal blocks from the file    
-    with open('files/blockworld_problem.json', 'r') as f:
+    with open('files/blockworld_single_test.json', 'r') as f:
         all_blocks = json.load(f)
-
     #save with indent 4
     # with open('files/NL_actions_new.json', 'w') as f:
     #     json.dump(domain, f, indent=4)
@@ -38,8 +37,9 @@ if __name__ == "__main__":
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
     # initialize the planner
-    max_depth = 3
+    max_depth = 5
     save_path = os.path.join(current_dir, f'blockworld_results_depth{max_depth}')
+
     os.makedirs(save_path, exist_ok=True)
     for i, problem in enumerate(all_blocks[0:1]):
         init_state, goal = problem

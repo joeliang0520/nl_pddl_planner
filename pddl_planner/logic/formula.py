@@ -546,11 +546,11 @@ class ConjunctiveFormula(Formula):
         for disj in self._clauses:
             s = disj.simplify() if hasattr(disj, 'simplify') else disj
             # Exclude disjuncts that are false.
-            # if isinstance(s, Equality):
-            #     if s.is_neq and s.term1.name != s.term2.name and isinstance(s.term1, Constant) and isinstance(s.term2, Constant):
-            #             continue
-            #     if not s.is_neq and s.term1.name == s.term2.name and isinstance(s.term1, Constant) and isinstance(s.term2, Constant):
-            #             continue
+            if isinstance(s, Equality):
+                if s.is_neq and s.term1.name != s.term2.name and isinstance(s.term1, Constant) and isinstance(s.term2, Constant):
+                        continue
+                if not s.is_neq and s.term1.name == s.term2.name and isinstance(s.term1, Constant) and isinstance(s.term2, Constant):
+                        continue
             simplified_clauses.append(s)
         
         
@@ -784,9 +784,9 @@ class DisjunctiveFormula(Formula):
             if isinstance(s, ConjunctiveFormula):
                 kept = []
                 for c in s.clauses:
-                    # if isinstance(c, Equality) and c.is_neq and isinstance(c.term1, Constant) and isinstance(c.term2, Constant) and c.term1.name != c.term2.name:
-                    #     # Drop pure variable-inequalities as they add no constraint under UNA in planning
-                    #     continue
+                    if (isinstance(c, Equality) and c.is_neq and isinstance(c.term1, Constant) and isinstance(c.term2, Constant) and c.term1.name != c.term2.name):
+                        # Drop pure variable-inequalities as they add no constraint under UNA in planning
+                        continue
                     kept.append(c)
                 s = ConjunctiveFormula(*kept)
                 if isinstance(s, FalseFormula):

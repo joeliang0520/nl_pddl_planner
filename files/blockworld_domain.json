@@ -197,12 +197,6 @@
           {
             "?b2": "object"
           }
-        ],
-        [
-          "?b1 is on the table",
-          {
-            "?b1": "object"
-          }
         ]
       ]
     }
@@ -264,6 +258,12 @@
           {
             "?b1": "object",
             "?b2": "object"
+          }
+        ],
+        [
+          "?b1 is clear",
+          {
+            "?b1": "object"
           }
         ]
       ]
