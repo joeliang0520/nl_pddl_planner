@@ -38,7 +38,7 @@ if __name__ == "__main__":
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
     # initialize the planner
-    max_depth = 10
+    max_depth = 3
     save_path = os.path.join(current_dir, f'blockworld_results_depth{max_depth}')
     os.makedirs(save_path, exist_ok=True)
     for i, problem in enumerate(all_blocks[0:1]):

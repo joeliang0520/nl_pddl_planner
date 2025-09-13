@@ -190,6 +190,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                     # Both positive and negative effects exist, ssa takes the form
                     # SSA = (positive_effect) ∨ (pred ∧ ¬negative_effect)
                     ssa = DisjunctiveFormula(positive_effect_axiom, ConjunctiveFormula(pred, negative_effect_axiom.get_negation())).simplify().distribute_and_over_or()
+    
                 elif positive_effect_axiom is not None:
                     # Only positive effect exists
                     # SSA = positive_effect ∨ pred
@@ -198,6 +199,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                     # Only negative effect exists
                     # SSA = pred ∧ ¬negative_effect
                     ssa = ConjunctiveFormula(negative_effect_axiom.get_negation(), pred).simplify().distribute_and_over_or()
+                    #print(f'returned_ssa: {str(negative_effect_axiom.get_negation())} for action "{action.name}" and predicate "{pred.name}"')
                 else:
                     # No effect exists
                     ssa = DisjunctiveFormula(pred).distribute_and_over_or()
@@ -273,6 +275,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                 print(f'Failing to entail "{predicate.name}" in domain predicates, creating a new ssa node with postive and negative effects as none') if self._verbose else None
                 self._ssa[predicate.name] = self.create_SSA_as_itself(predicate)
                 ssa_node = self._ssa[predicate.name][action.name]
+
         # Build a substitution:
         # Map the stored predicate parameters to the input predicate's terms.
         if not isinstance(ssa_node, List):
@@ -310,7 +313,6 @@ class NLFOLRegressionPlanner(NLPlanner):
             # print(f'ssa_node: {ssa_node.predicate_params} action: {ssa_node.action_params} predicate: {predicate.terms}')
             # print(f'substitution: {substitution}')
             # print(f'returned_ssa: {ssa_node.ssa.clauses} for action "{action.name}" and predicate "{predicate.name}"')
-
             return returned_ssa.substitute(substitution)
         else:
             # ssa_node is a list of SSA_Nodes (entailed to multiple domain predicates)
@@ -443,7 +445,6 @@ class NLFOLRegressionPlanner(NLPlanner):
         for clause in goal.clauses:
             if isinstance(clause, ConjunctiveFormula):
                 visited_goal.append(clause)
-
         while frontier:
             current_node: NLFOLRegressionPlanner.PlanNode = frontier.pop(0)
             current_goal: Formula = current_node.sub_goal
@@ -486,6 +487,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                         .substitute(substitution)
                         .distribute_and_over_or()
                     )
+                    
                 regressed_goal = self._operations.replace_domain_with_goal_fluents(regressed_goal, self._instance.goal)
                 
                 if (simplify_typing and self._domain.has_type_conflict(regressed_goal)) or isinstance(regressed_goal, FalseFormula):
@@ -496,9 +498,9 @@ class NLFOLRegressionPlanner(NLPlanner):
                 if simplify_dnf or dup_detection:
                     for conjunct in regressed_goal.clauses:
                         if isinstance(conjunct, ConjunctiveFormula):
-                            #implies_found = any(conjunct.implies(formula) for formula in visited_goal) if simplify_dnf else False
+                            implies_found = any(conjunct.implies(formula) for formula in visited_goal) if simplify_dnf else False
                             duplicate_found = any(conjunct.is_duplicate(formula) for formula in visited_goal) if dup_detection else False
-                            if not duplicate_found:
+                            if not duplicate_found and not implies_found:
                                 regressed_goal_list.append(conjunct)
                                 visited_goal.append(conjunct)
                     regressed_goal = DisjunctiveFormula(*regressed_goal_list).simplify().distribute_and_over_or() if simplify_contradiction else DisjunctiveFormula(*regressed_goal_list).distribute_and_over_or()

@@ -546,11 +546,11 @@ class ConjunctiveFormula(Formula):
         for disj in self._clauses:
             s = disj.simplify() if hasattr(disj, 'simplify') else disj
             # Exclude disjuncts that are false.
-            if isinstance(s, Equality):
-                if s.is_neq and s.term1.name != s.term2.name and isinstance(s.term1, Constant) and isinstance(s.term2, Constant):
-                        continue
-                if not s.is_neq and s.term1.name == s.term2.name and isinstance(s.term1, Constant) and isinstance(s.term2, Constant):
-                        continue
+            # if isinstance(s, Equality):
+            #     if s.is_neq and s.term1.name != s.term2.name and isinstance(s.term1, Constant) and isinstance(s.term2, Constant):
+            #             continue
+            #     if not s.is_neq and s.term1.name == s.term2.name and isinstance(s.term1, Constant) and isinstance(s.term2, Constant):
+            #             continue
             simplified_clauses.append(s)
         
         
@@ -743,7 +743,14 @@ class ConjunctiveFormula(Formula):
         
         # If any clause in the other formula contradicts a clause in this formula, return False.
         for other_clause in other.clauses:
-            if other_clause not in self.clauses:
+            flag = False
+            for self_clause in self.clauses:
+                if other_clause == self_clause:
+                    # if other_clause can be found in self
+                    flag = True
+                    break
+            if not flag:
+                # if other_clause is not a duplicate of any clause in self, return False
                 return False
         return True
 
@@ -777,9 +784,9 @@ class DisjunctiveFormula(Formula):
             if isinstance(s, ConjunctiveFormula):
                 kept = []
                 for c in s.clauses:
-                    if isinstance(c, Equality) and c.is_neq and isinstance(c.term1, Constant) and isinstance(c.term2, Constant) and c.term1.name != c.term2.name:
-                        # Drop pure variable-inequalities as they add no constraint under UNA in planning
-                        continue
+                    # if isinstance(c, Equality) and c.is_neq and isinstance(c.term1, Constant) and isinstance(c.term2, Constant) and c.term1.name != c.term2.name:
+                    #     # Drop pure variable-inequalities as they add no constraint under UNA in planning
+                    #     continue
                     kept.append(c)
                 s = ConjunctiveFormula(*kept)
                 if isinstance(s, FalseFormula):
@@ -1288,6 +1295,17 @@ class Predicate(Atomic):
         """
         if not isinstance(other, Predicate):
             return False
+        for term1, term2 in zip(self._terms, other.terms):
+            if isinstance(term1, Variable) and isinstance(term2, Variable):
+                if term1.name != term2.name:
+                    return False
+            elif isinstance(term1, Constant) and isinstance(term2, Constant):
+                if term1.name != term2.name:
+                    # if the terms are not the same, return False
+                    return False
+            else:
+                # if the terms are not the same type, return False
+                return False
         return (self._name == other.name) and (self._terms == other.terms) and (self._is_neg == other.is_neg)
 
     def is_duplicate(self, other: Any) -> bool:
