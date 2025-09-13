@@ -48,7 +48,7 @@ if __name__ == "__main__":
         print(f'Problem {block} =========================================')
         print("Initial state:")
         print(test_init)
-        planner = NLFOLRegressionPlanner(domain.copy(), test_goal[i].copy(), max_depth=10)
+        planner = NLFOLRegressionPlanner(domain.copy(), test_goal[i].copy(), max_depth=15)
         regressed_plans = planner.regress_plan()
 
         converted = converter.convert_regressed_plans(regressed_plans)
