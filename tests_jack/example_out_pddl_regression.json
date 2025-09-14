@@ -1,0 +1,1418 @@
+{
+  "initial_state": [
+    "(handempty)",
+    "(ontable a)",
+    "(ontable c)",
+    "(ontable d)",
+    "(on b c)",
+    "(clear a)",
+    "(clear b)",
+    "(clear d)"
+  ],
+  "goal_predicates": [
+    "(on c b)"
+  ],
+  "plans": [
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "is on top of(c, b)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(on c b)"
+      ],
+      "action": []
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(c)",
+          "is clear(b)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding c)",
+        "(clear b)"
+      ],
+      "action": [
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "is clear(b)",
+          "is clear(c)",
+          "is on the table(c)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(clear b)",
+        "(clear c)",
+        "(ontable c)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(b)",
+          "i am holding(c)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding b)",
+        "(holding c)"
+      ],
+      "action": [
+        "put-down(b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(c)",
+          "is clear(?V40)",
+          "is on top of(?V40, b)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding c)",
+        "(clear ?V40)",
+        "(on ?V40 b)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "is clear(b)",
+          "is clear(c)",
+          "is on top of(c, ?V41)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(clear b)",
+        "(clear c)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(?V43)",
+          "is clear(b)",
+          "is clear(c)",
+          "is on the table(c)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V43)",
+        "(clear b)",
+        "(clear c)",
+        "(ontable c)"
+      ],
+      "action": [
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(b)",
+          "is clear(c)",
+          "is on the table(c)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear c)",
+        "(ontable c)"
+      ],
+      "action": [
+        "put-down(b)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V45 != b",
+          "?V45 != c",
+          "i am holding(?V44)",
+          "is clear(?V45)",
+          "is clear(b)",
+          "is clear(c)",
+          "is on the table(c)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V44)",
+        "(clear ?V45)",
+        "(clear b)",
+        "(clear c)",
+        "(ontable c)"
+      ],
+      "action": [
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(b)",
+          "is clear(c)",
+          "is on top of(c, ?V53)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear c)",
+        "(on c ?V53)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(c, ?V53)",
+        "put-down(b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != c",
+          "i am holding(?V40)",
+          "i am holding(c)",
+          "is on top of(?V40, b)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V40)",
+        "(holding c)",
+        "(on ?V40 b)"
+      ],
+      "action": [
+        "put-down(?V40)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V55 != c",
+          "i am holding(?V55)",
+          "i am holding(c)",
+          "is clear(?V40)",
+          "is on top of(?V40, b)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V55)",
+        "(holding c)",
+        "(clear ?V40)",
+        "(on ?V40 b)"
+      ],
+      "action": [
+        "put-down(?V55)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != ?V57",
+          "?V56 != c",
+          "i am holding(?V56)",
+          "i am holding(c)",
+          "is clear(?V40)",
+          "is clear(?V57)",
+          "is on top of(?V40, b)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V56)",
+        "(holding c)",
+        "(clear ?V40)",
+        "(clear ?V57)",
+        "(on ?V40 b)"
+      ],
+      "action": [
+        "stack(?V56, ?V57)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(?V61)",
+          "is clear(b)",
+          "is clear(c)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V61)",
+        "(clear b)",
+        "(clear c)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(?V61)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(b)",
+          "is clear(c)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear c)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(b)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V63 != b",
+          "?V63 != c",
+          "i am holding(?V62)",
+          "is clear(?V63)",
+          "is clear(b)",
+          "is clear(c)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V62)",
+        "(clear ?V63)",
+        "(clear b)",
+        "(clear c)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "stack(?V62, ?V63)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V43 != b",
+          "is clear(?V43)",
+          "is clear(b)",
+          "is on the table(c)",
+          "is on top of(?V43, c)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(clear ?V43)",
+        "(clear b)",
+        "(ontable c)",
+        "(on ?V43 c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V43, c)",
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V43 != c",
+          "is clear(?V43)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V43, b)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(clear ?V43)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V43 b)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V43, b)",
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V70 != b",
+          "i am holding(?V43)",
+          "is clear(?V70)",
+          "is clear(b)",
+          "is on the table(c)",
+          "is on top of(?V70, c)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V43)",
+        "(clear ?V70)",
+        "(clear b)",
+        "(ontable c)",
+        "(on ?V70 c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V70, c)",
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V70 != c",
+          "i am holding(?V43)",
+          "is clear(?V70)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V70, b)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V43)",
+        "(clear ?V70)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V70 b)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V70, b)",
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(b)",
+          "is clear(?V76)",
+          "is on the table(c)",
+          "is on top of(?V76, c)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear ?V76)",
+        "(ontable c)",
+        "(on ?V76 c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V76, c)",
+        "put-down(b)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "is clear(b)",
+          "is on the table(c)",
+          "is on top of(b, c)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(clear b)",
+        "(ontable c)",
+        "(on b c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(b, c)",
+        "put-down(b)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V44 != ?V45",
+          "?V45 != b",
+          "?V45 != c",
+          "i am holding(?V44)",
+          "i am holding(?V45)",
+          "is clear(b)",
+          "is clear(c)",
+          "is on the table(c)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V44)",
+        "(holding ?V45)",
+        "(clear b)",
+        "(clear c)",
+        "(ontable c)"
+      ],
+      "action": [
+        "put-down(?V45)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V44 != ?V45",
+          "?V44 != b",
+          "?V45 != b",
+          "?V45 != c",
+          "is clear(?V44)",
+          "is clear(?V45)",
+          "is clear(b)",
+          "is on the table(c)",
+          "is on top of(?V44, c)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(clear ?V44)",
+        "(clear ?V45)",
+        "(clear b)",
+        "(ontable c)",
+        "(on ?V44 c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V44, c)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V44 != ?V45",
+          "?V44 != c",
+          "?V45 != b",
+          "?V45 != c",
+          "is clear(?V44)",
+          "is clear(?V45)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V44, b)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(clear ?V44)",
+        "(clear ?V45)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V44 b)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V44, b)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V45 != ?V82",
+          "?V45 != b",
+          "?V45 != c",
+          "?V82 != b",
+          "i am holding(?V44)",
+          "is clear(?V45)",
+          "is clear(?V82)",
+          "is clear(b)",
+          "is on the table(c)",
+          "is on top of(?V82, c)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V44)",
+        "(clear ?V45)",
+        "(clear ?V82)",
+        "(clear b)",
+        "(ontable c)",
+        "(on ?V82 c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V82, c)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V45 != ?V82",
+          "?V45 != b",
+          "?V45 != c",
+          "?V82 != c",
+          "i am holding(?V44)",
+          "is clear(?V45)",
+          "is clear(?V82)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V82, b)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V44)",
+        "(clear ?V45)",
+        "(clear ?V82)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V82 b)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V82, b)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V85 != b",
+          "i am holding(?V85)",
+          "i am holding(b)",
+          "is clear(c)",
+          "is on top of(c, ?V53)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V85)",
+        "(holding b)",
+        "(clear c)",
+        "(on c ?V53)"
+      ],
+      "action": [
+        "put-down(?V85)",
+        "unstack(c, ?V53)",
+        "put-down(b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V86 != b",
+          "?V87 != c",
+          "i am holding(?V86)",
+          "i am holding(b)",
+          "is clear(?V87)",
+          "is clear(c)",
+          "is on top of(c, ?V53)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V86)",
+        "(holding b)",
+        "(clear ?V87)",
+        "(clear c)",
+        "(on c ?V53)"
+      ],
+      "action": [
+        "stack(?V86, ?V87)",
+        "unstack(c, ?V53)",
+        "put-down(b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != c",
+          "i am holding(?V40)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V40, b)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V40)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V40 b)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(c)",
+        "put-down(?V40)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != c",
+          "i am holding(?V40)",
+          "is clear(c)",
+          "is on top of(?V40, b)",
+          "is on top of(c, ?V95)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V40)",
+        "(clear c)",
+        "(on ?V40 b)",
+        "(on c ?V95)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(c, ?V95)",
+        "put-down(?V40)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != c",
+          "?V55 != c",
+          "i am holding(?V55)",
+          "is clear(?V40)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V40, b)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V55)",
+        "(clear ?V40)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V40 b)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(c)",
+        "put-down(?V55)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != ?V100",
+          "?V55 != c",
+          "i am holding(?V55)",
+          "i am holding(c)",
+          "is clear(?V100)",
+          "is on top of(?V100, ?V40)",
+          "is on top of(?V40, b)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V55)",
+        "(holding c)",
+        "(clear ?V100)",
+        "(on ?V100 ?V40)",
+        "(on ?V40 b)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V100, ?V40)",
+        "put-down(?V55)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != ?V55",
+          "?V55 != c",
+          "i am holding(c)",
+          "is clear(?V55)",
+          "is on top of(?V40, b)",
+          "is on top of(?V55, ?V40)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding c)",
+        "(clear ?V55)",
+        "(on ?V40 b)",
+        "(on ?V55 ?V40)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V55, ?V40)",
+        "put-down(?V55)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != c",
+          "?V55 != c",
+          "i am holding(?V55)",
+          "is clear(?V40)",
+          "is clear(c)",
+          "is on top of(?V40, b)",
+          "is on top of(c, ?V101)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V55)",
+        "(clear ?V40)",
+        "(clear c)",
+        "(on ?V40 b)",
+        "(on c ?V101)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(c, ?V101)",
+        "put-down(?V55)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != ?V57",
+          "?V40 != c",
+          "?V56 != c",
+          "?V57 != c",
+          "i am holding(?V56)",
+          "is clear(?V40)",
+          "is clear(?V57)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V40, b)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V56)",
+        "(clear ?V40)",
+        "(clear ?V57)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V40 b)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(c)",
+        "stack(?V56, ?V57)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != ?V57",
+          "?V56 != ?V57",
+          "?V56 != c",
+          "?V57 != c",
+          "i am holding(?V56)",
+          "i am holding(?V57)",
+          "i am holding(c)",
+          "is on top of(?V40, b)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V56)",
+        "(holding ?V57)",
+        "(holding c)",
+        "(on ?V40 b)"
+      ],
+      "action": [
+        "put-down(?V57)",
+        "stack(?V56, ?V57)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != ?V106",
+          "?V40 != ?V57",
+          "?V56 != c",
+          "?V57 != ?V106",
+          "i am holding(?V56)",
+          "i am holding(c)",
+          "is clear(?V106)",
+          "is clear(?V57)",
+          "is on top of(?V106, ?V40)",
+          "is on top of(?V40, b)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V56)",
+        "(holding c)",
+        "(clear ?V106)",
+        "(clear ?V57)",
+        "(on ?V106 ?V40)",
+        "(on ?V40 b)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V106, ?V40)",
+        "stack(?V56, ?V57)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != ?V106",
+          "?V40 != ?V57",
+          "?V56 != c",
+          "i am holding(?V56)",
+          "i am holding(c)",
+          "is clear(?V106)",
+          "is on top of(?V106, ?V57)",
+          "is on top of(?V40, b)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V56)",
+        "(holding c)",
+        "(clear ?V106)",
+        "(on ?V106 ?V57)",
+        "(on ?V40 b)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V106, ?V57)",
+        "stack(?V56, ?V57)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != ?V56",
+          "?V40 != ?V57",
+          "?V56 != ?V57",
+          "?V56 != c",
+          "i am holding(c)",
+          "is clear(?V56)",
+          "is clear(?V57)",
+          "is on top of(?V40, b)",
+          "is on top of(?V56, ?V40)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding c)",
+        "(clear ?V56)",
+        "(clear ?V57)",
+        "(on ?V40 b)",
+        "(on ?V56 ?V40)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V56, ?V40)",
+        "stack(?V56, ?V57)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != ?V56",
+          "?V40 != ?V57",
+          "?V56 != c",
+          "i am holding(c)",
+          "is clear(?V56)",
+          "is on top of(?V40, b)",
+          "is on top of(?V56, ?V57)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding c)",
+        "(clear ?V56)",
+        "(on ?V40 b)",
+        "(on ?V56 ?V57)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V56, ?V57)",
+        "stack(?V56, ?V57)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != ?V57",
+          "?V40 != c",
+          "?V56 != c",
+          "?V57 != c",
+          "i am holding(?V56)",
+          "is clear(?V40)",
+          "is clear(?V57)",
+          "is clear(c)",
+          "is on top of(?V40, b)",
+          "is on top of(c, ?V107)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V56)",
+        "(clear ?V40)",
+        "(clear ?V57)",
+        "(clear c)",
+        "(on ?V40 b)",
+        "(on c ?V107)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(c, ?V107)",
+        "stack(?V56, ?V57)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != ?V57",
+          "?V40 != c",
+          "?V56 != c",
+          "?V57 != c",
+          "i am holding(?V56)",
+          "is clear(?V57)",
+          "is clear(c)",
+          "is on top of(?V40, b)",
+          "is on top of(c, ?V40)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V56)",
+        "(clear ?V57)",
+        "(clear c)",
+        "(on ?V40 b)",
+        "(on c ?V40)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(c, ?V40)",
+        "stack(?V56, ?V57)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V40 != ?V57",
+          "?V40 != c",
+          "?V56 != c",
+          "i am holding(?V56)",
+          "is clear(c)",
+          "is on top of(?V40, b)",
+          "is on top of(c, ?V57)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V56)",
+        "(clear c)",
+        "(on ?V40 b)",
+        "(on c ?V57)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(c, ?V57)",
+        "stack(?V56, ?V57)",
+        "unstack(?V40, b)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V112 != b",
+          "?V112 != c",
+          "i am holding(?V61)",
+          "is clear(?V112)",
+          "is clear(b)",
+          "is on top of(?V112, c)",
+          "is on top of(c, ?V41)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V61)",
+        "(clear ?V112)",
+        "(clear b)",
+        "(on ?V112 c)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V112, c)",
+        "put-down(?V61)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V112 != c",
+          "i am holding(?V61)",
+          "is clear(?V112)",
+          "is clear(c)",
+          "is on top of(?V112, b)",
+          "is on top of(c, ?V41)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V61)",
+        "(clear ?V112)",
+        "(clear c)",
+        "(on ?V112 b)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V112, b)",
+        "put-down(?V61)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V61 != b",
+          "?V61 != c",
+          "is clear(?V61)",
+          "is clear(b)",
+          "is on top of(?V61, c)",
+          "is on top of(c, ?V41)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(clear ?V61)",
+        "(clear b)",
+        "(on ?V61 c)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V61, c)",
+        "put-down(?V61)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V61 != c",
+          "is clear(?V61)",
+          "is clear(c)",
+          "is on top of(?V61, b)",
+          "is on top of(c, ?V41)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(clear ?V61)",
+        "(clear c)",
+        "(on ?V61 b)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V61, b)",
+        "put-down(?V61)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V118 != c",
+          "i am holding(b)",
+          "is clear(?V118)",
+          "is on top of(?V118, c)",
+          "is on top of(c, ?V41)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear ?V118)",
+        "(on ?V118 c)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V118, c)",
+        "put-down(b)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "is clear(b)",
+          "is on top of(b, c)",
+          "is on top of(c, ?V41)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(clear b)",
+        "(on b c)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(b, c)",
+        "put-down(b)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V62 != ?V63",
+          "?V63 != b",
+          "?V63 != c",
+          "i am holding(?V62)",
+          "i am holding(?V63)",
+          "is clear(b)",
+          "is clear(c)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V62)",
+        "(holding ?V63)",
+        "(clear b)",
+        "(clear c)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(?V63)",
+        "stack(?V62, ?V63)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V124 != b",
+          "?V124 != c",
+          "?V63 != ?V124",
+          "?V63 != b",
+          "?V63 != c",
+          "i am holding(?V62)",
+          "is clear(?V124)",
+          "is clear(?V63)",
+          "is clear(b)",
+          "is on top of(?V124, c)",
+          "is on top of(c, ?V41)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V62)",
+        "(clear ?V124)",
+        "(clear ?V63)",
+        "(clear b)",
+        "(on ?V124 c)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V124, c)",
+        "stack(?V62, ?V63)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V124 != c",
+          "?V63 != ?V124",
+          "?V63 != b",
+          "?V63 != c",
+          "i am holding(?V62)",
+          "is clear(?V124)",
+          "is clear(?V63)",
+          "is clear(c)",
+          "is on top of(?V124, b)",
+          "is on top of(c, ?V41)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(holding ?V62)",
+        "(clear ?V124)",
+        "(clear ?V63)",
+        "(clear c)",
+        "(on ?V124 b)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V124, b)",
+        "stack(?V62, ?V63)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V62 != ?V63",
+          "?V62 != b",
+          "?V62 != c",
+          "?V63 != b",
+          "?V63 != c",
+          "is clear(?V62)",
+          "is clear(?V63)",
+          "is clear(b)",
+          "is on top of(?V62, c)",
+          "is on top of(c, ?V41)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(clear ?V62)",
+        "(clear ?V63)",
+        "(clear b)",
+        "(on ?V62 c)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V62, c)",
+        "stack(?V62, ?V63)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V62 != ?V63",
+          "?V62 != c",
+          "?V63 != b",
+          "?V63 != c",
+          "is clear(?V62)",
+          "is clear(?V63)",
+          "is clear(c)",
+          "is on top of(?V62, b)",
+          "is on top of(c, ?V41)",
+          "the hand is empty()"
+        ]
+      },
+      "subgoal_predicates": [
+        "(clear ?V62)",
+        "(clear ?V63)",
+        "(clear c)",
+        "(on ?V62 b)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V62, b)",
+        "stack(?V62, ?V63)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    }
+  ]
+}

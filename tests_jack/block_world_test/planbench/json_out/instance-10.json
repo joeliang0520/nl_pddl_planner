@@ -1,0 +1,41 @@
+{
+  "goal": [
+    [
+      "a is on top of d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b is on top of c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  "initial_state": {
+    "handempty": [
+      "(handempty)"
+    ],
+    "ontable": [
+      "(ontable a)",
+      "(ontable b)"
+    ],
+    "on": [
+      "(on c b)",
+      "(on d a)"
+    ],
+    "clear": [
+      "(clear c)",
+      "(clear d)"
+    ]
+  },
+  "objects": [
+    "a",
+    "b",
+    "c",
+    "d"
+  ]
+}

@@ -1,0 +1,30 @@
+Regressed goals:
+Subgoal: 
+((is on top of(a, d) ∧ is on top of(b, c)))
+[]
+{}
+--------------------
+Subgoal: 
+((?V74 == a ∧ ?V75 == d ∧ i am holding(?V74) ∧ is clear(?V75) ∧ is on top of(b, c))
+ ∨ (?V74 == b ∧ ?V75 == c ∧ i am holding(?V74) ∧ is clear(?V75) ∧ is on top of(a, d)))
+[Action('stack ?b1 on top of ?b2'([?V74, ?V75]))]
+{}
+--------------------
+Subgoal: 
+((?V74 != ?V75 ∧ ?V74 == a ∧ ?V75 == d ∧ is clear(?V74) ∧ is clear(?V75) ∧ is on the table(?V74) ∧ is on top of(b, c) ∧ the hand is empty())
+ ∨ (?V74 != ?V75 ∧ ?V74 == b ∧ ?V75 == c ∧ is clear(?V74) ∧ is clear(?V75) ∧ is on the table(?V74) ∧ is on top of(a, d) ∧ the hand is empty()))
+[Action('pick up ?b'([?V78])), Action('stack ?b1 on top of ?b2'([?V74, ?V75]))]
+{?V78: ?V74}
+--------------------
+Subgoal: 
+((?V74 != ?V75 ∧ ?V74 == a ∧ ?V75 == d ∧ i am holding(?V74) ∧ i am holding(?V75) ∧ is on top of(b, c))
+ ∨ (?V74 != ?V75 ∧ ?V74 == b ∧ ?V75 == c ∧ i am holding(?V74) ∧ i am holding(?V75) ∧ is on top of(a, d)))
+[Action('put down ?b'([?V79])), Action('stack ?b1 on top of ?b2'([?V74, ?V75]))]
+{?V79: ?V75}
+--------------------
+Subgoal: 
+((?V74 != a ∧ ?V74 == b ∧ ?V75 == c ∧ is clear(?V74) ∧ is on top of(?V74, ?V75) ∧ is on top of(a, d) ∧ the hand is empty())
+ ∨ (?V74 != b ∧ ?V74 == a ∧ ?V75 == d ∧ is clear(?V74) ∧ is on top of(?V74, ?V75) ∧ is on top of(b, c) ∧ the hand is empty()))
+[Action('unstack ?b1 from ?b2'([?V82, ?V83])), Action('stack ?b1 on top of ?b2'([?V74, ?V75]))]
+{?V82: ?V74, ?V83: ?V75}
+--------------------

@@ -1,0 +1,20 @@
+# Ignore all files named cache.json (anywhere in the repo)
+**/cache.json
+
+# Ignore all PDDL files
+*.pddl
+
+# Ignore temporary / backup Python files
+*.py~
+*.tmp.py
+*.pyc
+*.pyo
+__pycache__/
+
+# Optional: also ignore editor/OS junk
+.DS_Store
+Thumbs.db
+
+pddl_planner.egg-info/
+
+*.egg-info/
