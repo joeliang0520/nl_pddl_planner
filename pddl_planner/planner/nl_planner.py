@@ -2,6 +2,7 @@ import copy
 import heapq
 import json
 import os
+import sys
 from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional, Union
 from pddl_planner.pddl_core.nl_domain import NLDomain
@@ -39,7 +40,8 @@ class NLPlanner():
 
 class NLFOLRegressionPlanner(NLPlanner):
     def __init__(self, nl_domain: str, nl_problem: str, max_depth: int = 16, 
-    llm_model: str = "gpt-4o-mini", llm_api_key: str = os.getenv("OPENAI_API_KEY"), verbose: bool = True) -> None:
+    llm_model: str = "gpt-4o-mini", llm_api_key: str = os.getenv("OPENAI_API_KEY"), 
+    verbose: bool = True, log_path: str|None = None) -> None:
         """
         Initialize a FOL-RegressionPlanner based on First-Order Logic (FOL) and uses SSA from Situation Calculus.
 
@@ -55,6 +57,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         self._ssa = self.create_SSA()
         self._verbose = verbose
         self._llm = LLM(model_name=llm_model, api_key=llm_api_key, verbose=verbose)
+        self._log_path = log_path
         
     @dataclass
     class SSA_Node:
@@ -379,13 +382,16 @@ class NLFOLRegressionPlanner(NLPlanner):
             
             regressed_conjunct_list = []
             for clause in conjunct.clauses:
-                if isinstance(clause, NLPredicate):
+                if isinstance(clause, Predicate):
                     # Regress the predicate clause using regress_pred
                     regressed_clause = self.regress_pred(clause, action)
                 else:
                     regressed_clause = clause
+                #print(f'action: {action} and conjunct: {clause} and regressed_clause: {regressed_clause}')
                 regressed_conjunct_list.append(regressed_clause)
             # Combine the regressed clauses and convert to DN
+            # print(f'action: {action} and conjunct: {conjunct} and regressed_conjunct_list: {ConjunctiveFormula(*regressed_conjunct_list)}')
+            # print(f'action: {action} and conjunct: {conjunct} and distributed regressed_conjunct_list: {ConjunctiveFormula(*regressed_conjunct_list).distribute_and_over_or()}')
             regressed_disjunct_list.append(ConjunctiveFormula(*regressed_conjunct_list).distribute_and_over_or())
         # Return a flattened regressed goal  in DNF
         flattened_regressed_goal = DisjunctiveFormula(*regressed_disjunct_list).distribute_and_over_or()
@@ -469,26 +475,27 @@ class NLFOLRegressionPlanner(NLPlanner):
                 if isinstance(regressed_goal, Predicate):
                     continue
 
-                if simplify_equality:
-                    for clause in regressed_goal.clauses:
-                        if isinstance(clause, ConjunctiveFormula):
-                            # if clause is conjunction, simplify with equality further to get a substitution
-                            clause, clause_substitution = clause.simplify_equality_variables_only(current_goal)
-                            substitution.update(clause_substitution)
+                #if simplify_equality:
+                for clause in regressed_goal.clauses:
+                    if isinstance(clause, ConjunctiveFormula):
+                        # # if clause is conjunction, simplify with equality further to get a substitution
+                        # clause, clause_substitution = clause.simplify_equality_variables_only(current_goal)
+                        # substitution.update(clause_substitution)
                         simplified_goals.append(clause)
 
-                    regressed_goal = (
-                        DisjunctiveFormula(*simplified_goals)
-                        .substitute(substitution)
-                        .simplify_plan()
-                        .distribute_and_over_or()
-                        if simplify_contradiction
-                        else DisjunctiveFormula(*simplified_goals)
-                        .substitute(substitution)
-                        .distribute_and_over_or()
-                    )
+                regressed_goal = (
+                    DisjunctiveFormula(*simplified_goals)
+                    #.substitute(substitution)
+                    .simplify_plan()
+                    .distribute_and_over_or()
+                    if simplify_contradiction
+                    else DisjunctiveFormula(*simplified_goals)
+                    #.substitute(substitution)
+                    .distribute_and_over_or()
+                )
                     
                 regressed_goal = self._operations.replace_domain_with_goal_fluents(regressed_goal, self._instance.goal)
+                regressed_goal = self._operations.simplify_by_domain_axiom(regressed_goal)
                 
                 if (simplify_typing and self._domain.has_type_conflict(regressed_goal)) or isinstance(regressed_goal, FalseFormula):
                     # skip if there is a type conflict or the formula simplifes to false
@@ -504,6 +511,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                                 regressed_goal_list.append(conjunct)
                                 visited_goal.append(conjunct)
                     regressed_goal = DisjunctiveFormula(*regressed_goal_list).simplify().distribute_and_over_or() if simplify_contradiction else DisjunctiveFormula(*regressed_goal_list).distribute_and_over_or()
+                
                 child_node = NLFOLRegressionPlanner.PlanNode(standardized_action, regressed_goal, current_node, current_node.depth + 1, {**current_node.substitution, **substitution})
                 # add to the frontier and plan if the subgoal hasn't visited before
                 if not isinstance(child_node.sub_goal, FalseFormula):

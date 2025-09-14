@@ -40,7 +40,7 @@ class NLPlanner():
 
 class NLFOLRegressionPlanner(NLPlanner):
     def __init__(self, nl_domain: str, nl_problem: str, max_depth: int = 16, 
-    llm_model: str = "gpt-4o-mini", llm_api_key: str = os.getenv("OPENAI_API_KEY"), verbose: bool = True) -> None:
+    llm_model: str = "gpt-4o-mini", llm_api_key: str = os.getenv("OPENAI_API_KEY"), verbose: bool = True, log_path: str|None = None) -> None:
         """
         Initialize a FOL-RegressionPlanner based on First-Order Logic (FOL) and uses SSA from Situation Calculus.
 
@@ -56,7 +56,9 @@ class NLFOLRegressionPlanner(NLPlanner):
         self._ssa = self.create_SSA()
         self._verbose = verbose
         self._llm = LLM(model_name=llm_model, api_key=llm_api_key, verbose=False)
-        
+        # if verbose and log_path is not None:
+        #     log = open(log_path, "w")
+        #     sys.stdout = log
     @dataclass
     class SSA_Node:
         """
@@ -501,6 +503,8 @@ class NLFOLRegressionPlanner(NLPlanner):
                     # No equality processing; create an empty mapping for child substitutions
                     subst_map = {}
 
+                regressed_goal = self._operations.replace_domain_with_goal_fluents(regressed_goal, self._instance.goal)
+                regressed_goal = self._operations.simplify_by_domain_axiom(regressed_goal)
                 
                 if (simplify_typing and self._domain.has_type_conflict(regressed_goal)) or isinstance(regressed_goal, FalseFormula):
                     # skip if there is a type conflict or the formula simplifes to false

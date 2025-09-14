@@ -181,3 +181,49 @@ class Operations(Logic):
             return replaced
         return DisjunctiveFormula(replaced)
 
+    def simplify_by_domain_axiom(self, formula: "DisjunctiveFormula") -> "DisjunctiveFormula":
+        """
+        Domain-axiom simplification for regressed goals.
+
+        Args:
+            formula (DisjunctiveFormula): The regressed goal in DNF.
+
+        Returns:
+            DisjunctiveFormula: A filtered disjunction with invalid conjuncts removed.
+        """
+        if not isinstance(formula, DisjunctiveFormula):
+            return formula
+        kept_clauses: List[Formula] = []
+        for clause in formula.clauses:
+            if isinstance(clause, ConjunctiveFormula):
+                count_dict = {}
+                for c in clause.clauses:
+                    if isinstance(c, Predicate):
+                        name = getattr(c, 'name', '').lower()
+                        if name == 'i am holding' or name == 'the hand is empty':
+                            if name not in count_dict:
+                                count_dict[name] = 0
+                            count_dict[name] += 1
+                if 'i am holding' in count_dict and count_dict['i am holding'] > 1:
+                    # cannot hold more than one object at a time
+                    # drop this conjunct
+                    continue
+                if 'the hand is empty' in count_dict and 'i am holding' in count_dict and count_dict['the hand is empty'] >= 1 and count_dict['i am holding'] >= 1:
+                    # cannot hold and the hand is empty at the same time
+                    # drop this conjunct
+                    continue
+                kept_clauses.append(clause)
+            else:
+                kept_clauses.append(clause)
+
+        result = DisjunctiveFormula(*kept_clauses)
+        # propagate type dicts
+        formula._combine_and_propagate_type_dict(result)
+        return result
+
+    # Backward-compatibility alias for varied naming in call sites
+    def _simplify_by_domian_axiom(self, formula: "DisjunctiveFormula") -> "DisjunctiveFormula":
+        return self.simplify_by_domain_axiom(formula)
+    def simpl_domain_axmoin(self, formula: "DisjunctiveFormula") -> "DisjunctiveFormula":
+        return self.simplify_by_domain_axiom(formula)
+

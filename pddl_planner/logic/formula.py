@@ -230,7 +230,7 @@ class Formula(Logic):
         """
         pass
 
-    def distribute_and_over_or(self) -> "DisjunctiveFormula":
+    def  distribute_and_over_or(self) -> "DisjunctiveFormula":
         """Recursively distribute all conjunctions over disjunctions.
 
         The resulting formula is a DisjunctiveFormula whose clauses are ConjunctiveFormulas,
@@ -671,6 +671,15 @@ class ConjunctiveFormula(Formula):
             Tuple[Formula, Substitution]: The simplified conjunctive formula with substitutions
             applied, and the substitution mapping.
         """
+
+        def update_substitution(substitution: "Substitution", sub_term: "Term", target_term: "Term"):
+            substitution[target_term] = sub_term
+            for key, value in substitution.items():
+                # iterate through the substitution and update the target term with the sub term
+                if isinstance(value, Variable) and value.name == target_term.name:
+                    substitution[key] = sub_term
+            return substitution
+
         # First, simplify each clause if possible.
         simplified_clauses = [clause.simplify() if hasattr(clause, 'simplify') else clause 
                                 for clause in self._clauses]
@@ -689,18 +698,23 @@ class ConjunctiveFormula(Formula):
                 in_goal_2 = t2 in goal_terms
                 if in_goal_1 and not in_goal_2:
                     # if isinstance(t2, Variable):
-                        equality_subst[t2] = t1
+                        #equality_subst[t2] = t1
+                        equality_subst = update_substitution(equality_subst, sub_term=t1, target_term=t2)
                 elif in_goal_2 and not in_goal_1:
                     # if isinstance(t1, Variable):
-                        equality_subst[t1] = t2
+                        #equality_subst[t1] = t2
+                        equality_subst = update_substitution(equality_subst, sub_term=t2, target_term=t1)
                 else:
                     # Fallback: original equalities
+                    # x: y
+                    # y: a
+                    # x: y : a -> x: a
                     if isinstance(t1, Variable) and isinstance(t2, Variable):
-                        equality_subst[t2] = t1
+                        equality_subst = update_substitution(equality_subst, sub_term=t1, target_term=t2)
                     elif isinstance(t1, Variable) and isinstance(t2, Constant):
-                        equality_subst[t1] = t2
+                        equality_subst = update_substitution(equality_subst, sub_term=t2, target_term=t1)
                     elif isinstance(t1, Constant) and isinstance(t2, Variable):
-                        equality_subst[t2] = t1
+                        equality_subst = update_substitution(equality_subst, sub_term=t1, target_term=t2)
         
         substituted_clauses = set()
         for clause in simplified_clauses:
@@ -712,8 +726,8 @@ class ConjunctiveFormula(Formula):
         for clause in substituted_clauses:
             if isinstance(clause, Equality):
                 if not clause.is_neq:
-                    if isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
-                        continue
+                    # if isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
+                    continue
                 elif isinstance(clause.term1, Constant) and isinstance(clause.term2, Constant):
                     if clause.term1.name != clause.term2.name:
                         continue # remove due to unique name axiom
