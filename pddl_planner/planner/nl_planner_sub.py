@@ -1,8 +1,6 @@
 import copy
-import heapq
-import json
+import time
 import os
-import sys
 from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional, Union
 from pddl_planner.pddl_core.nl_domain import NLDomain
@@ -438,6 +436,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         if not isinstance(goal, DisjunctiveFormula):
             raise ValueError(f"Goal must be a DisjunctiveFormula, but got {type(goal)}")
         frontier = [NLFOLRegressionPlanner.PlanNode(None, goal)]
+        start_time = time.time()
         plan.append((frontier[0].sub_goal, [], Substitution()))
 
         visited_goal = []
@@ -453,7 +452,8 @@ class NLFOLRegressionPlanner(NLPlanner):
                 bar_len = 20
                 filled = int((current_node.depth / max(1, self._max_depth)) * bar_len)
                 bar = "[" + "#" * filled + "-" * (bar_len - filled) + "]"
-                print(f"[Depth] {current_node.depth}/{self._max_depth} {bar}")
+                elapsed = time.time() - start_time
+                print(f"[Depth] {current_node.depth}/{self._max_depth} {bar} | {elapsed:.2f}s")
             if current_node.depth >= self._max_depth:
                 # exit if max depth is reached
                 print(f'max depth reached: {current_node.depth}') if self._verbose else None
