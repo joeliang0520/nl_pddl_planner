@@ -1,0 +1,27 @@
+[
+  [[
+    [
+      "cl is stacked above bl",
+      {
+        "cl": "object",
+        "bl": "object"
+      }
+    ]
+  ],[
+    [
+      "al is stacked above cl",
+      {
+        "al": "object",
+        "cl": "object"
+      }
+    ],
+    [
+      "dl is stacked above al",
+      {
+        "dl": "object",
+        "al": "object"
+      }
+    ]
+  ]
+]
+]

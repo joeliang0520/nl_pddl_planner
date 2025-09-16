@@ -1,6 +1,6 @@
 import copy
-from typing import List
-from pddl_planner.logic.formula import Logic, Substitution, Formula, Predicate, ConjunctiveFormula, DisjunctiveFormula, Variable
+from typing import List, Dict, Set
+from pddl_planner.logic.formula import Logic, Substitution, Formula, Predicate, ConjunctiveFormula, DisjunctiveFormula, Variable, Constant, Equality
 from pddl_planner.logic.nl_formula import NLPredicate
 
 class Operations(Logic):
@@ -144,20 +144,19 @@ class Operations(Logic):
                     if pred.name == gpred.name:
                         return pred
                     gpred_copy = copy.deepcopy(gpred)
-                    pred_copy = copy.deepcopy(pred)
                     # Unify the terms of the predicates, ignoring name
-                    # substitution = self.unify_with_different_name(pred_copy, gpred_copy, Substitution())
-                    # if substitution is not None:
-                    #     #pred = pred.substitute(substitution)
-                    #     gpred_copy = gpred_copy.substitute(substitution)
+                    substitution = self.unify_with_different_name(pred, gpred_copy, Substitution())
+                    if substitution is not None:
+                        pred = pred.substitute(substitution)
+                        gpred_copy = gpred_copy.substitute(substitution)
                     # Prefer preserving NLPredicate fields when present
                     return NLPredicate(
                         gpred_copy.name,
-                        pred.nl_description,
+                        gpred_copy.nl_description,
                         pred.is_neg,
                         *pred.terms,
                         term_type_dict=pred.term_type_dict,
-                        inital_terms=getattr(gpred_copy, '_inital_terms'),
+                        inital_terms=getattr(pred, '_inital_terms'),
                         inital_str=getattr(gpred_copy, '_inital_str_represntation'),
                     )
             return pred
@@ -194,17 +193,67 @@ class Operations(Logic):
         """
         if not isinstance(formula, DisjunctiveFormula):
             return formula
+        if init is not None:
+            init_const_names = set(getattr(t, 'name', str(t)) for t in init.collect_terms())
+            init_const_names_count = float('inf') if init is None else len(init_const_names)
+        else:
+            init_const_names = set()
+            init_const_names_count = float('inf')
+
         kept_clauses: List[Formula] = []
         for clause in formula.clauses:
+            terms_in_clause = set([t.name for t in clause.collect_terms() if 'V' not in t.name])
+            ineq_var_to_consts: Dict[Variable, Set[Constant]] = {}
+            eq_var_to_const: List = []
+            if len(terms_in_clause) > init_const_names_count:
+                # drop this conjunct due to too many constant blocks
+                print(f'drop this conjunct due to too many constant blocks: {clause} with terms {terms_in_clause}')
+                continue
             if isinstance(clause, ConjunctiveFormula):
                 count_dict = {}
+                fluent_term_map = {}
                 for c in clause.clauses:
+                    
                     if isinstance(c, Predicate):
                         name = getattr(c, 'name', '').lower()
                         if name == 'i am holding' or name == 'the hand is empty':
                             if name not in count_dict:
                                 count_dict[name] = 0
                             count_dict[name] += 1
+                        if name == 'i am holding' or name == 'is on top of':
+                            if name not in fluent_term_map:
+                                fluent_term_map[name] = set()
+                            for t in c.terms:
+                                fluent_term_map[name].add(t)
+                    
+                    elif isinstance(c, Equality):
+                        if c.is_neq:
+                            # var != const or const != var
+                            if isinstance(c.term1, Variable) and isinstance(c.term2, Constant):
+                                const_name = getattr(c.term2, 'name', str(c.term2))
+                                if const_name in init_const_names:
+                                    ineq_var_to_consts.setdefault(getattr(c.term1, 'name', str(c.term1)), set()).add(const_name)
+                            elif isinstance(c.term1, Constant) and isinstance(c.term2, Variable):
+                                const_name = getattr(c.term1, 'name', str(c.term1))
+                                if const_name in init_const_names:
+                                    ineq_var_to_consts.setdefault(getattr(c.term2, 'name', str(c.term2)), set()).add(const_name)
+                        else:
+                            # var == const
+                            if isinstance(c.term1, Variable) and isinstance(c.term2, Constant):
+                                eq_var_to_const.add(getattr(c.term1, 'name', str(c.term1)))
+                            elif isinstance(c.term1, Constant) and isinstance(c.term2, Variable):
+                                eq_var_to_const.add(getattr(c.term2, 'name', str(c.term2)))
+
+            # Add variables that are unequal to all init constants and not equated to any constant
+                for var_name, ineq_consts in ineq_var_to_consts.items():
+                    if len(init_const_names) > 0 and len(ineq_consts) == len(init_const_names) and var_name not in eq_var_to_const:
+                        terms_in_clause.add(var_name)
+
+                # Re-check against init term budget (now including these variables)
+                if len(terms_in_clause) > init_const_names_count:
+                    print(f'drop this conjunct due to too many constant and free variables blocks: {clause} with terms {terms_in_clause}')
+                    continue
+
                 if 'i am holding' in count_dict and count_dict['i am holding'] > 1:
                     # cannot hold more than one object at a time
                     # drop this conjunct
@@ -213,6 +262,16 @@ class Operations(Logic):
                     # cannot hold and the hand is empty at the same time
                     # drop this conjunct
                     continue
+                # drop_flag = False
+                # if 'is on top of' in fluent_term_map and 'i am holding' in count_dict:
+                #     for term in fluent_term_map['is on top of']:
+                #         if term in fluent_term_map['i am holding']:
+                #             # same term cannot be on top of and holding at the same time
+                #             # drop this conjunct
+                #             drop_flag = True
+                #             break
+                # if drop_flag:
+                #     continue
                 kept_clauses.append(clause)
             else:
                 kept_clauses.append(clause)
@@ -227,4 +286,3 @@ class Operations(Logic):
         return self.simplify_by_domain_axiom(formula)
     def simpl_domain_axmoin(self, formula: "DisjunctiveFormula") -> "DisjunctiveFormula":
         return self.simplify_by_domain_axiom(formula)
-

@@ -726,7 +726,7 @@ class ConjunctiveFormula(Formula):
         for clause in substituted_clauses:
             if isinstance(clause, Equality):
                 if not clause.is_neq:
-                    # if isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
+                    #if isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
                     continue
                 elif isinstance(clause.term1, Constant) and isinstance(clause.term2, Constant):
                     if clause.term1.name != clause.term2.name:
