@@ -9,17 +9,17 @@
     ]
   ],[
     [
-      "a is on top of c",
+      "a is on top of d",
       {
         "a": "object",
-        "c": "object"
+        "d": "object"
       }
     ],
     [
-      "d is on top of a",
+      "b is on top of c",
       {
-        "d": "object",
-        "a": "object"
+        "b": "object",
+        "c": "object"
       }
     ]
   ]
