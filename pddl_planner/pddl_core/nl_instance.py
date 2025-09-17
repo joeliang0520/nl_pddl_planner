@@ -4,7 +4,7 @@ from pddl_planner.logic.formula import Predicate
 from typing import List
 
 class NLInstance():
-    def __init__(self, nl_problem: List[tuple], nl_init: List[tuple], domain: NLDomain):
+    def __init__(self, nl_problem: List[tuple], nl_init: List[tuple]|None, domain: NLDomain):
         self._domain = domain
         self._parser = NLParser()
         self._predicates = None
@@ -13,7 +13,10 @@ class NLInstance():
         self._init = None
         self._parse_problem(nl_problem)
         self._parse_predicates(nl_problem)
-        self._parse_init(nl_init)
+        if nl_init is not None:
+            self._parse_init(nl_init)
+        else:
+            self._init = None
         
     def _parse_problem(self, nl_problem: List[tuple]):
         # self._init = self._parser.parse_init(list(nl_problem.init))

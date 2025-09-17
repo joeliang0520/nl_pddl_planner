@@ -13,7 +13,7 @@ from pddl_planner.pddl_core.action import Action
 from pddl_planner.llm.llm import LLM
     
 class NLPlanner():
-    def __init__(self, nl_domain: str, nl_problem: str, nl_init: str) -> None:
+    def __init__(self, nl_domain: str, nl_problem: str, nl_init: str|None) -> None:
         """
         Initializes a Planner instance.
 
@@ -38,8 +38,9 @@ class NLPlanner():
         pass
 
 class NLFOLRegressionPlanner(NLPlanner):
-    def __init__(self, nl_domain: str, nl_problem: str, nl_init: str, max_depth: int = 16, 
-    llm_model: str = "gpt-4o-mini", llm_api_key: str = os.getenv("OPENAI_API_KEY"), verbose: bool = True, log_path: str|None = None, time_limit: int|None = None) -> None:
+    def __init__(self, nl_domain: str, nl_problem: str, nl_init: str|None, max_depth: int = 16, 
+    llm_model: str = "gpt-4o-mini", llm_api_key: str = os.getenv("OPENAI_API_KEY"), verbose: bool = True, 
+    log_path: str|None = None, time_limit: int|None = None) -> None:
         """
         Initialize a FOL-RegressionPlanner based on First-Order Logic (FOL) and uses SSA from Situation Calculus.
 

@@ -47,7 +47,7 @@ if __name__ == "__main__":
         init_state, goal = problem
 
         print(f'Problem {goal} =========================================')
-        planner = NLFOLRegressionPlanner(domain.copy(), goal.copy(), init_state.copy(), max_depth=max_depth, 
+        planner = NLFOLRegressionPlanner(domain.copy(), goal.copy(), None, max_depth=max_depth, 
         log_path=os.path.join(log_path, f'blockworld_results_depth{max_depth}_{i}.txt'), time_limit=60)
         # track time
         start_time = time.time()
