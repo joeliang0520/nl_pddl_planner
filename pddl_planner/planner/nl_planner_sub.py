@@ -430,10 +430,10 @@ class NLFOLRegressionPlanner(NLPlanner):
         start_time = time.time()
         plan.append((frontier[0].sub_goal, [], Substitution()))
         
-        def save_plan(plan: List[Tuple[Formula, List[Action], Substitution]], save_file_path: str):
+        def save_plan(plan: List[Tuple[Formula, List[Action], Substitution]], save_file_path: str, count: int = 0):
             last_plan = plan[-1]
             with open(save_file_path, 'a') as f:
-                f.write("Subgoal:\n")
+                f.write(f"Subgoal S{count}:\n")
                 f.write(str(last_plan[0]) + '\n')
                 reversed_plan = copy.deepcopy(last_plan[1])
                 reversed_plan.reverse()
@@ -441,8 +441,11 @@ class NLFOLRegressionPlanner(NLPlanner):
                 f.write(str(actions) + '\n')
                 f.write(str(last_plan[2]) + '\n')
                 f.write("--------------------\n")
-        
-        save_plan(plan, save_file_path)
+            count += 1
+            return count
+
+        plan_counter = 0
+        plan_counter = save_plan(plan, save_file_path, plan_counter)
 
         visited_goal = []
 
@@ -570,7 +573,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                             plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
 
                             if save_file_path is not None and len(plan) > 0:
-                                save_plan(plan, save_file_path)
+                                plan_counter = save_plan(plan, save_file_path, plan_counter)
                 else:
                     conj = regressed_conjuncts[0] if regressed_conjuncts else None
                     conj_sub = subst_map.get(str(conj), Substitution()) if conj is not None and 'subst_map' in locals() else Substitution()
@@ -587,7 +590,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                         plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
                 
                         if save_file_path is not None and len(plan) > 0:
-                            save_plan(plan, save_file_path)
+                            plan_counter = save_plan(plan, save_file_path, plan_counter)
         if self._verbose:
             print("")
         return plan
