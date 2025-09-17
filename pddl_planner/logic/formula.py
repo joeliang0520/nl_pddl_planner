@@ -673,12 +673,45 @@ class ConjunctiveFormula(Formula):
         """
 
         def update_substitution(substitution: "Substitution", sub_term: "Term", target_term: "Term"):
-            substitution[target_term] = sub_term
-            for key, value in substitution.items():
-                # iterate through the substitution and update the target term with the sub term
-                if isinstance(value, Variable) and value.name == target_term.name:
-                    substitution[key] = sub_term
-            return substitution
+            if isinstance(sub_term, Variable):
+                if target_term in substitution:
+                    if not isinstance(substitution[target_term], Constant):
+                        # V50 == V161 AND # V69 == V161
+                        # V161: V69
+                        substitution[target_term] = sub_term
+                    else:
+                        # V69 == V181 AND C == V161 AND V69 == V161
+                        # V181: V69
+                        # V161: C already exist
+                        # ---- V69 == V161
+                        # V69: C
+                        # V181: C
+                        substitution[sub_term] = copy.deepcopy(substitution[target_term])
+                        for key, value in substitution.items():
+                            if isinstance(value, Variable) and value.name == sub_term.name:
+                                substitution[key] = copy.deepcopy(substitution[target_term])
+                else:
+                    substitution[target_term] = sub_term
+                    for key, value in substitution.items():
+                            # V68 == V161
+                            # V181:V161
+                            # V181:V69
+                    # iterate through the substitution and update the target term with the sub term
+                        if isinstance(value, Variable) and value.name == target_term.name:
+                            substitution[key] = sub_term
+                return substitution
+            else:
+                # V161 == v181, V161 == C
+                # V181: V161
+                # ---- V161 == C
+                # V161: C
+                # V181: C
+                substitution[target_term] = sub_term
+                for key, value in substitution.items():
+                    # iterate through the substitution and update the target term with the sub term
+                    if isinstance(value, Variable) and value.name == target_term.name:
+                        substitution[key] = sub_term
+                return substitution
 
         # First, simplify each clause if possible.
         simplified_clauses = [clause.simplify() if hasattr(clause, 'simplify') else clause 
@@ -694,6 +727,8 @@ class ConjunctiveFormula(Formula):
                 
                 t1, t2 = clause.term1, clause.term2
                 # Prefer aligning to goal terms: if exactly one side is in goal, substitute the other side to it
+                # ?V161 == ?b
+                # ?V161:?b
                 in_goal_1 = t1 in goal_terms
                 in_goal_2 = t2 in goal_terms
                 if in_goal_1 and not in_goal_2:

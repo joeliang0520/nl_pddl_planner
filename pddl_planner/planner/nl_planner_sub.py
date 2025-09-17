@@ -56,9 +56,9 @@ class NLFOLRegressionPlanner(NLPlanner):
         self._verbose = verbose
         self._time_limit = time_limit
         self._llm = LLM(model_name=llm_model, api_key=llm_api_key, verbose=False)
-        # if verbose and log_path is not None:
-        #     log = open(log_path, "w")
-        #     sys.stdout = log
+        if verbose and log_path is not None:
+            log = open(log_path, "w")
+            sys.stdout = log
     @dataclass
     class SSA_Node:
         """
@@ -461,6 +461,8 @@ class NLFOLRegressionPlanner(NLPlanner):
                 
                 if isinstance(regressed_goal, Predicate):
                     continue
+                print('--------------------------------')
+                print(f'regressed_goal: {regressed_goal}')
                 if simplify_equality:
                     per_conjunct_results = []
                     subst_map: Dict[str, Substitution] = {}
@@ -492,6 +494,7 @@ class NLFOLRegressionPlanner(NLPlanner):
 
                     # Recombine per-conjunct processed results
                     regressed_goal = DisjunctiveFormula(*per_conjunct_results).distribute_and_over_or()
+                    print(f'regressed_goal: {regressed_goal}')
                 else:
                     # No equality processing; create an empty mapping for child substitutions
                     subst_map = {}

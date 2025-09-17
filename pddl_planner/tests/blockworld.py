@@ -25,7 +25,7 @@ if __name__ == "__main__":
         domain = json.load(f)
 
     # load the goal blocks from the file    
-    with open('files/blockworld_problem_with_entailment.json', 'r') as f:
+    with open('files/blockworld_single_test.json', 'r') as f:
         all_blocks = json.load(f)
     #save with indent 4
     # with open('files/NL_actions_new.json', 'w') as f:
@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
         print(f'Problem {goal} =========================================')
         planner = NLFOLRegressionPlanner(domain.copy(), goal.copy(), init_state.copy(), max_depth=max_depth, 
-        log_path=os.path.join(log_path, f'blockworld_results_depth{max_depth}_{i}.txt'))
+        log_path=os.path.join(log_path, f'blockworld_results_depth{max_depth}_{i}.txt'), time_limit=60)
         # track time
         start_time = time.time()
         regressed_plans = planner.regress_plan()
