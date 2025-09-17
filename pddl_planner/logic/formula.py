@@ -701,6 +701,13 @@ class ConjunctiveFormula(Formula):
                             substitution[key] = sub_term
                 return substitution
             else:
+                if target_term in substitution:
+                    # V161 == v181, V181 == C
+                    # V181: V161
+                    # ---- V181 == C
+                    # V181: C
+                    # V161: C
+                    substitution[substitution[target_term]] = sub_term
                 # V161 == v181, V161 == C
                 # V181: V161
                 # ---- V161 == C
@@ -711,6 +718,7 @@ class ConjunctiveFormula(Formula):
                     # iterate through the substitution and update the target term with the sub term
                     if isinstance(value, Variable) and value.name == target_term.name:
                         substitution[key] = sub_term
+
                 return substitution
 
         # First, simplify each clause if possible.
