@@ -53,6 +53,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         """
         super().__init__(nl_domain, nl_problem, nl_init)
         self._max_depth = max_depth
+        self._log_file = open(log_path, "w") if log_path is not None else sys.stdout
         self._ssa = self.create_SSA()
         self._verbose = verbose
         self._time_limit = time_limit
@@ -183,7 +184,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         if predicates is None:
             predicates = self._domain.predicates
         for pred in predicates:
-            print(f"Processing predicate: {pred.name}") 
+            print(f"Processing predicate: {pred.name}", file = self._log_file, flush=True)
             pred_ssa: Dict[str, NLFOLRegressionPlanner.SSA_Node] = {}
             for action in self._domain.actions:
                 standardized_action = action.standardize(self._operations)
@@ -257,7 +258,7 @@ class NLFOLRegressionPlanner(NLPlanner):
             ssa_node = self._ssa[predicate.name][action.name]
         else:
             # check if the predicate can be entailed as a domain predicate
-            print(f'Failing to find "{predicate.nl_description}" in domain predicates, attempting to entail it to a domain predicate') if self._verbose else None
+            print(f'Failing to find "{predicate.nl_description}" in domain predicates, attempting to entail it to a domain predicate',file = self._log_file, flush=True) if self._verbose else None
             entailment_required = True
             background_predicates = (copy.deepcopy(action), [clause for clause in self._instance.goal.clauses if isinstance(clause, NLPredicate)])
             entailed_pred = self._llm.entailment(predicate, self._domain.predicates, background_predicates=background_predicates)
@@ -274,7 +275,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                 #predicate = entailed_pred
             else:
                 # create a new ssa node with postive and negative effects as none
-                print(f'Failing to entail "{predicate.name}" in domain predicates, creating a new ssa node with postive and negative effects as none') if self._verbose else None
+                print(f'Failing to entail "{predicate.name}" in domain predicates, creating a new ssa node with postive and negative effects as none', file = self._log_file, flush=True) if self._verbose else None
                 self._ssa[predicate.name] = self.create_SSA_as_itself(predicate)
                 ssa_node = self._ssa[predicate.name][action.name]
         # Build a substitution:
@@ -310,7 +311,7 @@ class NLFOLRegressionPlanner(NLPlanner):
             return returned_ssa.substitute(substitution)
         else:
             # ssa_node is a list of SSA_Nodes (entailed to multiple domain predicates)
-            print(f'[Multiple Entailment] Found multiple domain predicates that entail "{predicate.name}"') if self._verbose else None
+            print(f'[Multiple Entailment] Found multiple domain predicates that entail "{predicate.name}"', file = self._log_file, flush=True) if self._verbose else None
             substituted_ssas: List[Formula] = []
             for node in ssa_node:
                 node_sub = Substitution()
@@ -444,14 +445,14 @@ class NLFOLRegressionPlanner(NLPlanner):
                 filled = int((current_node.depth / max(1, self._max_depth)) * bar_len)
                 bar = "[" + "#" * filled + "-" * (bar_len - filled) + "]"
                 elapsed = time.time() - start_time
-                print(f"[Depth] {current_node.depth}/{self._max_depth} {bar} | {elapsed:.2f}s | {len(frontier)} nodes in frontier")
+                print(f"[Depth] {current_node.depth}/{self._max_depth} {bar} | {elapsed:.2f}s | {len(frontier)} nodes in frontier", file = self._log_file, flush=True)
             if current_node.depth >= self._max_depth:
                 # exit if max depth is reached
-                print(f'max depth reached: {current_node.depth}') if self._verbose else None
+                print(f'max depth reached: {current_node.depth}', file = self._log_file, flush=True) if self._verbose else None
                 continue
             if self._time_limit is not None and time.time() - start_time > self._time_limit:
                 # exit if time limit is reached
-                print(f'time limit reached: {time.time() - start_time}') if self._verbose else None
+                print(f'time limit reached: {time.time() - start_time}', file = self._log_file, flush=True) if self._verbose else None
                 continue
 
             for action in self._domain.actions:
@@ -552,7 +553,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                             if isinstance(conjunct, ConjunctiveFormula):
                                 visited_goal.append(conjunct)
                             else:
-                                print(f"Not a conjunctive formula: {conjunct}") if self._verbose else None
+                                print(f"Not a conjunctive formula: {conjunct}", file = self._log_file, flush=True) if self._verbose else None
                         frontier.append(child_node)
                         plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
     
