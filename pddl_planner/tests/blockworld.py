@@ -50,14 +50,10 @@ if __name__ == "__main__":
         planner = NLFOLRegressionPlanner(domain.copy(), goal.copy(), None, max_depth=max_depth, 
         log_path=os.path.join(log_path, f'blockworld_results_depth{max_depth}_{i}.txt'), time_limit=3600)
         # track time
-        start_time = time.time()
-        regressed_plans = planner.regress_plan()
-        end_time = time.time()
-        print(f'Time taken: {end_time - start_time} seconds')
-
         # create a empty text file to store the results
         save_file_path = os.path.join(save_path, f'blockworld_results_{i}.txt')
-        with open(save_file_path, 'w') as f:
+        save_file_path_temp = os.path.join(save_path, f'blockworld_results_{i}_temp.txt')
+        with open(save_file_path_temp, 'w') as f:
             if init_state is not None:
                 parser = NLParser()
                 type_tags = {}
@@ -79,6 +75,12 @@ if __name__ == "__main__":
             else:
                 f.write("Regressed goals:\n")
 
+            start_time = time.time()
+            regressed_plans = planner.regress_plan(save_file_path=save_file_path)
+            end_time = time.time()
+
+            print(f'Time taken: {end_time - start_time} seconds')
+            
             for i, plan in enumerate(regressed_plans):
                 f.write(f"Subgoal {i}: \n")
                 f.write(str(plan[0]) + '\n')

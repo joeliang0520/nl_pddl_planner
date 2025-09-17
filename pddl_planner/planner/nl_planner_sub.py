@@ -381,7 +381,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         return flattened_regressed_goal
     
     def regress_plan(self, simplify_equality: bool = True, simplify_contradiction: bool = True, 
-    simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True) -> List[Tuple[Formula, List[Action]]]:
+    simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True, save_file_path: Optional[str] = None) -> List[Tuple[Formula, List[Action]]]:
         """
         Generate a regressed plan by iteratively regressing the goal through applicable actions.
 
@@ -394,7 +394,6 @@ class NLFOLRegressionPlanner(NLPlanner):
                 - A subgoal (Formula) that represents a regressed goal state.
                 - A list of actions (List[Action]) that form the plan to achieve that subgoal.
         """
-
         # Pre-compute goal predicate names for entailment gating
         goal_predicate_names = set()
         def _collect_goal_predicates(formula: Formula) -> None:
@@ -430,6 +429,20 @@ class NLFOLRegressionPlanner(NLPlanner):
         frontier = [NLFOLRegressionPlanner.PlanNode(None, goal)]
         start_time = time.time()
         plan.append((frontier[0].sub_goal, [], Substitution()))
+        
+        def save_plan(plan: List[Tuple[Formula, List[Action], Substitution]], save_file_path: str):
+            last_plan = plan[-1]
+            with open(save_file_path, 'a') as f:
+                f.write("Subgoal:\n")
+                f.write(str(last_plan[0]) + '\n')
+                reversed_plan = copy.deepcopy(last_plan[1])
+                reversed_plan.reverse()
+                actions = [p.substitute(last_plan[2]) for p in reversed_plan]
+                f.write(str(actions) + '\n')
+                f.write(str(last_plan[2]) + '\n')
+                f.write("--------------------\n")
+        
+        save_plan(plan, save_file_path)
 
         visited_goal = []
 
@@ -555,6 +568,9 @@ class NLFOLRegressionPlanner(NLPlanner):
                                     visited_goal.append(c)
                             frontier.append(child_node)
                             plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
+
+                            if save_file_path is not None and len(plan) > 0:
+                                save_plan(plan, save_file_path)
                 else:
                     conj = regressed_conjuncts[0] if regressed_conjuncts else None
                     conj_sub = subst_map.get(str(conj), Substitution()) if conj is not None and 'subst_map' in locals() else Substitution()
@@ -569,7 +585,9 @@ class NLFOLRegressionPlanner(NLPlanner):
                                 print(f"Not a conjunctive formula: {conjunct}", file = self._log_file, flush=True) if self._verbose else None
                         frontier.append(child_node)
                         plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
-    
+                
+                        if save_file_path is not None and len(plan) > 0:
+                            save_plan(plan, save_file_path)
         if self._verbose:
             print("")
         return plan
