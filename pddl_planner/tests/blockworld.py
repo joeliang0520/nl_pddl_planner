@@ -79,8 +79,8 @@ if __name__ == "__main__":
             else:
                 f.write("Regressed goals:\n")
 
-            for plan in regressed_plans:
-                f.write("Subgoal: \n")
+            for i, plan in enumerate(regressed_plans):
+                f.write(f"Subgoal {i}: \n")
                 f.write(str(plan[0]) + '\n')
                 reversed_plan = plan[1]
                 reversed_plan.reverse()
