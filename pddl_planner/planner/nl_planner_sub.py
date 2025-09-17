@@ -497,6 +497,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                     # Recombine per-conjunct processed results
                     regressed_goal = DisjunctiveFormula(*per_conjunct_results).distribute_and_over_or()
                     # print(f'regressed_goal: {regressed_goal}')
+                    
                 else:
                     # No equality processing; create an empty mapping for child substitutions
                     subst_map = {}
@@ -517,7 +518,19 @@ class NLFOLRegressionPlanner(NLPlanner):
                                 regressed_goal_list.append(conjunct)
                                 visited_goal.append(conjunct)
                             # else:
-                            #     print(f'drop this conjunct due to implies or duplicate: {conjunct}') if self._verbose else None
+                            #     for formula in visited_goal:
+                            #         if conjunct.implies(formula):
+                            #             print(f'drop {conjunct} due to implies', file = self._log_file, flush=True) if self._verbose else None
+                            #             print(f'{formula}', file = self._log_file, flush=True) if self._verbose else None
+                            #             print('--------------------------------', file = self._log_file, flush=True) if self._verbose else None
+                            #             break
+                            #     for formula in visited_goal:
+                            #         if conjunct.is_duplicate(formula):
+                            #             print(f'drop {conjunct} due to duplicate', file = self._log_file, flush=True) if self._verbose else None
+                            #             print(f'{formula}', file = self._log_file, flush=True) if self._verbose else None
+                            #             print('--------------------------------', file = self._log_file, flush=True) if self._verbose else None
+                            #             break
+                            #print(f'drop this conjunct due to implies or duplicate: {conjunct}') if self._verbose else None
                     regressed_goal = DisjunctiveFormula(*regressed_goal_list).simplify().distribute_and_over_or() if simplify_contradiction else DisjunctiveFormula(*regressed_goal_list).distribute_and_over_or()
                 
                 # If regressed_goal contains multiple conjuncts, split only if there are non-empty per-conjunct substitutions

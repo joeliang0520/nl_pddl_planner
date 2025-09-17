@@ -404,6 +404,8 @@ class Formula(Logic):
                 elif isinstance(term1, Constant) and isinstance(term2, Constant):
                     if term1.name != term2.name:
                         return False
+                else:
+                    return False
             if len(mapping) != len(set(mapping.values())):
                 return False
             return True
