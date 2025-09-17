@@ -674,11 +674,22 @@ class ConjunctiveFormula(Formula):
 
         def update_substitution(substitution: "Substitution", sub_term: "Term", target_term: "Term"):
             if isinstance(sub_term, Variable):
+                if sub_term in substitution and isinstance(substitution[sub_term], Constant):
+                    sub_term = copy.deepcopy(substitution[sub_term])
+
+            if isinstance(sub_term, Variable):
                 if target_term in substitution:
                     if not isinstance(substitution[target_term], Constant):
-                        # V50 == V161 AND # V69 == V161
-                        # V161: V69
-                        substitution[target_term] = sub_term
+                        # V69 == V131 AND V50 == V161 AND V69 == V161
+                        # V131: V69
+                        # V161: V50
+                        # ----- V69 == V161
+                        # V69: V50
+                        substitution[sub_term] = copy.deepcopy(substitution[target_term])
+                        # V131: V50
+                        for key, value in substitution.items():
+                            if isinstance(value, Variable) and value.name == sub_term.name:
+                                substitution[key] = copy.deepcopy(substitution[target_term])
                     else:
                         # V69 == V181 AND C == V161 AND V69 == V161
                         # V181: V69

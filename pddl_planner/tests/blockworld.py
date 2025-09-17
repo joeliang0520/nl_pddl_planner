@@ -37,7 +37,7 @@ if __name__ == "__main__":
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
     # initialize the planner
-    max_depth = 4
+    max_depth = 5
     save_path = os.path.join(current_dir, f'blockworld_results_depth{max_depth}')
     log_path = os.path.join(current_dir, f'logs/blockworld_results_depth{max_depth}')
 
@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
         print(f'Problem {goal} =========================================')
         planner = NLFOLRegressionPlanner(domain.copy(), goal.copy(), None, max_depth=max_depth, 
-        log_path=os.path.join(log_path, f'blockworld_results_depth{max_depth}_{i}.txt'), time_limit=60)
+        log_path=os.path.join(log_path, f'blockworld_results_depth{max_depth}_{i}.txt'), time_limit=3600)
         # track time
         start_time = time.time()
         regressed_plans = planner.regress_plan()
