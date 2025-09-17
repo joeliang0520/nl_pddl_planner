@@ -52,8 +52,8 @@ if __name__ == "__main__":
         # track time
         # create a empty text file to store the results
         save_file_path = os.path.join(save_path, f'blockworld_results_{i}.txt')
-        save_file_path_temp = os.path.join(save_path, f'blockworld_results_{i}_temp.txt')
-        with open(save_file_path_temp, 'w') as f:
+        #save_file_path_temp = os.path.join(save_path, f'blockworld_results_{i}_temp.txt')
+        with open(save_file_path, 'w') as f:
             if init_state is not None:
                 parser = NLParser()
                 type_tags = {}
@@ -75,18 +75,18 @@ if __name__ == "__main__":
             else:
                 f.write("Regressed goals:\n")
 
-            start_time = time.time()
-            regressed_plans = planner.regress_plan(save_file_path=save_file_path)
-            end_time = time.time()
+        start_time = time.time()
+        regressed_plans = planner.regress_plan(save_file_path=save_file_path)
+        end_time = time.time()
 
-            print(f'Time taken: {end_time - start_time} seconds')
+        print(f'Time taken: {end_time - start_time} seconds')
             
-            for i, plan in enumerate(regressed_plans):
-                f.write(f"Subgoal {i}: \n")
-                f.write(str(plan[0]) + '\n')
-                reversed_plan = plan[1]
-                reversed_plan.reverse()
-                actions = [p.substitute(plan[2]) for p in reversed_plan]
-                f.write(str(actions) + '\n')
-                f.write(str(plan[2]) + '\n')
-                f.write("--------------------\n")
+            # for i, plan in enumerate(regressed_plans):
+            #     f.write(f"Subgoal {i}: \n")
+            #     f.write(str(plan[0]) + '\n')
+            #     reversed_plan = plan[1]
+            #     reversed_plan.reverse()
+            #     actions = [p.substitute(plan[2]) for p in reversed_plan]
+            #     f.write(str(actions) + '\n')
+            #     f.write(str(plan[2]) + '\n')
+            #     f.write("--------------------\n")
