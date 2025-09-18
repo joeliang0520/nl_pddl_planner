@@ -37,7 +37,7 @@ if __name__ == "__main__":
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
     # initialize the planner
-    max_depth = 5
+    max_depth = 7
     save_path = os.path.join(current_dir, f'blockworld_results_depth{max_depth}')
     log_path = os.path.join(current_dir, f'logs/blockworld_results_depth{max_depth}')
 

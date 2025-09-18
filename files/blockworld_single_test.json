@@ -3,23 +3,16 @@
     [
       "c is on top of b",
       {
-        "c": "object",
-        "b": "object"
+        "orange": "object",
+        "red": "object"
       }
     ]
   ],[
     [
-      "a is on top of d",
+      "orange is on top of red",
       {
-        "a": "object",
-        "d": "object"
-      }
-    ],
-    [
-      "b is on top of c",
-      {
-        "b": "object",
-        "c": "object"
+        "orange": "object",
+        "red": "object"
       }
     ]
   ]

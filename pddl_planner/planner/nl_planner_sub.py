@@ -479,8 +479,8 @@ class NLFOLRegressionPlanner(NLPlanner):
                 
                 if isinstance(regressed_goal, Predicate):
                     continue
-                # print('--------------------------------')
-                # print(f'regressed_goal: {regressed_goal}')
+                # print('--------------------------------', file = self._log_file, flush=True) if self._verbose else None
+                # print(f'regressed_goal: {regressed_goal}', file = self._log_file, flush=True) if self._verbose else None
                 if simplify_equality:
                     per_conjunct_results = []
                     subst_map: Dict[str, Substitution] = {}
@@ -502,6 +502,8 @@ class NLFOLRegressionPlanner(NLPlanner):
                             for conj in per_conj.clauses:
                                 if isinstance(conj, ConjunctiveFormula):
                                     subst_map[str(conj)] = clause_sub
+                            # print(f'regressed_goal: {regressed_goal}', file = self._log_file, flush=True) if self._verbose else None
+                            # print(f'subst_map: {clause_sub}', file = self._log_file, flush=True) if self._verbose else None
                         else:
                             df = clause if isinstance(clause, DisjunctiveFormula) else DisjunctiveFormula(clause)
                             per_conjunct_results.append(df)
@@ -512,7 +514,6 @@ class NLFOLRegressionPlanner(NLPlanner):
 
                     # Recombine per-conjunct processed results
                     regressed_goal = DisjunctiveFormula(*per_conjunct_results).distribute_and_over_or()
-                    # print(f'regressed_goal: {regressed_goal}')
                     
                 else:
                     # No equality processing; create an empty mapping for child substitutions
@@ -563,6 +564,8 @@ class NLFOLRegressionPlanner(NLPlanner):
                     for conj in regressed_conjuncts:
                         split_goal = DisjunctiveFormula(conj).distribute_and_over_or()
                         conj_sub = subst_map.get(str(conj), Substitution())
+                        # print(f'conj: {conj}', file = self._log_file, flush=True) if self._verbose else None
+                        # print(f'conj_sub: {conj_sub}', file = self._log_file, flush=True) if self._verbose else None
                         child_subst = {**current_node.substitution, **conj_sub}
                         child_node = NLFOLRegressionPlanner.PlanNode(standardized_action, split_goal, current_node, current_node.depth + 1, child_subst)
                         if not isinstance(child_node.sub_goal, FalseFormula):
