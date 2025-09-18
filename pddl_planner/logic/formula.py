@@ -694,8 +694,9 @@ class ConjunctiveFormula(Formula):
                     add_edge(t2, t1)
             return graph
 
-        def resolve_graph_to_substitution(graph: Dict["Variable", List["Term"]]) -> "Substitution":
+        def resolve_graph_to_substitution(graph: Dict["Variable", List["Term"]]) -> Tuple["Substitution", bool]:
             substitution = Substitution()
+            inconsistent = False
             visited: Set[Variable] = set()
 
             # helper to compare variables by numeric index if present (V12 < V2 handled properly)
@@ -724,14 +725,17 @@ class ConjunctiveFormula(Formula):
                                 queue.append(t)
 
                 # Resolution rule:
-                # 1) If any constants present, map all vars in component to the (unique) constant.
-                #    If multiple distinct constants appear, they must be equal by previous simplification; if not, keep first by stable order.
+                # 1) If multiple distinct constants appear in the component, it's inconsistent.
+                if len({c.name for c in component_consts}) > 1:
+                    inconsistent = True
+                    # No need to compute further; keep scanning to mark visited but final result will be False
+                # 2) If any constants present, map all vars in component to that constant.
                 representative_term: Term
                 if component_consts:
                     # choose one constant deterministically by name
                     representative_term = sorted(component_consts, key=lambda c: c.name)[0]
                 else:
-                    # 2) Otherwise choose the smallest variable by our sort key
+                    # 3) Otherwise choose the smallest variable by our sort key
                     representative_term = sorted(component_vars, key=variable_sort_key)[0]
 
                 # Map every variable in component to the representative (skip self-map)
@@ -748,7 +752,7 @@ class ConjunctiveFormula(Formula):
                         if any(isinstance(n, Variable) and n in component_vars for n in neighbors):
                             substitution[other_var] = representative_term
 
-            return substitution
+            return (substitution, inconsistent)
 
         # First, simplify each clause if possible.
         simplified_clauses = [clause.simplify() if hasattr(clause, 'simplify') else clause 
@@ -756,7 +760,9 @@ class ConjunctiveFormula(Formula):
         
         # Build equality graph from all positive equalities in the conjunction
         eqs: List[Equality] = [c for c in simplified_clauses if isinstance(c, Equality) and not c.is_neq]
-        equality_subst = resolve_graph_to_substitution(build_equality_graph(eqs))
+        equality_subst, inconsistent = resolve_graph_to_substitution(build_equality_graph(eqs))
+        if inconsistent:
+            return (FalseFormula(), Substitution())
         substituted_clauses = set()
         for clause in simplified_clauses:
             # Apply the substitution to every clause.
