@@ -140,7 +140,7 @@ class Operations(Logic):
         def _match_and_replace(pred: Predicate) -> Predicate:
             # Try match against any goal predicate using entailment-aware equality when available.
             for gpred in goal_preds:
-                if pred._equals_helper(gpred, {}):
+                if pred._equals_helper(gpred, {}, check_var_constant_consistency=False):
                     if pred.name == gpred.name:
                         return pred
                     gpred_copy = copy.deepcopy(gpred)

@@ -373,12 +373,13 @@ class Formula(Logic):
         mapping: Dict["Term", "Term"] = {}
         return self._equals_helper(other, mapping)
 
-    def _equals_helper(self, other: "Formula", mapping: Dict["Term", "Term"]) -> bool:
+    def _equals_helper(self, other: "Formula", mapping: Dict["Term", "Term"], check_var_constant_consistency: bool = True) -> bool:
         """Helper method to check equality between formulas using a mapping for variables.
 
         Args:
             other (Formula): The formula with which to compare.
             mapping (Dict[Term, Term]): A mapping from terms in self to terms in other.
+            check_var_constant_consistency (bool): Whether to check if the mapping is consistent with the variable-constant consistency.
 
         Returns:
             bool: True if formulas are equivalent, False otherwise.
@@ -404,7 +405,7 @@ class Formula(Logic):
                 elif isinstance(term1, Constant) and isinstance(term2, Constant):
                     if term1.name != term2.name:
                         return False
-                else:
+                elif check_var_constant_consistency:
                     return False
             if len(mapping) != len(set(mapping.values())):
                 return False

@@ -25,7 +25,7 @@ if __name__ == "__main__":
         domain = json.load(f)
 
     # load the goal blocks from the file    
-    with open('files/blockworld_single_test.json', 'r') as f:
+    with open('files/blockworld_problem_with_entailment.json', 'r') as f:
         all_blocks = json.load(f)
     #save with indent 4
     # with open('files/NL_actions_new.json', 'w') as f:
