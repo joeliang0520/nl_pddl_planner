@@ -1,0 +1,57 @@
+[
+  [
+    [
+      [
+        "red is clear",
+        {
+          "red": "object"
+        }
+      ],
+      [
+        "yellow is clear",
+        {
+          "yellow": "object"
+        }
+      ],
+      [
+        "the hand is empty",
+        {}
+      ],
+      [
+        "red is on top of blue",
+        {
+          "red": "object",
+          "blue": "object"
+        }
+      ],
+      [
+        "yellow is on top of orange",
+        {
+          "yellow": "object",
+          "orange": "object"
+        }
+      ],
+      [
+        "blue is on the table",
+        {
+          "blue": "object"
+        }
+      ],
+      [
+        "orange is on the table",
+        {
+          "orange": "object"
+        }
+      ]
+    ],
+    [
+      [
+        "orange is on top of red",
+        {
+          "orange": "object",
+          "red": "object"
+        }
+      ]
+    ]
+  ]
+]

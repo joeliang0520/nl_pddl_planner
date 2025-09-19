@@ -253,15 +253,15 @@ class NLFOLRegressionPlanner(NLPlanner):
             DisjunctiveFormula: The regressed formula with variables substituted according to the SSA_Node.
         """
         # check if the predicate is in domain predicates
-        entailment_required = False
         if predicate.name in self._ssa:
             ssa_node = self._ssa[predicate.name][action.name]
         else:
             # check if the predicate can be entailed as a domain predicate
             print(f'Failing to find "{predicate.nl_description}" in domain predicates, attempting to entail it to a domain predicate',file = self._log_file, flush=True) if self._verbose else None
-            entailment_required = True
             background_predicates = (copy.deepcopy(action), [clause for clause in self._instance.goal.clauses if isinstance(clause, NLPredicate)])
-            entailed_pred = self._llm.entailment(predicate, self._domain.predicates, background_predicates=background_predicates)
+            #print(['Predicates in domain: ', self._domain.predicates])
+            entailed_pred = self._llm.entailment(predicate, self._domain.predicates, 
+                                                    background_predicates=background_predicates, domain_predicates=True)
 
             if entailed_pred is not None:
                 if isinstance(entailed_pred.entailed, list):
@@ -470,7 +470,6 @@ class NLFOLRegressionPlanner(NLPlanner):
                 # exit if time limit is reached
                 print(f'time limit reached: {time.time() - start_time}', file = self._log_file, flush=True) if self._verbose else None
                 continue
-
             for action in self._domain.actions:
                 standardized_action = action.standardize(self._operations)
                 regressed_goal = self.regress(current_goal, standardized_action)
@@ -557,7 +556,6 @@ class NLFOLRegressionPlanner(NLPlanner):
                 bool(subst_map.get(str(conj), Substitution()))
                 for conj in regressed_conjuncts
                     ) if 'subst_map' in locals() else False
-                
                 
                 if len(regressed_conjuncts) > 1 and has_any_subst:
                     # Additional dup detection per conjunct when splitting

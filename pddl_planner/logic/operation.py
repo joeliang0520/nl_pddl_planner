@@ -1,6 +1,6 @@
 import copy
 from typing import List
-from pddl_planner.logic.formula import Logic, Substitution, Formula, Predicate, ConjunctiveFormula, DisjunctiveFormula, Variable
+from pddl_planner.logic.formula import Logic, Substitution, Formula, Predicate, ConjunctiveFormula, DisjunctiveFormula, Variable, Constant
 from pddl_planner.logic.nl_formula import NLPredicate
 
 class Operations(Logic):
@@ -44,7 +44,8 @@ class Operations(Logic):
         else:
             return None
 
-    def unify_with_different_name(self, x: "Formula", y: "Formula", substitution: "Substitution") -> "Substitution":
+    def unify_with_different_name(self, x: "Formula", y: "Formula", 
+    substitution: "Substitution") -> "Substitution":
         """Unify two formulas without requiring them to have the same name.
         This is specifically designed for entailment tasks where predicates with different names
         might have similar structures that can be unified.
@@ -56,11 +57,11 @@ class Operations(Logic):
         elif x == y:
             return substitution
         
-        elif isinstance(x, Variable):
-            return self.unify_var(x, y, substitution)
+        elif isinstance(x, Variable) or isinstance(x, Constant):
+            return self.unify_var_with_different_name(x, y, substitution)
         
-        elif isinstance(y, Variable):
-            return self.unify_var(y, x, substitution)
+        elif isinstance(y, Variable) or isinstance(y, Constant):
+            return self.unify_var_with_different_name(y, x, substitution)
             
         elif isinstance(x, Predicate) and isinstance(y, Predicate):
             # Skip name unification and only unify terms
@@ -83,7 +84,17 @@ class Operations(Logic):
         
         else:
             return None
-        
+    def unify_var_with_different_name(self, var, x, substitution):
+        # if var in substitution:
+        #     return self.unify_with_different_name(substitution[var], x, substitution)
+        # elif x in substitution: 
+        #     return self.unify_with_different_name(var, substitution[x], substitution)
+        # elif isinstance(x, Formula) and self.occur_check(var, x):
+        #     return None
+        # else:
+            substitution[var] = x
+            return substitution
+
     def unify_var(self, var, x, substitution):
         if var in substitution:
             return self.unify(substitution[var], x, substitution)

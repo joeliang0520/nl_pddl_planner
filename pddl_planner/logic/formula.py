@@ -1456,8 +1456,8 @@ class   Substitution(dict):
             ValueError: If any key is not a Variable or any value is not a Term.
         """
         for key, value in self.items():
-            if not isinstance(key, Variable):
-                raise ValueError(f"Key {key} is not a Variable")
+            # if not isinstance(key, Variable):
+            #     raise ValueError(f"Key {key} is not a Variable")
             if not (isinstance(value, Variable) or isinstance(value, Constant)):
                 raise ValueError(f"Value {value} is not a Term")
 

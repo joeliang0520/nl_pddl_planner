@@ -30,11 +30,12 @@ class LLM:
         self._cache_path = cache_path
         self._cache = self._load_cache()
         self.client = openai.OpenAI(api_key=api_key)
-        self._n_iter = 3 # number of iterations for the entailment check for self consistency check
+        self._n_iter = 5 # number of iterations for the entailment check for self consistency check
         self._operations = Operations()
         self._verbose = verbose
 
-    def entailment(self, predicate: NLPredicate, predicates: List[NLPredicate], background_predicates: Tuple[Action, List[NLPredicate]] = (None, [])) -> NLPredicate|None:
+    def entailment(self, predicate: NLPredicate, predicates: List[NLPredicate], background_predicates: Tuple[Action, List[NLPredicate]] = (None, []),
+                    domain_predicates: bool = False) -> NLPredicate|None:
         """
         Determine whether a target NL predicate is entailed by any predicate schema in a list.
 
@@ -59,7 +60,10 @@ class LLM:
             
             # Find proper substitution between the target predicate and the current predicate
             # Use unify_with_different_name for entailment tasks to allow different predicate names
-            substitution = self._operations.unify_with_different_name(predicate_copy, pred_copy, Substitution())
+            substitution = self._operations.unify_with_different_name(pred_copy, predicate_copy,  Substitution())
+            # else:
+            #     substitution = self._operations.unify_with_different_name(predicate_copy, pred_copy, Substitution())
+            print(f'[Substitution] Substitution: {substitution} between "{str(predicate_copy)}" and "{str(pred_copy)}"') if self._verbose else None
             # if substitution is not None:
             #     names = [term.name for term in substitution.keys()]
             #     names.extend([term.name for term in substitution.values()])
@@ -82,10 +86,11 @@ class LLM:
             entailed_for_this_pred = False
             winning_perm_sub = None
             for perm_vals in permuted_values_list:
+                print(f'[Substitution] Permutation: {perm_vals} for substitution keys {keys}') if self._verbose else None
                 perm_sub = Substitution({k: v for k, v in zip(keys, perm_vals)})
 
                 # Apply substitution on fresh copies to avoid cross-permutation side effects
-                perm_target = copy.deepcopy(predicate_copy).substitute(perm_sub)
+                perm_target = copy.deepcopy(predicate_copy)
                 perm_pred = copy.deepcopy(pred_copy).substitute(perm_sub)
 
                 # Conduct entailment between the substituted string representations
