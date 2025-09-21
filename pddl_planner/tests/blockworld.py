@@ -20,7 +20,7 @@ if __name__ == "__main__":
         print("Environment variables not loaded")
         
     # load the domain from the file
-    with open('files/blockworld_domain.json', 'r') as f:
+    with open('files/blockworld_domain_entailment.json', 'r') as f:
         domain = json.load(f)
 
     # load the goal blocks from the file    

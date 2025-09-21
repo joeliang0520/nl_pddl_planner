@@ -6,7 +6,7 @@
           {}
         ],
         [
-          "block ?b has nothing on top of it",
+          "block ?b has no block above it",
           {
             "?b": "object"
           }
@@ -49,7 +49,7 @@
           {}
         ],
         [
-          "block ?b has nothing on top of it",
+          "block ?b has no block above it",
           {
             "?b": "object"
           }
@@ -76,7 +76,7 @@
             {}
           ],
           [
-            "block ?b has nothing on top of it",
+            "block ?b has no block above it",
             {
               "?b": "object"
             }
@@ -122,7 +122,7 @@
             }
           ],
           [
-            "block ?b has nothing on top of it",
+            "block ?b has no block above it",
             {
               "?b": "object"
             }
@@ -159,7 +159,7 @@
           }
         ],
         [
-          "block ?b2 has nothing on top of it",
+          "block ?b2 has no block above it",
           {
             "?b2": "object"
           }
@@ -179,7 +179,7 @@
             {}
           ],
           [
-            "block ?b1 has nothing on top of it",
+            "block ?b1 has no block above it",
             {
               "?b1": "object"
             }
@@ -193,7 +193,7 @@
             }
           ],
           [
-            "block ?b2 has nothing on top of it",
+            "block ?b2 has no block above it",
             {
               "?b2": "object"
             }
@@ -227,7 +227,7 @@
           }
         ],
         [
-          "block ?b1 has nothing on top of it",
+          "block ?b1 has no block above it",
           {
             "?b1": "object"
           }
@@ -242,7 +242,7 @@
             }
           ],
           [
-            "block ?b2 has nothing on top of it",
+            "block ?b2 has no block above it",
             {
               "?b2": "object"
             }
@@ -261,7 +261,7 @@
             }
           ],
           [
-            "block ?b1 has nothing on top of it",
+            "block ?b1 has no block above it",
             {
               "?b1": "object"
             }
