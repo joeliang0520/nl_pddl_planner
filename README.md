@@ -24,26 +24,37 @@ Scripts are included to run the regression planner on a variety of domains.
 pddl_solver/
 ├── pddl_planner/                  # Core planning package
 │   ├── logic/
-│   │   ├── parser.py       	   # PDDL→logic parser
-│   │   ├── nl_parser.py (*new*)   # NL→logic parser
+│   │   ├── parser.py       	     # PDDL→logic parser
+│   │   ├── nl_parser.py    	     # NL→logic parser
 │   │   ├── formula.py             # Formula classes (Conjunctive, Disjunctive, Predicate, Equality), main file for logic
-│   │   ├── nl_formula.py (*new*)  # Formula classes (Predicate) with additional field for NL representation and functions to handle logic operation with NL
-│   │   └── operation.py    	   # Unification & standardization operations
+│   │   ├── nl_formula.py    	     # Formula classes (Predicate) with additional field for NL representation and functions to handle logic operation with NL
+│   │   └── operation.py    	     # Unification & standardization operations
 │   ├── pddl_core/
-│   │   ├── domain.py       	   # PDDL Domain parser (types, predicates, actions)
-│   │   ├── nl_domain.py (*new*)   # NL Domain parser 
+│   │   ├── domain.py       	     # PDDL Domain parser (types, predicates, actions)
+│   │   ├── nl_domain.py    	     # NL Domain parser 
 │   │   └── instance.py            # PDDL Problem parser (initial state, goal, objects)
-│   │   └── nl_instance.py (*new*) # NL Problem parser (initial state, goal, objects)
+│   │   └── nl_instance.py    	   # NL Problem parser (initial state, goal, objects)
 │   └── planner/
 │       └── planner.py             # PDDL RegressionPlanner & PDDL FOLRegressionPlanner
-│       └── nl_planner.py (*new*)  # NL FOLRegressionPlanner
+│       └── nl_planner.py    	     # NL FOLRegressionPlanner
 │   └── llm/
-│       └── llm.py (*new*)         # Interface for entailment from both cache and LLM  (*new*)
+│       └── llm.py    	           # Interface for entailment from both cache and LLM
+│       └── llm_with_type.py       # Interface for entailment from both cache and LLM with Type Check
 ├── test/
-│   ├── alfworldtext.py (*new*)    # Example of alfworldtext problem with NL actions and goals
+│   ├── alfworld_text_with_misalignment.py    # Test script for ALFWorld Text with misalignment dataset
+│   ├── alfworld_text.py    # Test script for ALFWorld Text dataset
+│   ├── blockworld.py       # Test script for Blockworld Dataset
+│   ├── misalignment_blockworld.py # Test script for Misalignment Blockworld Dataset
 ├── file/
-│   ├── NL_actions.json (*new*)    # Contains examples of domains used in alfworldtext problem
-│   ├── NL_goals.json  (*new*)     # Contains examples of problem used in alfworldtext problem
+│   ├── alfworld_text_with_misalignment
+│   │   ├── alfworld_text_with_misalignment_model.json
+│   │   ├── alfworld_text_with_misalignment_goal.json
+│   ├──blockworld
+│   │   ├── blockworld_model.json
+│   │   ├── blockworld_goal.json
+│   ├──misalignment_blockworld
+│   │   ├── misalignment_blockworld_model.json
+│   │   ├── blockworld_goal.json       
 └── README.md               	   # This file
 ```
 
