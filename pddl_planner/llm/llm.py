@@ -61,19 +61,10 @@ class LLM:
             # Find proper substitution between the target predicate and the current predicate
             # Use unify_with_different_name for entailment tasks to allow different predicate names
             substitution = self._operations.unify_with_different_name(pred_copy, predicate_copy,  Substitution())
-            # else:
-            #     substitution = self._operations.unify_with_different_name(predicate_copy, pred_copy, Substitution())
-            print(f'[Substitution] Substitution: {substitution} between "{str(predicate_copy)}" and "{str(pred_copy)}"') if self._verbose else None
-            # if substitution is not None:
-            #     names = [term.name for term in substitution.keys()]
-            #     names.extend([term.name for term in substitution.values()])
-                # if 'b2' in names:
-                #     print(f'[Substitution] Substitution: {substitution} between "{str(predicate_copy)}" and "{str(pred_copy)}"')
             if substitution is None:
                 continue
-
             print(f'[Substitution] Existing substitution: {substitution} between "{str(predicate_copy)}" and "{str(pred_copy)}"') if self._verbose else None
-            
+    
             # Build and try all permutations of value assignments if multiple variables are present
             keys = list(substitution.keys())
             values = list(substitution.values())

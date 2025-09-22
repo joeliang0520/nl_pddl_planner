@@ -620,7 +620,7 @@ class ConjunctiveFormula(Formula):
         """
         Simplify equalities in this conjunctive formula.
         
-        This function processes equality clauses where both terms are variables.
+        This function processes equality clauses when only one of the two terms is a variable.
         For each such equality, it selects the representative variable (the one with the
         lower alphabetical value), adds a substitution mapping (using Substitution class),
         and then applies the substitution to every clause in the formula.

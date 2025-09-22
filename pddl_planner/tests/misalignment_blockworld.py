@@ -9,10 +9,10 @@ from pddl_planner.logic.formula import DisjunctiveFormula
 
 if __name__ == "__main__":
     # load the domain from the file
-    with open('files/blockworld/blockworld_model.json', 'r') as f:
+    with open('files/misalignment_blockworld/misalignment_blockworld_model.json', 'r') as f:
         domain = json.load(f)
 
-    # load the goals from the file
+    # load the goals from the file (note that the goal are the same as the blockworld goal)
     with open('files/blockworld/blockworld_goal.json', 'r') as f:
         all_goals = json.load(f)
 
@@ -23,23 +23,24 @@ if __name__ == "__main__":
     max_depth = 10
 
     # save path
-    save_folder_path = os.path.join(current_dir, f'results/blockworld_results_depth{max_depth}')
-    log_folder_path = os.path.join(current_dir, f'logs/blockworld_results_depth{max_depth}')
-    os.makedirs(save_folder_path, exist_ok=True)
-    os.makedirs(log_folder_path, exist_ok=True)
+    save_folder_path = os.path.join(current_dir, f'results/misalignment_blockworld_results_depth{max_depth}')
+    log_folder_path = os.path.join(current_dir, f'logs/misalignment_blockworld_results_depth{max_depth}')
 
     # llm cache path
-    llm_cache_path = os.path.join(current_dir, f'llm_cache/blockworld.json')
+    llm_cache_path = os.path.join(current_dir, f'llm_cache/misalignment_blockworld.json')
     #check if the cache json file exists
     if not os.path.exists(llm_cache_path):
         os.makedirs(os.path.dirname(llm_cache_path), exist_ok=True)
         with open(llm_cache_path, 'w') as f:
             json.dump({}, f)
 
+    os.makedirs(save_folder_path, exist_ok=True)
+    os.makedirs(log_folder_path, exist_ok=True)
+
     for i, problem in enumerate(all_goals[0:1]):
         init_state, goal = problem
-        save_file_path = os.path.join(save_folder_path, f'blockworld_results_{i}.txt')
-        log_file_path = os.path.join(log_folder_path, f'blockworld_results_depth{max_depth}_{i}.txt')
+        save_file_path = os.path.join(save_folder_path, f'misalignment_blockworld_results_{i}.txt')
+        log_file_path = os.path.join(log_folder_path, f'misalignment_blockworld_results_depth{max_depth}_{i}.txt')
 
 
         # save the initial state
@@ -66,7 +67,7 @@ if __name__ == "__main__":
                 f.write("Regressed goals:\n")
 
         print(f'Problem {goal} =========================================')
-        planner = NLFOLRegressionPlanner(domain.copy(), goal.copy(), None, max_depth=max_depth, log_path=log_file_path, time_limit=None)
+        planner = NLFOLRegressionPlanner(domain.copy(), goal.copy(), None, max_depth=max_depth, log_path=log_file_path, time_limit=None, cache_path=llm_cache_path)
         start_time = time.time()
         regressed_plans = planner.regress_plan(save_file_path=save_file_path)
         end_time = time.time()

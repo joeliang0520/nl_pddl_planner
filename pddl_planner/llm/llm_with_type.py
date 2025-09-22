@@ -16,7 +16,7 @@ class LLM:
     A class to intilize and interact with the LLM for various task in the regression planner.
     """
     
-    def __init__(self, model_name: str, api_key: str, cache_path: str|None ='cache.json', verbose: bool = True):
+    def __init__(self, model_name: str, api_key: str, cache_path: str|None ='cache.json', n_iter: int = 5, verbose: bool = True):
         """
         Initialize the LLM.
 
@@ -24,11 +24,13 @@ class LLM:
             model_name (str): The name of the model to use.
             api_key (str): The API key to use.
             cache_path (str|None): The path to the cache file.
+            n_iter (int): Number of iterations for the entailment check for self consistency check.
+            verbose (bool): Whether to print verbose output.
         """
         self.model_name = model_name
         self._api_key = api_key
         self.client = openai.OpenAI(api_key=api_key)
-        self._n_iter = 3 # number of iterations for the entailment check for self consistency check
+        self._n_iter = n_iter # number of iterations for the entailment check for self consistency check
         self._operations = Operations()
         self._verbose = verbose
         
@@ -65,7 +67,7 @@ class LLM:
             
             # Find proper substitution between the target predicate and the current predicate
             # Use unify_with_different_name for entailment tasks to allow different predicate names
-            substitution = self._operations.unify_with_different_name(predicate_copy, pred_copy, Substitution())
+            substitution = self._operations.unify_with_different_name(pred_copy, predicate_copy,  Substitution())
             if substitution is None:
                 continue
 
@@ -86,7 +88,7 @@ class LLM:
                 perm_sub = Substitution({k: v for k, v in zip(keys, perm_vals)})
 
                 # Apply substitution on fresh copies to avoid cross-permutation side effects
-                perm_target = copy.deepcopy(predicate_copy).substitute(perm_sub)
+                perm_target = copy.deepcopy(predicate_copy)
                 perm_pred = copy.deepcopy(pred_copy).substitute(perm_sub)
 
                 # Conduct entailment between the substituted string representations
