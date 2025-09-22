@@ -1,15 +1,15 @@
-# NL-PDDL Planner
+# Natural Language PDDL (NL-PDDL) for Open-world Goal-oriented Commonsense Regression Planning in Embodied AI
 
-NL-PDDL Planner is a Python implementation of a regression-based planner that operates directly on natural language (NL) predicates. It integrates First-Order Logic (FOL) regression with successor state axioms (SSA) from Situation Calculus, and provides PDDL-style domain and problem representations for testing.
+Python implementation of NL-PDDL that operates directly on natural language (NL) predicates. It integrates First-Order Logic (FOL) regression with successor state axioms (SSA), and provides LLM interface for commonsense entailment to handling model-goal misalignments in the dataets.
 
-Features
-- NL Parser – processes NL domain and problem descriptions into a logic formula
-- Maintaining Core PDDL Structures – representations for domain and problem instances.
+## Features
+- NL Parser – processes NL description of planning model and goal nto a logic formula
+- Maintaining Core PDDL Structures – representations for domain and problem instances for  structural planning.
 - Planning Algorithms – FOL regression planners for the Open World Planning Task.
-- LLM Entailment – leverages large language models to detect predicate entailment between goal and domain entailments, even when predicate names differ.
+- LLM Commonsense Entailment – leverages large language models to detect predicate entailment between goal and domain entailments, handling model-goal misalignments.
 - Logic Utilities – functions for formula manipulation, unification, and substitution.
 
-Scripts are included to run the regression planner on a variety of domains.
+Scripts are included to run the NL-PDDL on three different planning tasks and their variants: ALFWorld Vision, ALFWorld Text, and Blockworld.
 
 
 ## Table of Contents
@@ -22,40 +22,47 @@ Scripts are included to run the regression planner on a variety of domains.
 
 ```
 pddl_solver/
-├── pddl_planner/                  # Core planning package
+├── pddl_planner/
 │   ├── logic/
-│   │   ├── parser.py       	     # PDDL→logic parser
-│   │   ├── nl_parser.py    	     # NL→logic parser
-│   │   ├── formula.py             # Formula classes (Conjunctive, Disjunctive, Predicate, Equality), main file for logic
-│   │   ├── nl_formula.py    	     # Formula classes (Predicate) with additional field for NL representation and functions to handle logic operation with NL
-│   │   └── operation.py    	     # Unification & standardization operations
+│   │   ├── parser.py       # PDDL → logic parser
+│   │   ├── nl_parser.py    # NL → logic parser
+│   │   ├── formula.py      # Formula classes (Conjunctive, Disjunctive, Predicate, Equality)
+│   │   ├── nl_formula.py   # Formula classes with NL representation and NL-aware logic ops
+│   │   └── operation.py    # Unification & standardization operations
+│   │
 │   ├── pddl_core/
-│   │   ├── domain.py       	     # PDDL Domain parser (types, predicates, actions)
-│   │   ├── nl_domain.py    	     # NL Domain parser 
-│   │   └── instance.py            # PDDL Problem parser (initial state, goal, objects)
-│   │   └── nl_instance.py    	   # NL Problem parser (initial state, goal, objects)
-│   └── planner/
-│       └── planner.py             # PDDL RegressionPlanner & PDDL FOLRegressionPlanner
-│       └── nl_planner.py    	     # NL FOLRegressionPlanner
+│   │   ├── domain.py       # PDDL domain parser (types, predicates, actions)
+│   │   ├── nl_domain.py    # NL domain parser
+│   │   ├── instance.py     # PDDL problem parser (initial state, goal, objects)
+│   │   └── nl_instance.py  # NL problem parser (initial state, goal, objects)
+│   │
+│   ├── planner/
+│   │   └── nl_planner.py   # NL FOLRegressionPlanner
+│   │
 │   └── llm/
-│       └── llm.py    	           # Interface for entailment from both cache and LLM
-│       └── llm_with_type.py       # Interface for entailment from both cache and LLM with Type Check
-├── test/
-│   ├── alfworld_text_with_misalignment.py    # Test script for ALFWorld Text with misalignment dataset
-│   ├── alfworld_text.py    # Test script for ALFWorld Text dataset
-│   ├── blockworld.py       # Test script for Blockworld Dataset
-│   ├── misalignment_blockworld.py # Test script for Misalignment Blockworld Dataset
-├── file/
-│   ├── alfworld_text_with_misalignment
+│       ├── llm.py          # Entailment via cache + LLM
+│       └── llm_with_type.py# Entailment with type checking
+│
+├── test/                               # Test Script for Completed Datasets
+│   ├── alfworld_text.py                     # ALFWorld Text dataset
+│   ├── alfworld_text_with_misalignment.py   # ALFWorld Text w/ misalignment
+│   ├── blockworld.py                        # Blockworld dataset
+│   └── misalignment_blockworld.py           # Misalignment Blockworld dataset
+│
+├── file/                               # Datasets in JSON-format
+│   ├── alfworld_text_with_misalignment/
 │   │   ├── alfworld_text_with_misalignment_model.json
-│   │   ├── alfworld_text_with_misalignment_goal.json
-│   ├──blockworld
+│   │   └── alfworld_text_with_misalignment_goal.json
+│   │
+│   ├── blockworld/
 │   │   ├── blockworld_model.json
-│   │   ├── blockworld_goal.json
-│   ├──misalignment_blockworld
-│   │   ├── misalignment_blockworld_model.json
-│   │   ├── blockworld_goal.json       
-└── README.md               	   # This file
+│   │   └── blockworld_goal.json
+│   │
+│   └── misalignment_blockworld/
+│       ├── misalignment_blockworld_model.json
+│       └── blockworld_goal.json
+│
+└── README.md                               # This file
 ```
 
 ## Getting Started
