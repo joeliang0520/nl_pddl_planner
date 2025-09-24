@@ -230,7 +230,7 @@ class Formula(Logic):
         """
         pass
 
-    def distribute_and_over_or(self) -> "DisjunctiveFormula":
+    def  distribute_and_over_or(self) -> "DisjunctiveFormula":
         """Recursively distribute all conjunctions over disjunctions.
 
         The resulting formula is a DisjunctiveFormula whose clauses are ConjunctiveFormulas,
@@ -373,12 +373,13 @@ class Formula(Logic):
         mapping: Dict["Term", "Term"] = {}
         return self._equals_helper(other, mapping)
 
-    def _equals_helper(self, other: "Formula", mapping: Dict["Term", "Term"]) -> bool:
+    def _equals_helper(self, other: "Formula", mapping: Dict["Term", "Term"], check_var_constant_consistency: bool = True) -> bool:
         """Helper method to check equality between formulas using a mapping for variables.
 
         Args:
             other (Formula): The formula with which to compare.
             mapping (Dict[Term, Term]): A mapping from terms in self to terms in other.
+            check_var_constant_consistency (bool): Whether to check if the mapping is consistent with the variable-constant consistency.
 
         Returns:
             bool: True if formulas are equivalent, False otherwise.
@@ -404,6 +405,8 @@ class Formula(Logic):
                 elif isinstance(term1, Constant) and isinstance(term2, Constant):
                     if term1.name != term2.name:
                         return False
+                elif check_var_constant_consistency:
+                    return False
             if len(mapping) != len(set(mapping.values())):
                 return False
             return True
@@ -617,7 +620,7 @@ class ConjunctiveFormula(Formula):
         """
         Simplify equalities in this conjunctive formula.
         
-        This function processes equality clauses where both terms are variables.
+        This function processes equality clauses when only one of the two terms is a variable.
         For each such equality, it selects the representative variable (the one with the
         lower alphabetical value), adds a substitution mapping (using Substitution class),
         and then applies the substitution to every clause in the formula.
@@ -671,37 +674,96 @@ class ConjunctiveFormula(Formula):
             Tuple[Formula, Substitution]: The simplified conjunctive formula with substitutions
             applied, and the substitution mapping.
         """
+
+        def build_equality_graph(eqs: List["Equality"]) -> Dict["Variable", List["Term"]]:
+            graph: Dict[Variable, List[Term]] = {}
+            def add_edge(v: Variable, t: Term):
+                if v not in graph:
+                    graph[v] = []
+                if t not in graph[v]:
+                    graph[v].append(t)
+            for eq in eqs:
+                if eq.is_neq:
+                    continue
+                t1, t2 = eq.term1, eq.term2
+                if isinstance(t1, Variable) and isinstance(t2, Variable):
+                    add_edge(t1, t2)
+                    add_edge(t2, t1)
+                elif isinstance(t1, Variable) and isinstance(t2, Constant):
+                    add_edge(t1, t2)
+                elif isinstance(t2, Variable) and isinstance(t1, Constant):
+                    add_edge(t2, t1)
+            return graph
+
+        def resolve_graph_to_substitution(graph: Dict["Variable", List["Term"]]) -> Tuple["Substitution", bool]:
+            substitution = Substitution()
+            inconsistent = False
+            visited: Set[Variable] = set()
+
+            # helper to compare variables by numeric index if present (V12 < V2 handled properly)
+            def variable_sort_key(v: Variable):
+                parts = re.split(r'(\d+)', v.name)
+                return [int(p) if p.isdigit() else p for p in parts]
+
+            for start in sorted(graph.keys(), key=variable_sort_key):
+                if start in visited:
+                    continue
+                # BFS to collect connected component of variables, plus any constants they connect to
+                queue: List[Variable] = [start]
+                component_vars: Set[Variable] = set()
+                component_consts: Set[Constant] = set()
+                visited.add(start)
+
+                while queue:
+                    v = queue.pop(0)
+                    component_vars.add(v)
+                    for t in graph.get(v, []):
+                        if isinstance(t, Constant):
+                            component_consts.add(t)
+                        elif isinstance(t, Variable):
+                            if t not in visited:
+                                visited.add(t)
+                                queue.append(t)
+
+                # Resolution rule:
+                # 1) If multiple distinct constants appear in the component, it's inconsistent.
+                if len({c.name for c in component_consts}) > 1:
+                    inconsistent = True
+                    # No need to compute further; keep scanning to mark visited but final result will be False
+                # 2) If any constants present, map all vars in component to that constant.
+                representative_term: Term
+                if component_consts:
+                    # choose one constant deterministically by name
+                    representative_term = sorted(component_consts, key=lambda c: c.name)[0]
+                else:
+                    # 3) Otherwise choose the smallest variable by our sort key
+                    representative_term = sorted(component_vars, key=variable_sort_key)[0]
+
+                # Map every variable in component to the representative (skip self-map)
+                for v in component_vars:
+                    if v != representative_term:
+                        substitution[v] = representative_term  # type: ignore[arg-type]
+
+                # Propagate constant choice: if representative is a constant, then any variable
+                # that has this component's variables in its adjacency should also map to the constant
+                if isinstance(representative_term, Constant):
+                    for other_var, neighbors in graph.items():
+                        if other_var in component_vars:
+                            continue
+                        if any(isinstance(n, Variable) and n in component_vars for n in neighbors):
+                            substitution[other_var] = representative_term
+
+            return (substitution, inconsistent)
+
         # First, simplify each clause if possible.
         simplified_clauses = [clause.simplify() if hasattr(clause, 'simplify') else clause 
                                 for clause in self._clauses]
         
-        # Build the substitution from equality clauses (goal-aware where possible)
-        equality_subst = Substitution()
-
-        # Collect all terms present in the current goal (variables and constants)
-        goal_terms = current_goal.collect_terms()
-        for clause in simplified_clauses:
-            if isinstance(clause, Equality) and not clause.is_neq:
-                
-                t1, t2 = clause.term1, clause.term2
-                # Prefer aligning to goal terms: if exactly one side is in goal, substitute the other side to it
-                in_goal_1 = t1 in goal_terms
-                in_goal_2 = t2 in goal_terms
-                if in_goal_1 and not in_goal_2:
-                    # if isinstance(t2, Variable):
-                        equality_subst[t2] = t1
-                elif in_goal_2 and not in_goal_1:
-                    # if isinstance(t1, Variable):
-                        equality_subst[t1] = t2
-                else:
-                    # Fallback: original equalities
-                    if isinstance(t1, Variable) and isinstance(t2, Variable):
-                        equality_subst[t2] = t1
-                    elif isinstance(t1, Variable) and isinstance(t2, Constant):
-                        equality_subst[t1] = t2
-                    elif isinstance(t1, Constant) and isinstance(t2, Variable):
-                        equality_subst[t2] = t1
-        
+        # Build equality graph from all positive equalities in the conjunction
+        eqs: List[Equality] = [c for c in simplified_clauses if isinstance(c, Equality) and not c.is_neq]
+        equality_subst, inconsistent = resolve_graph_to_substitution(build_equality_graph(eqs))
+        if inconsistent:
+            return (FalseFormula(), Substitution())
         substituted_clauses = set()
         for clause in simplified_clauses:
             # Apply the substitution to every clause.
@@ -712,8 +774,8 @@ class ConjunctiveFormula(Formula):
         for clause in substituted_clauses:
             if isinstance(clause, Equality):
                 if not clause.is_neq:
-                    if isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
-                        continue
+                    #if isinstance(clause.term1, Variable) and isinstance(clause.term2, Variable):
+                    continue
                 elif isinstance(clause.term1, Constant) and isinstance(clause.term2, Constant):
                     if clause.term1.name != clause.term2.name:
                         continue # remove due to unique name axiom
@@ -743,7 +805,14 @@ class ConjunctiveFormula(Formula):
         
         # If any clause in the other formula contradicts a clause in this formula, return False.
         for other_clause in other.clauses:
-            if other_clause not in self.clauses:
+            flag = False
+            for self_clause in self.clauses:
+                if other_clause == self_clause:
+                    # if other_clause can be found in self
+                    flag = True
+                    break
+            if not flag:
+                # if other_clause is not a duplicate of any clause in self, return False
                 return False
         return True
 
@@ -777,7 +846,7 @@ class DisjunctiveFormula(Formula):
             if isinstance(s, ConjunctiveFormula):
                 kept = []
                 for c in s.clauses:
-                    if isinstance(c, Equality) and c.is_neq and isinstance(c.term1, Constant) and isinstance(c.term2, Constant) and c.term1.name != c.term2.name:
+                    if (isinstance(c, Equality) and c.is_neq and isinstance(c.term1, Constant) and isinstance(c.term2, Constant) and c.term1.name != c.term2.name):
                         # Drop pure variable-inequalities as they add no constraint under UNA in planning
                         continue
                     kept.append(c)
@@ -1288,6 +1357,17 @@ class Predicate(Atomic):
         """
         if not isinstance(other, Predicate):
             return False
+        for term1, term2 in zip(self._terms, other.terms):
+            if isinstance(term1, Variable) and isinstance(term2, Variable):
+                if term1.name != term2.name:
+                    return False
+            elif isinstance(term1, Constant) and isinstance(term2, Constant):
+                if term1.name != term2.name:
+                    # if the terms are not the same, return False
+                    return False
+            else:
+                # if the terms are not the same type, return False
+                return False
         return (self._name == other.name) and (self._terms == other.terms) and (self._is_neg == other.is_neg)
 
     def is_duplicate(self, other: Any) -> bool:
@@ -1376,8 +1456,8 @@ class   Substitution(dict):
             ValueError: If any key is not a Variable or any value is not a Term.
         """
         for key, value in self.items():
-            if not isinstance(key, Variable):
-                raise ValueError(f"Key {key} is not a Variable")
+            # if not isinstance(key, Variable):
+            #     raise ValueError(f"Key {key} is not a Variable")
             if not (isinstance(value, Variable) or isinstance(value, Constant)):
                 raise ValueError(f"Value {value} is not a Term")
 

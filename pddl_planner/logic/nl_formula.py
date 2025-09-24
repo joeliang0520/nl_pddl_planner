@@ -179,3 +179,13 @@ class NLPredicate(Predicate):
         """
         self._str_represntation = nl_description
 
+    # getter for _entailed_substitutions
+    @property
+    def entailed_substitutions(self) -> Dict[str, Substitution]:
+        """Get the entailed substitutions of the predicate.
+
+        Returns:
+            Dict[str, Substitution]: The entailed substitutions of the predicate.
+        """
+        return self._entailed_substitutions
+

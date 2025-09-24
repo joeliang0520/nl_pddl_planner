@@ -1,6 +1,6 @@
 import copy
 from typing import List
-from pddl_planner.logic.formula import Logic, Substitution, Formula, Predicate, ConjunctiveFormula, DisjunctiveFormula, Variable
+from pddl_planner.logic.formula import Logic, Substitution, Formula, Predicate, ConjunctiveFormula, DisjunctiveFormula, Variable, Constant
 from pddl_planner.logic.nl_formula import NLPredicate
 
 class Operations(Logic):
@@ -44,7 +44,8 @@ class Operations(Logic):
         else:
             return None
 
-    def unify_with_different_name(self, x: "Formula", y: "Formula", substitution: "Substitution") -> "Substitution":
+    def unify_with_different_name(self, x: "Formula", y: "Formula", 
+    substitution: "Substitution") -> "Substitution":
         """Unify two formulas without requiring them to have the same name.
         This is specifically designed for entailment tasks where predicates with different names
         might have similar structures that can be unified.
@@ -56,11 +57,11 @@ class Operations(Logic):
         elif x == y:
             return substitution
         
-        elif isinstance(x, Variable):
-            return self.unify_var(x, y, substitution)
+        elif isinstance(x, Variable) or isinstance(x, Constant):
+            return self.unify_var_with_different_name(x, y, substitution)
         
-        elif isinstance(y, Variable):
-            return self.unify_var(y, x, substitution)
+        elif isinstance(y, Variable) or isinstance(y, Constant):
+            return self.unify_var_with_different_name(y, x, substitution)
             
         elif isinstance(x, Predicate) and isinstance(y, Predicate):
             # Skip name unification and only unify terms
@@ -83,7 +84,17 @@ class Operations(Logic):
         
         else:
             return None
-        
+    def unify_var_with_different_name(self, var, x, substitution):
+        # if var in substitution:
+        #     return self.unify_with_different_name(substitution[var], x, substitution)
+        # elif x in substitution: 
+        #     return self.unify_with_different_name(var, substitution[x], substitution)
+        # elif isinstance(x, Formula) and self.occur_check(var, x):
+        #     return None
+        # else:
+            substitution[var] = x
+            return substitution
+
     def unify_var(self, var, x, substitution):
         if var in substitution:
             return self.unify(substitution[var], x, substitution)
@@ -140,23 +151,24 @@ class Operations(Logic):
         def _match_and_replace(pred: Predicate) -> Predicate:
             # Try match against any goal predicate using entailment-aware equality when available.
             for gpred in goal_preds:
-                if pred._equals_helper(gpred, {}):
+                if pred._equals_helper(gpred, {}, check_var_constant_consistency=False):
                     if pred.name == gpred.name:
                         return pred
                     gpred_copy = copy.deepcopy(gpred)
+                    pred_copy = copy.deepcopy(pred)
                     # Unify the terms of the predicates, ignoring name
-                    substitution = self.unify_with_different_name(pred, gpred_copy, Substitution())
-                    if substitution is not None:
-                        pred = pred.substitute(substitution)
-                        gpred_copy = gpred_copy.substitute(substitution)
+                    # substitution = self.unify_with_different_name(pred_copy, gpred_copy, Substitution())
+                    # if substitution is not None:
+                    #     #pred = pred.substitute(substitution)
+                    #     gpred_copy = gpred_copy.substitute(substitution)
                     # Prefer preserving NLPredicate fields when present
                     return NLPredicate(
                         gpred_copy.name,
-                        gpred_copy.nl_description,
+                        pred.nl_description,
                         pred.is_neg,
                         *pred.terms,
                         term_type_dict=pred.term_type_dict,
-                        inital_terms=getattr(pred, '_inital_terms'),
+                        inital_terms=getattr(gpred_copy, '_inital_terms'),
                         inital_str=getattr(gpred_copy, '_inital_str_represntation'),
                     )
             return pred
@@ -180,4 +192,50 @@ class Operations(Logic):
         if isinstance(replaced, DisjunctiveFormula):
             return replaced
         return DisjunctiveFormula(replaced)
+
+    def simplify_by_domain_axiom(self, formula: "DisjunctiveFormula", init: Formula|None = None) -> "DisjunctiveFormula":
+        """
+        Domain-axiom simplification for regressed goals.
+
+        Args:
+            formula (DisjunctiveFormula): The regressed goal in DNF.
+
+        Returns:
+            DisjunctiveFormula: A filtered disjunction with invalid conjuncts removed.
+        """
+        if not isinstance(formula, DisjunctiveFormula):
+            return formula
+        kept_clauses: List[Formula] = []
+        for clause in formula.clauses:
+            if isinstance(clause, ConjunctiveFormula):
+                count_dict = {}
+                for c in clause.clauses:
+                    if isinstance(c, Predicate):
+                        name = getattr(c, 'name', '').lower()
+                        if name == 'i am holding' or name == 'the hand is empty':
+                            if name not in count_dict:
+                                count_dict[name] = 0
+                            count_dict[name] += 1
+                if 'i am holding' in count_dict and count_dict['i am holding'] > 1:
+                    # cannot hold more than one object at a time
+                    # drop this conjunct
+                    continue
+                if 'the hand is empty' in count_dict and 'i am holding' in count_dict and count_dict['the hand is empty'] >= 1 and count_dict['i am holding'] >= 1:
+                    # cannot hold and the hand is empty at the same time
+                    # drop this conjunct
+                    continue
+                kept_clauses.append(clause)
+            else:
+                kept_clauses.append(clause)
+
+        result = DisjunctiveFormula(*kept_clauses)
+        # propagate type dicts
+        formula._combine_and_propagate_type_dict(result)
+        return result
+
+    # Backward-compatibility alias for varied naming in call sites
+    def _simplify_by_domian_axiom(self, formula: "DisjunctiveFormula") -> "DisjunctiveFormula":
+        return self.simplify_by_domain_axiom(formula)
+    def simpl_domain_axmoin(self, formula: "DisjunctiveFormula") -> "DisjunctiveFormula":
+        return self.simplify_by_domain_axiom(formula)
 

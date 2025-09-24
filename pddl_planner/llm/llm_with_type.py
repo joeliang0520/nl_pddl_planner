@@ -16,7 +16,7 @@ class LLM:
     A class to intilize and interact with the LLM for various task in the regression planner.
     """
     
-    def __init__(self, model_name: str, api_key: str, cache_path: str|None ='cache.json', verbose: bool = True):
+    def __init__(self, model_name: str, api_key: str, cache_path: str|None ='cache.json', n_iter: int = 5, verbose: bool = True):
         """
         Initialize the LLM.
 
@@ -24,18 +24,24 @@ class LLM:
             model_name (str): The name of the model to use.
             api_key (str): The API key to use.
             cache_path (str|None): The path to the cache file.
+            n_iter (int): Number of iterations for the entailment check for self consistency check.
+            verbose (bool): Whether to print verbose output.
         """
         self.model_name = model_name
         self._api_key = api_key
-        self._cache_path = cache_path
-        self._cache = self._load_cache()
         self.client = openai.OpenAI(api_key=api_key)
-        self._n_iter = 5 # number of iterations for the entailment check for self consistency check
+        self._n_iter = n_iter # number of iterations for the entailment check for self consistency check
         self._operations = Operations()
         self._verbose = verbose
+        
+        # cache for entailment
+        self._cache_path = cache_path
+        self._cache = self._load_cache()
+        # cache for type entailment
+        self._type_cache_path = 'cache_type.json'
+        self._type_cache = self._load_type_cache()
 
-    def entailment(self, predicate: NLPredicate, predicates: List[NLPredicate], background_predicates: Tuple[Action, List[NLPredicate]] = (None, []),
-                    domain_predicates: bool = False) -> NLPredicate|None:
+    def entailment(self, predicate: NLPredicate, predicates: List[NLPredicate], background_predicates: Tuple[Action, List[NLPredicate]] = (None, [])) -> NLPredicate|None:
         """
         Determine whether a target NL predicate is entailed by any predicate schema in a list.
 
@@ -49,8 +55,9 @@ class LLM:
             NLPredicate | None: The input predicate annotated with its entailed schema if found
                 (or list of candidates if multiple), otherwise None.
         """
-        # update current cache
+        # update current caches
         self._cache = self._load_cache()
+        self._type_cache = self._load_type_cache()
         print(f'[Info] Checking entailment via cache/LLM for "{predicate.nl_description}"') if self._verbose else None
         entailed_preds = []
         for pred in predicates:
@@ -63,8 +70,9 @@ class LLM:
             substitution = self._operations.unify_with_different_name(pred_copy, predicate_copy,  Substitution())
             if substitution is None:
                 continue
+
             print(f'[Substitution] Existing substitution: {substitution} between "{str(predicate_copy)}" and "{str(pred_copy)}"') if self._verbose else None
-    
+            
             # Build and try all permutations of value assignments if multiple variables are present
             keys = list(substitution.keys())
             values = list(substitution.values())
@@ -73,11 +81,10 @@ class LLM:
                 # Deduplicate permutations in case of repeated values
                 permuted_values_list = list({tuple(p) for p in itertools.permutations(values, len(values))})
                 print(f"[Substitution] Trying {len(permuted_values_list)} permutations for substitution keys {keys}") if self._verbose else None
-
+                
             entailed_for_this_pred = False
             winning_perm_sub = None
             for perm_vals in permuted_values_list:
-                print(f'[Substitution] Permutation: {perm_vals} for substitution keys {keys}') if self._verbose else None
                 perm_sub = Substitution({k: v for k, v in zip(keys, perm_vals)})
 
                 # Apply substitution on fresh copies to avoid cross-permutation side effects
@@ -88,6 +95,34 @@ class LLM:
                 target_str = perm_target.nl_description
                 pred_str = perm_pred.nl_description
 
+                # Type-aware gate: if term types are incompatible, verify type entailment first
+                def _collect_term_types(p: NLPredicate):
+                    pairs = []
+                    for t in p.terms:
+                        ttypes = []
+                        if p.term_type_dict is not None and t in p.term_type_dict:
+                            ttypes = sorted(list(p.term_type_dict[t]))
+                        pairs.append((getattr(t, 'name', str(t)), ttypes))
+                    return pairs
+                def _types_compatible(tt, pt):
+                    if len(tt) != len(pt):
+                        return False
+                    for (_, a), (_, b) in zip(tt, pt):
+                        if not a or not b:
+                            # Unknown typing -> treat as compatible
+                            continue
+                        if len(set(a).intersection(set(b))) == 0:
+                            return False
+                    return True
+                _tt = _collect_term_types(perm_target)
+                _pt = _collect_term_types(perm_pred)
+                if not _types_compatible(_tt, _pt):
+                    target_types_str = "; ".join([f"{n}:{','.join(ts) if ts else 'UNKNOWN'}" for n, ts in _tt])
+                    pred_types_str = "; ".join([f"{n}:{','.join(ts) if ts else 'UNKNOWN'}" for n, ts in _pt])
+                    type_ok, _ = self._entailment_check(target_types_str, pred_types_str, background_predicates, target_predicate_name=predicate_copy.name, mode='type')
+                    if not type_ok:
+                        continue
+
                 if predicate_copy._is_neg:
                     # reverse the entailment check for negative predicates
                     entailment_result, response_text = self._entailment_check(
@@ -95,6 +130,7 @@ class LLM:
                         target_str,
                         background_predicates,
                         target_predicate_name=pred_copy.name,
+                        mode='predicate',
                     )
                 else:
                     # conduct entailment check
@@ -103,6 +139,7 @@ class LLM:
                         pred_str,
                         background_predicates,
                         target_predicate_name=predicate_copy.name,
+                        mode='predicate',
                     )
 
                 if entailment_result:
@@ -132,7 +169,7 @@ class LLM:
             return None
 
     def _entailment_check(self, target_str: str, pred_str: str, background_predicates: Tuple[Action, List[NLPredicate]] = (None, []), 
-    target_predicate_name: Optional[str] = None) -> Tuple[bool, str]:
+    target_predicate_name: Optional[str] = None, mode: str = 'predicate') -> Tuple[bool, str]:
         """
         Check if the target description is entailed by the candidate description, with caching and self-consistency.
 
@@ -141,6 +178,7 @@ class LLM:
             pred_str (str): The candidate predicate string representation.
             background_predicates (Tuple[Action, List[NLPredicate]]): The background predicates and action.
             target_predicate_name (Optional[str]): The name of the target predicate.
+            mode (str): 'predicate' for normal entailment, 'type' for type entailment strings.
 
         Returns:
             Tuple[bool, str]: (decision, representative_raw_text)
@@ -149,7 +187,7 @@ class LLM:
         # Check cache first, then complete to n_iter with LLM calls and decide by self-consistency
 
         # 1) Parse cached responses (if any), then complete to n_iter using LLM, then decide
-        cached_texts = self._get_cached_llm_responses(target_str, pred_str) or []
+        cached_texts = (self._get_cached_type_llm_responses(target_str, pred_str) if mode == 'type' else self._get_cached_llm_responses(target_str, pred_str)) or []
         normal_results: List[Tuple[Optional[bool], str]] = []
         # Parse existing cached responses (up to n_iter)
         for t in cached_texts[: self._n_iter]:
@@ -159,12 +197,15 @@ class LLM:
         missing = max(0, self._n_iter - len(cached_texts))
         last_text = ""
         for _ in range(missing):
-            decision, text = self._get_llm_responses(target_str, pred_str, background_predicates, target_predicate_name=target_predicate_name)
+            decision, text = self._get_llm_responses(target_str, pred_str, background_predicates, target_predicate_name=target_predicate_name, mode=mode)
             if text is not None:
-                self._update_cache_llm_response(target_str, pred_str, text, predicate_name=target_predicate_name)
+                if mode == 'type':
+                    self._update_type_cache_llm_response(target_str, pred_str, text)
+                else:
+                    self._update_cache_llm_response(target_str, pred_str, text, predicate_name=target_predicate_name)
                 last_text = text or last_text
             normal_results.append((decision, text or ""))
-        print(f'[LLM Response] is "{target_str}" entailed by "{pred_str}" ?: {[result[0] for result in normal_results]}') if self._verbose else None
+        print(f'[LLM Response] ({mode}) is "{target_str}" entailed by "{pred_str}" ?: {[result[0] for result in normal_results]}') if self._verbose else None
         majority_decision, majority_text = self._self_consistent_decision(normal_results)
         if majority_decision is not None:
             return bool(majority_decision), (majority_text or last_text)
@@ -208,7 +249,8 @@ class LLM:
         return None, last_text
 
     def _get_llm_responses(self, target_str: str, pred_str: str, background_predicates: Tuple[Action, List[NLPredicate]] = (None, []),
-                            max_retries: int = 3, timeout: float = 30.0, target_predicate_name: Optional[str] = None) -> Tuple[Optional[bool], str]:
+                            max_retries: int = 3, timeout: float = 30.0, target_predicate_name: Optional[str] = None,
+                            mode: str = 'predicate') -> Tuple[Optional[bool], str]:
         """
         Build the entailment prompt and call the chat API with retries.
         Returns (decision, raw_text).
@@ -224,14 +266,20 @@ class LLM:
             Tuple[Optional[bool], str]: (decision, raw_text) where decision can be True/False/None on parse failure.
         """
         
-        prompt = self._build_entailment_prompt(
-            target_str,
-            pred_str,
-            background_predicates=background_predicates,
-            include_action=False,
-            include_background_predicates=True,
-            include_examples=False,
-        )
+        if mode == 'type':
+            prompt = self._build_type_entailment_prompt(
+                target_str,
+                pred_str,
+            )
+        else:
+            prompt = self._build_entailment_prompt(
+                target_str,
+                pred_str,
+                background_predicates=background_predicates,
+                include_action=False,
+                include_background_predicates=True,
+                include_examples=False,
+            )
         last_error: Optional[Exception] = None
         for attempt in range(max_retries):
             try:
@@ -326,6 +374,32 @@ class LLM:
                 Response:"""
         return prompt
     
+    def _build_type_entailment_prompt(
+        self,
+        target_types: str,
+        pred_types: str,
+    ) -> str:
+        """
+        Build a type entailment prompt: decide if candidate types imply target types per position.
+        """
+        prompt = f"""
+                You are checking TYPE ENTAILMENT between two predicates' term types.
+
+                - If the candidate's term type set implies or matches the target's term type set for each corresponding term, answer YES.
+                - Consider synonyms and common-sense subtype relations (e.g., 'vegetable' entails 'food').
+                - If information is unknown, be conservative and answer NO unless it's very likely.
+
+                Input:
+                - Target term types: {target_types}
+                - Candidate term types: {pred_types}
+
+                Output format:
+                - Line 1: exactly YES or NO.
+                - Line 2: Reason.
+
+                Response:"""
+        return prompt
+    
     def _get_cached_llm_responses(self, target_str: str, candidate_pred_nl: str) -> Optional[List[str]]:
         """
         Retrieve cached raw LLM response texts (list) for the given NL pair if available.
@@ -345,6 +419,17 @@ class LLM:
                 return val
             if isinstance(val, str):
                 # Backward-compat: single string stored before switch to list
+                return [val]
+        return None
+    
+    def _get_cached_type_llm_responses(self, target_types_str: str, candidate_types_str: str) -> Optional[List[str]]:
+        # ensure type cache is current
+        self._type_cache = self._load_type_cache()
+        if target_types_str in self._type_cache and isinstance(self._type_cache[target_types_str], dict):
+            val = self._type_cache[target_types_str].get(candidate_types_str)
+            if isinstance(val, list):
+                return val
+            if isinstance(val, str):
                 return [val]
         return None
     
@@ -371,6 +456,15 @@ class LLM:
             self._save_cache()
         return self._cache
         
+    def _load_type_cache(self) -> Dict[str, Dict[str, List[str]]]:
+        try:
+            with open(self._type_cache_path, 'r') as f:
+                self._type_cache = json.load(f)
+        except FileNotFoundError:
+            self._type_cache = {}
+            with open(self._type_cache_path, 'w') as f:
+                json.dump(self._type_cache, f, indent=2)
+        return self._type_cache
 
     def _load_cache_entailment(self, predicate: NLPredicate, predicates: List[NLPredicate]) -> Tuple[bool, NLPredicate|List[NLPredicate]|None]:
         """
@@ -438,6 +532,14 @@ class LLM:
         self._cache[target_str][candidate_pred_nl].append(response_text)
         self._save_cache()
 
+    def _update_type_cache_llm_response(self, target_types_str: str, candidate_types_str: str, response_text: str) -> None:
+        if target_types_str not in self._type_cache or not isinstance(self._type_cache[target_types_str], dict):
+            self._type_cache[target_types_str] = {}
+        if candidate_types_str not in self._type_cache[target_types_str] or not isinstance(self._type_cache[target_types_str][candidate_types_str], list):
+            self._type_cache[target_types_str][candidate_types_str] = []
+        self._type_cache[target_types_str][candidate_types_str].append(response_text)
+        with open(self._type_cache_path, 'w') as f:
+            json.dump(self._type_cache, f, indent=2)
 
     def _parse_yes_no_response(self, text: str) -> Tuple[Optional[bool], str]:
         """
