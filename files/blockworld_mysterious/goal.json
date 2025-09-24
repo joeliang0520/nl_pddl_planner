@@ -1,0 +1,8982 @@
+[
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves e",
+      {
+        "d": "object",
+        "e": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves e",
+      {
+        "d": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "e craves c",
+      {
+        "e": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves e",
+      {
+        "c": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "e craves a",
+      {
+        "e": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "e craves d",
+      {
+        "e": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves e",
+      {
+        "b": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "e craves c",
+      {
+        "e": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves e",
+      {
+        "a": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "e craves b",
+      {
+        "e": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves e",
+      {
+        "b": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "e craves d",
+      {
+        "e": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "e craves b",
+      {
+        "e": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "e craves a",
+      {
+        "e": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves e",
+      {
+        "b": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves e",
+      {
+        "b": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "e craves d",
+      {
+        "e": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves e",
+      {
+        "b": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves e",
+      {
+        "d": "object",
+        "e": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves e",
+      {
+        "a": "object",
+        "e": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves e",
+      {
+        "a": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "e craves b",
+      {
+        "e": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves e",
+      {
+        "c": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves e",
+      {
+        "d": "object",
+        "e": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "e craves a",
+      {
+        "e": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves e",
+      {
+        "c": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "e craves b",
+      {
+        "e": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves e",
+      {
+        "c": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves e",
+      {
+        "c": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves e",
+      {
+        "a": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves e",
+      {
+        "d": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "e craves c",
+      {
+        "e": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves e",
+      {
+        "b": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "e craves c",
+      {
+        "e": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves e",
+      {
+        "a": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "e craves d",
+      {
+        "e": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "c craves e",
+      {
+        "c": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "e craves a",
+      {
+        "e": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves e",
+      {
+        "b": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "e craves a",
+      {
+        "e": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "e craves c",
+      {
+        "e": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "e craves a",
+      {
+        "e": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "e craves b",
+      {
+        "e": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves e",
+      {
+        "d": "object",
+        "e": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves e",
+      {
+        "c": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "e craves d",
+      {
+        "e": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves e",
+      {
+        "a": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "e craves b",
+      {
+        "e": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves e",
+      {
+        "b": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "e craves d",
+      {
+        "e": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves e",
+      {
+        "b": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves d",
+      {
+        "a": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "c craves a",
+      {
+        "c": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves e",
+      {
+        "d": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "e craves c",
+      {
+        "e": "object",
+        "c": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves c",
+      {
+        "a": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "d craves e",
+      {
+        "d": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "e craves b",
+      {
+        "e": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves a",
+      {
+        "b": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves e",
+      {
+        "d": "object",
+        "e": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves c",
+      {
+        "d": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "e craves a",
+      {
+        "e": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves b",
+      {
+        "a": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "b craves d",
+      {
+        "b": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves c",
+      {
+        "b": "object",
+        "c": "object"
+      }
+    ],
+    [
+      "c craves e",
+      {
+        "c": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "b craves e",
+      {
+        "b": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ],
+    [
+      "e craves d",
+      {
+        "e": "object",
+        "d": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "a craves e",
+      {
+        "a": "object",
+        "e": "object"
+      }
+    ],
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "d craves e",
+      {
+        "d": "object",
+        "e": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves b",
+      {
+        "c": "object",
+        "b": "object"
+      }
+    ],
+    [
+      "d craves a",
+      {
+        "d": "object",
+        "a": "object"
+      }
+    ]
+  ],
+  [
+    [
+      "c craves d",
+      {
+        "c": "object",
+        "d": "object"
+      }
+    ],
+    [
+      "d craves b",
+      {
+        "d": "object",
+        "b": "object"
+      }
+    ]
+  ]
+]
