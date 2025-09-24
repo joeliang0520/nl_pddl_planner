@@ -61,7 +61,7 @@ export GOOGLE_API_KEY=...
 export DASHSCOPE_API_KEY=...   # optional
 ```
 
-## Run: LLM baseline (text-only)
+## Run: LLM baseline with NLPDDL (text-only)
 Main script: `run_alfworld_NL.py`
 
 Notes:
@@ -77,7 +77,7 @@ This will:
 - For each episode, run the NL regression agent with planning and LLM heuristics.
 - Save failed tasks to `failed_tasks.txt`.
 
-## Run: VLM baseline (vision + text)
+## Run: VLM with NLPDDL (vision + text)
 Main script: `run_alfworld_VLM.py`
 
 Notes:
@@ -96,3 +96,5 @@ Resume/rerun only failed episodes from progress file:
 python run_alfworld_VLM.py --use-failed --progress-file progress_vlm.json
 ```
 
+## Run: VLM with NLPDDL (vision + text)
+Other LLM/VLM baselines can be run using `vlm_baseline.py` and `llm_baseline.py`
