@@ -45,7 +45,7 @@ Scripts are included to run the NL-PDDL on three different planning tasks and th
 # 1) Create a dedicated Python environment for this project (optional but recommended).
 
 python3 -m venv nl_pddl
-source myenv/bin/activate
+source nl_pddl/bin/activate
 python -m pip install --upgrade pip
 
 # 2) Install
