@@ -20,8 +20,8 @@ Usage example:
       --input-dir block_world_test/planbench/blockworld_results_depth10 \
       --output-dir out_pipeline \
       --goal-mode first_subgoal \
-      --domain ../nl_pddl_planner/tests_jack/block_world_test/planbench/generated_domain.pddl \
-      --problem ../nl_pddl_planner/tests_jack/block_world_test/planbench/instance-10.pddl \
+      --domain ../nl_pddl_planner/tests_usr/block_world_test/planbench/generated_domain.pddl \
+      --problem ../nl_pddl_planner/tests_usr/block_world_test/planbench/instance-10.pddl \
       --val ./val/bin/Validate
 
 All paths are interpreted relative to this script unless absolute.
@@ -677,8 +677,8 @@ def main() -> None:
     ap.add_argument('--input-dir', default=str(DEFAULT_INPUT_DIR), help='Directory containing input .txt regression dumps')
     ap.add_argument('--output-dir', default=str(DEFAULT_OUTPUT_DIR), help='Directory to write per-file outputs')
     ap.add_argument('--goal-mode', choices=['empty','first_subgoal','last_subgoal','union_subgoals'], default='first_subgoal', help='How to populate goal_predicates in the converted JSON')
-    ap.add_argument('--domain', default=str((SCRIPT_DIR / '../nl_pddl_planner/tests_jack/block_world_test/planbench/generated_domain.pddl').resolve()), help='Path to domain.pddl for VAL')
-    ap.add_argument('--problem', default=str((SCRIPT_DIR / '../nl_pddl_planner/tests_jack/block_world_test/planbench/instance-10.pddl').resolve()), help='Path to a base problem.pddl (goal may be replaced)')
+    ap.add_argument('--domain', default=str((SCRIPT_DIR / '../nl_pddl_planner/tests_usr/block_world_test/planbench/generated_domain.pddl').resolve()), help='Path to domain.pddl for VAL')
+    ap.add_argument('--problem', default=str((SCRIPT_DIR / '../nl_pddl_planner/tests_usr/block_world_test/planbench/instance-10.pddl').resolve()), help='Path to a base problem.pddl (goal may be replaced)')
     ap.add_argument('--val', default=str((SCRIPT_DIR / 'val/bin/Validate').resolve()), help='Path to VAL Validate binary')
     ap.add_argument('--limit', type=int, default=0, help='Optional limit on number of files to process (0 = no limit)')
     args = ap.parse_args()
