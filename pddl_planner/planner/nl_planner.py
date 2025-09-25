@@ -324,7 +324,10 @@ class NLFOLRegressionPlanner(NLPlanner):
                 inv_name_map = {}
                 if recorded is not None:
                     for k, v in recorded.items():
-                        inv_name_map[v.name] = k.name
+                        try:
+                            inv_name_map[v.name] = k.name
+                        except Exception:
+                            pass
                 target_name_to_term = {getattr(t, 'name', str(t)): t for t in predicate.terms}
                 for idx, stored_pred_var in enumerate(node.predicate_params):
                     mapped_target_name = inv_name_map.get(getattr(stored_pred_var, 'name', str(stored_pred_var)))
@@ -459,6 +462,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         while frontier:
             current_node: NLFOLRegressionPlanner.PlanNode = frontier.pop(0)
             current_goal: Formula = current_node.sub_goal
+            # Progress bar for current depth
             if self._verbose:
                 bar_len = 20
                 filled = int((current_node.depth / max(1, self._max_depth)) * bar_len)

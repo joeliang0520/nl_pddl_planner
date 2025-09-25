@@ -8,9 +8,14 @@ version = "0.1"
 dependencies = [
   "pddl==0.4.0",
   "openai",
+  "pydantic",
+  "numpy",
+  "python-dotenv",
+  "pydatalog",
 ]
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["pddl_planner", "pddl_planner.*"]
 exclude = ["img*", "files*"]
+
