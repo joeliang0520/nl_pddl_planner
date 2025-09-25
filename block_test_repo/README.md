@@ -59,3 +59,13 @@ After running the validation and satisfiability checks, this script aggregates t
 python summarize_out_pipeline.py --dir <directory_with_stats_files>
 ```
 
+### `run_end_to_end_standalone.py`
+
+This script provides a complete, end-to-end validation pipeline that automates the entire workflow. It takes a directory of raw text-based regression dumps and performs the following steps for each file:
+
+1.  **Text to JSON Conversion**: Parses the text file into a structured JSON format.
+2.  **VAL Validation**: Validates the generated plans using the VAL tool.
+3.  **Initial State Check**: Checks the satisfiability of subgoals against the initial state using `pydatalog`.
+
+This is the recommended script for batch processing and simplifies the validation process by combining the functionality of the other scripts into a single command.
+
