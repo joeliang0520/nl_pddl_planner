@@ -64,10 +64,15 @@ def main() -> None:
 
     # Map dataset to file locations and behaviors
     dataset_key = args.dataset
-    if dataset_key == "alfworld_text":
-        dataset_key = "alfworld_text_with_misalignment"
 
     dataset_map = {
+        "alfworld_text": {
+            "domain": "files/alfworld_text/alfworld_text_model.json",
+            "goals": "files/alfworld_text/alfworld_text_goal.json",
+            "result_prefix": "alfworld_text",
+            "has_init": False,
+            "cache": "alfworld_text.json",
+        },
         "alfworld_text_with_misalignment": {
             "domain": "files/alfworld_text_with_misalignment/alfworld_text_with_misalignment_model.json",
             "goals": "files/alfworld_text_with_misalignment/alfworld_text_with_misalignment_goal.json",

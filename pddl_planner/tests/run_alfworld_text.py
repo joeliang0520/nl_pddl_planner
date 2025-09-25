@@ -10,28 +10,25 @@ from pddl_planner.logic.formula import DisjunctiveFormula
 
 if __name__ == "__main__":
     # parse the arguments
-    parser = argparse.ArgumentParser(description="Run a regression planner over a PDDL domain & problem")
-    parser.add_argument("--max_depth", type=int, default=10, help="The maximum depth of the regression planner")
-    args = parser.parse_args()
-    max_depth = args.max_depth
+    max_depth = 10
 
     # load the domain from the file
-    with open('files/alfworld_text_with_misalignment/alfworld_text_with_misalignment_model.json', 'r') as f:
+    with open('files/alfworld_text/alfworld_text_model.json', 'r') as f:
         domain = json.load(f)
     
     # load the goals from the file    
-    with open('files/alfworld_text_with_misalignment/alfworld_text_with_misalignment_goal.json', 'r') as f:
+    with open('files/alfworld_text/alfworld_text_goal.json', 'r') as f:
         all_goals = json.load(f)
 
     # create a directory to store the results
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
     # save path
-    save_folder_path = os.path.join(current_dir, f'results/alfworld_text_with_misalignment_results_depth{max_depth}')
-    log_folder_path = os.path.join(current_dir, f'logs/alfworld_text_with_misalignment_results_depth{max_depth}')
+    save_folder_path = os.path.join(current_dir, f'results/alfworld_text_results_depth{max_depth}')
+    log_folder_path = os.path.join(current_dir, f'logs/alfworld_text_results_depth{max_depth}')
 
     # llm cache path
-    llm_cache_path = os.path.join(current_dir, f'llm_cache/alfworld_text_with_misalignment.json')
+    llm_cache_path = os.path.join(current_dir, f'llm_cache/alfworld_text.json')
     #check if the cache json file exists
     if not os.path.exists(llm_cache_path):
         os.makedirs(os.path.dirname(llm_cache_path), exist_ok=True)
@@ -42,8 +39,8 @@ if __name__ == "__main__":
     os.makedirs(log_folder_path, exist_ok=True)
 
     for i, goal in enumerate(all_goals[0:1]):
-        save_file_path = os.path.join(save_folder_path, f'alfworld_text_with_misalignment_results_{i}.txt')
-        log_file_path = os.path.join(log_folder_path, f'alfworld_text_with_misalignment_results_depth{max_depth}_{i}.txt')
+        save_file_path = os.path.join(save_folder_path, f'alfworld_text_results_{i}.txt')
+        log_file_path = os.path.join(log_folder_path, f'alfworld_text_results_depth{max_depth}_{i}.txt')
 
         with open(save_file_path, 'w') as f:
                 f.write("Regressed goals:\n")
