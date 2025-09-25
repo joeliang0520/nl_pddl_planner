@@ -1,0 +1,2551 @@
+{
+  "initial_state": [
+    "(handempty)",
+    "(ontable a)",
+    "(ontable c)",
+    "(ontable d)",
+    "(on b c)",
+    "(clear a)",
+    "(clear b)",
+    "(clear d)"
+  ],
+  "goal_predicates": [
+    "(on c b)"
+  ],
+  "plans": [
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "is on top of(c, b)"
+        ]
+      },
+      "action_raw": [],
+      "substitution": {},
+      "subgoal_predicates": [
+        "(on c b)"
+      ],
+      "action": []
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(c)",
+          "is clear(b)"
+        ]
+      },
+      "action_raw": [
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b"
+      },
+      "subgoal_predicates": [
+        "(holding c)",
+        "(clear b)"
+      ],
+      "action": [
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "is clear(b)",
+          "is clear(c)",
+          "is on the table(c)",
+          "the hand is empty()"
+        ]
+      },
+      "action_raw": [
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c"
+      },
+      "subgoal_predicates": [
+        "(clear b)",
+        "(clear c)",
+        "(ontable c)",
+        "(handempty)"
+      ],
+      "action": [
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "is clear(b)",
+          "is clear(c)",
+          "is on top of(c, ?V41)",
+          "the hand is empty()"
+        ]
+      },
+      "action_raw": [
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c"
+      },
+      "subgoal_predicates": [
+        "(clear b)",
+        "(clear c)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(?V43)",
+          "is clear(b)",
+          "is clear(c)",
+          "is on the table(c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V43)",
+        "(clear b)",
+        "(clear c)",
+        "(ontable c)"
+      ],
+      "action": [
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(b)",
+          "is clear(c)",
+          "is on the table(c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V43": "b"
+      },
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear c)",
+        "(ontable c)"
+      ],
+      "action": [
+        "put-down(b)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V45 != b",
+          "?V45 != c",
+          "i am holding(?V44)",
+          "is clear(?V45)",
+          "is clear(b)",
+          "is clear(c)",
+          "is on the table(c)"
+        ]
+      },
+      "action_raw": [
+        "stack ?b1 right above ?b2(?V44, ?V45)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V44)",
+        "(clear ?V45)",
+        "(clear b)",
+        "(clear c)",
+        "(ontable c)"
+      ],
+      "action": [
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(?V49)",
+          "is clear(b)",
+          "is clear(c)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V49)",
+        "(clear b)",
+        "(clear c)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(?V49)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(b)",
+          "is clear(c)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V49": "b"
+      },
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear c)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(b)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V51 != b",
+          "?V51 != c",
+          "i am holding(?V50)",
+          "is clear(?V51)",
+          "is clear(b)",
+          "is clear(c)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "action_raw": [
+        "stack ?b1 right above ?b2(?V50, ?V51)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V50)",
+        "(clear ?V51)",
+        "(clear b)",
+        "(clear c)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "stack(?V50, ?V51)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V43 != b",
+          "is clear(?V43)",
+          "is clear(b)",
+          "is on the table(c)",
+          "is right above(?V43, c)",
+          "the hand is empty()"
+        ]
+      },
+      "action_raw": [
+        "unstack ?b1 from ?b2(?V58, ?V59)",
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V58": "?V43",
+        "?V59": "c"
+      },
+      "subgoal_predicates": [
+        "(clear ?V43)",
+        "(clear b)",
+        "(ontable c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V43, c)",
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V43 != c",
+          "is clear(?V43)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V43, b)",
+          "the hand is empty()"
+        ]
+      },
+      "action_raw": [
+        "unstack ?b1 from ?b2(?V58, ?V59)",
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V58": "?V43",
+        "?V59": "b"
+      },
+      "subgoal_predicates": [
+        "(clear ?V43)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V43 b)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V43, b)",
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "is clear(b)",
+          "is on the table(c)",
+          "is right above(b, c)",
+          "the hand is empty()"
+        ]
+      },
+      "action_raw": [
+        "unstack ?b1 from ?b2(?V64, ?V65)",
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V43": "b",
+        "?V64": "b",
+        "?V65": "c"
+      },
+      "subgoal_predicates": [
+        "(clear b)",
+        "(ontable c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(b, c)",
+        "put-down(b)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V44 != ?V45",
+          "?V44 != b",
+          "?V45 != b",
+          "?V45 != c",
+          "is clear(?V44)",
+          "is clear(?V45)",
+          "is clear(b)",
+          "is on the table(c)",
+          "is right above(?V44, c)",
+          "the hand is empty()"
+        ]
+      },
+      "action_raw": [
+        "unstack ?b1 from ?b2(?V70, ?V71)",
+        "stack ?b1 right above ?b2(?V44, ?V45)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V70": "?V44",
+        "?V71": "c"
+      },
+      "subgoal_predicates": [
+        "(clear ?V44)",
+        "(clear ?V45)",
+        "(clear b)",
+        "(ontable c)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V44, c)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V44 != ?V45",
+          "?V44 != c",
+          "?V45 != b",
+          "?V45 != c",
+          "is clear(?V44)",
+          "is clear(?V45)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V44, b)",
+          "the hand is empty()"
+        ]
+      },
+      "action_raw": [
+        "unstack ?b1 from ?b2(?V70, ?V71)",
+        "stack ?b1 right above ?b2(?V44, ?V45)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V70": "?V44",
+        "?V71": "b"
+      },
+      "subgoal_predicates": [
+        "(clear ?V44)",
+        "(clear ?V45)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V44 b)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V44, b)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V49 != b",
+          "?V49 != c",
+          "is clear(?V49)",
+          "is clear(b)",
+          "is on top of(c, ?V41)",
+          "is right above(?V49, c)",
+          "the hand is empty()"
+        ]
+      },
+      "action_raw": [
+        "unstack ?b1 from ?b2(?V76, ?V77)",
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V76": "?V49",
+        "?V77": "c"
+      },
+      "subgoal_predicates": [
+        "(clear ?V49)",
+        "(clear b)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V49, c)",
+        "put-down(?V49)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V49 != c",
+          "is clear(?V49)",
+          "is clear(c)",
+          "is on top of(?V49, b)",
+          "is on top of(c, ?V41)",
+          "the hand is empty()"
+        ]
+      },
+      "action_raw": [
+        "unstack ?b1 from ?b2(?V76, ?V77)",
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V76": "?V49",
+        "?V77": "b"
+      },
+      "subgoal_predicates": [
+        "(clear ?V49)",
+        "(clear c)",
+        "(on ?V49 b)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V49, b)",
+        "put-down(?V49)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "is clear(b)",
+          "is on top of(c, ?V41)",
+          "is right above(b, c)",
+          "the hand is empty()"
+        ]
+      },
+      "action_raw": [
+        "unstack ?b1 from ?b2(?V82, ?V83)",
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V49": "b",
+        "?V82": "b",
+        "?V83": "c"
+      },
+      "subgoal_predicates": [
+        "(clear b)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(b, c)",
+        "put-down(b)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V50 != ?V51",
+          "?V50 != b",
+          "?V50 != c",
+          "?V51 != b",
+          "?V51 != c",
+          "is clear(?V50)",
+          "is clear(?V51)",
+          "is clear(b)",
+          "is on top of(c, ?V41)",
+          "is right above(?V50, c)",
+          "the hand is empty()"
+        ]
+      },
+      "action_raw": [
+        "unstack ?b1 from ?b2(?V88, ?V89)",
+        "stack ?b1 right above ?b2(?V50, ?V51)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V88": "?V50",
+        "?V89": "c"
+      },
+      "subgoal_predicates": [
+        "(clear ?V50)",
+        "(clear ?V51)",
+        "(clear b)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V50, c)",
+        "stack(?V50, ?V51)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V50 != ?V51",
+          "?V50 != c",
+          "?V51 != b",
+          "?V51 != c",
+          "is clear(?V50)",
+          "is clear(?V51)",
+          "is clear(c)",
+          "is on top of(?V50, b)",
+          "is on top of(c, ?V41)",
+          "the hand is empty()"
+        ]
+      },
+      "action_raw": [
+        "unstack ?b1 from ?b2(?V88, ?V89)",
+        "stack ?b1 right above ?b2(?V50, ?V51)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V88": "?V50",
+        "?V89": "b"
+      },
+      "subgoal_predicates": [
+        "(clear ?V50)",
+        "(clear ?V51)",
+        "(clear c)",
+        "(on ?V50 b)",
+        "(on c ?V41)",
+        "(handempty)"
+      ],
+      "action": [
+        "unstack(?V50, b)",
+        "stack(?V50, ?V51)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V43 != b",
+          "i am holding(?V43)",
+          "is clear(b)",
+          "is on the table(c)",
+          "is right above(?V43, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V91)",
+        "unstack ?b1 from ?b2(?V58, ?V59)",
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V58": "?V43",
+        "?V59": "c",
+        "?V91": "?V43"
+      },
+      "subgoal_predicates": [
+        "(holding ?V43)",
+        "(clear b)",
+        "(ontable c)"
+      ],
+      "action": [
+        "put-down(?V43)",
+        "unstack(?V43, c)",
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V43 != b",
+          "i am holding(?V91)",
+          "is clear(?V43)",
+          "is clear(b)",
+          "is on the table(c)",
+          "is right above(?V43, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V91)",
+        "unstack ?b1 from ?b2(?V58, ?V59)",
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V58": "?V43",
+        "?V59": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V91)",
+        "(clear ?V43)",
+        "(clear b)",
+        "(ontable c)"
+      ],
+      "action": [
+        "put-down(?V91)",
+        "unstack(?V43, c)",
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V43 != b",
+          "i am holding(b)",
+          "is clear(?V43)",
+          "is on the table(c)",
+          "is right above(?V43, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V91)",
+        "unstack ?b1 from ?b2(?V58, ?V59)",
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V58": "?V43",
+        "?V59": "c",
+        "?V91": "b"
+      },
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear ?V43)",
+        "(ontable c)"
+      ],
+      "action": [
+        "put-down(b)",
+        "unstack(?V43, c)",
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V43 != ?V93",
+          "?V43 != b",
+          "?V93 != b",
+          "i am holding(?V92)",
+          "is clear(?V43)",
+          "is clear(?V93)",
+          "is clear(b)",
+          "is on the table(c)",
+          "is right above(?V43, c)"
+        ]
+      },
+      "action_raw": [
+        "stack ?b1 right above ?b2(?V92, ?V93)",
+        "unstack ?b1 from ?b2(?V58, ?V59)",
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V58": "?V43",
+        "?V59": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V92)",
+        "(clear ?V43)",
+        "(clear ?V93)",
+        "(clear b)",
+        "(ontable c)"
+      ],
+      "action": [
+        "stack(?V92, ?V93)",
+        "unstack(?V43, c)",
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V43 != c",
+          "i am holding(?V43)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V43, b)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V97)",
+        "unstack ?b1 from ?b2(?V58, ?V59)",
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V58": "?V43",
+        "?V59": "b",
+        "?V97": "?V43"
+      },
+      "subgoal_predicates": [
+        "(holding ?V43)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V43 b)"
+      ],
+      "action": [
+        "put-down(?V43)",
+        "unstack(?V43, b)",
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V43 != c",
+          "i am holding(?V97)",
+          "is clear(?V43)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V43, b)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V97)",
+        "unstack ?b1 from ?b2(?V58, ?V59)",
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V58": "?V43",
+        "?V59": "b"
+      },
+      "subgoal_predicates": [
+        "(holding ?V97)",
+        "(clear ?V43)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V43 b)"
+      ],
+      "action": [
+        "put-down(?V97)",
+        "unstack(?V43, b)",
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V43 != c",
+          "i am holding(c)",
+          "is clear(?V43)",
+          "is on top of(?V43, b)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V97)",
+        "unstack ?b1 from ?b2(?V58, ?V59)",
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V58": "?V43",
+        "?V59": "b",
+        "?V97": "c"
+      },
+      "subgoal_predicates": [
+        "(holding c)",
+        "(clear ?V43)",
+        "(on ?V43 b)"
+      ],
+      "action": [
+        "put-down(c)",
+        "unstack(?V43, b)",
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V43 != ?V99",
+          "?V43 != c",
+          "?V99 != c",
+          "i am holding(?V98)",
+          "is clear(?V43)",
+          "is clear(?V99)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V43, b)"
+        ]
+      },
+      "action_raw": [
+        "stack ?b1 right above ?b2(?V98, ?V99)",
+        "unstack ?b1 from ?b2(?V58, ?V59)",
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V58": "?V43",
+        "?V59": "b"
+      },
+      "subgoal_predicates": [
+        "(holding ?V98)",
+        "(clear ?V43)",
+        "(clear ?V99)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V43 b)"
+      ],
+      "action": [
+        "stack(?V98, ?V99)",
+        "unstack(?V43, b)",
+        "put-down(?V43)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(?V103)",
+          "is clear(b)",
+          "is on the table(c)",
+          "is right above(b, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V103)",
+        "unstack ?b1 from ?b2(?V64, ?V65)",
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V43": "b",
+        "?V64": "b",
+        "?V65": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V103)",
+        "(clear b)",
+        "(ontable c)"
+      ],
+      "action": [
+        "put-down(?V103)",
+        "unstack(b, c)",
+        "put-down(b)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(b)",
+          "is on the table(c)",
+          "is right above(b, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V103)",
+        "unstack ?b1 from ?b2(?V64, ?V65)",
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V43": "b",
+        "?V64": "b",
+        "?V65": "c",
+        "?V103": "b"
+      },
+      "subgoal_predicates": [
+        "(holding b)",
+        "(ontable c)"
+      ],
+      "action": [
+        "put-down(b)",
+        "unstack(b, c)",
+        "put-down(b)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V105 != b",
+          "i am holding(?V104)",
+          "is clear(?V105)",
+          "is clear(b)",
+          "is on the table(c)",
+          "is right above(b, c)"
+        ]
+      },
+      "action_raw": [
+        "stack ?b1 right above ?b2(?V104, ?V105)",
+        "unstack ?b1 from ?b2(?V64, ?V65)",
+        "put down ?b(?V43)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V43": "b",
+        "?V64": "b",
+        "?V65": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V104)",
+        "(clear ?V105)",
+        "(clear b)",
+        "(ontable c)"
+      ],
+      "action": [
+        "stack(?V104, ?V105)",
+        "unstack(b, c)",
+        "put-down(b)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V44 != ?V45",
+          "?V44 != b",
+          "?V45 != b",
+          "?V45 != c",
+          "i am holding(?V109)",
+          "is clear(?V44)",
+          "is clear(?V45)",
+          "is clear(b)",
+          "is on the table(c)",
+          "is right above(?V44, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V109)",
+        "unstack ?b1 from ?b2(?V70, ?V71)",
+        "stack ?b1 right above ?b2(?V44, ?V45)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V70": "?V44",
+        "?V71": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V109)",
+        "(clear ?V44)",
+        "(clear ?V45)",
+        "(clear b)",
+        "(ontable c)"
+      ],
+      "action": [
+        "put-down(?V109)",
+        "unstack(?V44, c)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V44 != ?V45",
+          "?V44 != b",
+          "?V45 != b",
+          "?V45 != c",
+          "i am holding(?V44)",
+          "is clear(?V45)",
+          "is clear(b)",
+          "is on the table(c)",
+          "is right above(?V44, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V109)",
+        "unstack ?b1 from ?b2(?V70, ?V71)",
+        "stack ?b1 right above ?b2(?V44, ?V45)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V70": "?V44",
+        "?V71": "c",
+        "?V109": "?V44"
+      },
+      "subgoal_predicates": [
+        "(holding ?V44)",
+        "(clear ?V45)",
+        "(clear b)",
+        "(ontable c)"
+      ],
+      "action": [
+        "put-down(?V44)",
+        "unstack(?V44, c)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V44 != ?V45",
+          "?V44 != b",
+          "?V45 != b",
+          "?V45 != c",
+          "i am holding(?V45)",
+          "is clear(?V44)",
+          "is clear(b)",
+          "is on the table(c)",
+          "is right above(?V44, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V109)",
+        "unstack ?b1 from ?b2(?V70, ?V71)",
+        "stack ?b1 right above ?b2(?V44, ?V45)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V70": "?V44",
+        "?V71": "c",
+        "?V109": "?V45"
+      },
+      "subgoal_predicates": [
+        "(holding ?V45)",
+        "(clear ?V44)",
+        "(clear b)",
+        "(ontable c)"
+      ],
+      "action": [
+        "put-down(?V45)",
+        "unstack(?V44, c)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V44 != ?V45",
+          "?V44 != b",
+          "?V45 != b",
+          "?V45 != c",
+          "i am holding(b)",
+          "is clear(?V44)",
+          "is clear(?V45)",
+          "is on the table(c)",
+          "is right above(?V44, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V109)",
+        "unstack ?b1 from ?b2(?V70, ?V71)",
+        "stack ?b1 right above ?b2(?V44, ?V45)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V70": "?V44",
+        "?V71": "c",
+        "?V109": "b"
+      },
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear ?V44)",
+        "(clear ?V45)",
+        "(ontable c)"
+      ],
+      "action": [
+        "put-down(b)",
+        "unstack(?V44, c)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V111 != b",
+          "?V44 != ?V111",
+          "?V44 != ?V45",
+          "?V44 != b",
+          "?V45 != ?V111",
+          "?V45 != b",
+          "?V45 != c",
+          "i am holding(?V110)",
+          "is clear(?V111)",
+          "is clear(?V44)",
+          "is clear(?V45)",
+          "is clear(b)",
+          "is on the table(c)",
+          "is right above(?V44, c)"
+        ]
+      },
+      "action_raw": [
+        "stack ?b1 right above ?b2(?V110, ?V111)",
+        "unstack ?b1 from ?b2(?V70, ?V71)",
+        "stack ?b1 right above ?b2(?V44, ?V45)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V70": "?V44",
+        "?V71": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V110)",
+        "(clear ?V111)",
+        "(clear ?V44)",
+        "(clear ?V45)",
+        "(clear b)",
+        "(ontable c)"
+      ],
+      "action": [
+        "stack(?V110, ?V111)",
+        "unstack(?V44, c)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V44 != ?V45",
+          "?V44 != c",
+          "?V45 != b",
+          "?V45 != c",
+          "i am holding(?V115)",
+          "is clear(?V44)",
+          "is clear(?V45)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V44, b)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V115)",
+        "unstack ?b1 from ?b2(?V70, ?V71)",
+        "stack ?b1 right above ?b2(?V44, ?V45)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V70": "?V44",
+        "?V71": "b"
+      },
+      "subgoal_predicates": [
+        "(holding ?V115)",
+        "(clear ?V44)",
+        "(clear ?V45)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V44 b)"
+      ],
+      "action": [
+        "put-down(?V115)",
+        "unstack(?V44, b)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V44 != ?V45",
+          "?V44 != c",
+          "?V45 != b",
+          "?V45 != c",
+          "i am holding(?V44)",
+          "is clear(?V45)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V44, b)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V115)",
+        "unstack ?b1 from ?b2(?V70, ?V71)",
+        "stack ?b1 right above ?b2(?V44, ?V45)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V70": "?V44",
+        "?V71": "b",
+        "?V115": "?V44"
+      },
+      "subgoal_predicates": [
+        "(holding ?V44)",
+        "(clear ?V45)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V44 b)"
+      ],
+      "action": [
+        "put-down(?V44)",
+        "unstack(?V44, b)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V44 != ?V45",
+          "?V44 != c",
+          "?V45 != b",
+          "?V45 != c",
+          "i am holding(?V45)",
+          "is clear(?V44)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V44, b)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V115)",
+        "unstack ?b1 from ?b2(?V70, ?V71)",
+        "stack ?b1 right above ?b2(?V44, ?V45)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V70": "?V44",
+        "?V71": "b",
+        "?V115": "?V45"
+      },
+      "subgoal_predicates": [
+        "(holding ?V45)",
+        "(clear ?V44)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V44 b)"
+      ],
+      "action": [
+        "put-down(?V45)",
+        "unstack(?V44, b)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V44 != ?V45",
+          "?V44 != c",
+          "?V45 != b",
+          "?V45 != c",
+          "i am holding(c)",
+          "is clear(?V44)",
+          "is clear(?V45)",
+          "is on top of(?V44, b)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V115)",
+        "unstack ?b1 from ?b2(?V70, ?V71)",
+        "stack ?b1 right above ?b2(?V44, ?V45)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V70": "?V44",
+        "?V71": "b",
+        "?V115": "c"
+      },
+      "subgoal_predicates": [
+        "(holding c)",
+        "(clear ?V44)",
+        "(clear ?V45)",
+        "(on ?V44 b)"
+      ],
+      "action": [
+        "put-down(c)",
+        "unstack(?V44, b)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V117 != c",
+          "?V44 != ?V117",
+          "?V44 != ?V45",
+          "?V44 != c",
+          "?V45 != ?V117",
+          "?V45 != b",
+          "?V45 != c",
+          "i am holding(?V116)",
+          "is clear(?V117)",
+          "is clear(?V44)",
+          "is clear(?V45)",
+          "is clear(c)",
+          "is on the table(c)",
+          "is on top of(?V44, b)"
+        ]
+      },
+      "action_raw": [
+        "stack ?b1 right above ?b2(?V116, ?V117)",
+        "unstack ?b1 from ?b2(?V70, ?V71)",
+        "stack ?b1 right above ?b2(?V44, ?V45)",
+        "pick up ?b(?V36)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V36": "c",
+        "?V70": "?V44",
+        "?V71": "b"
+      },
+      "subgoal_predicates": [
+        "(holding ?V116)",
+        "(clear ?V117)",
+        "(clear ?V44)",
+        "(clear ?V45)",
+        "(clear c)",
+        "(ontable c)",
+        "(on ?V44 b)"
+      ],
+      "action": [
+        "stack(?V116, ?V117)",
+        "unstack(?V44, b)",
+        "stack(?V44, ?V45)",
+        "pick-up(c)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V49 != b",
+          "?V49 != c",
+          "i am holding(?V121)",
+          "is clear(?V49)",
+          "is clear(b)",
+          "is on top of(c, ?V41)",
+          "is right above(?V49, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V121)",
+        "unstack ?b1 from ?b2(?V76, ?V77)",
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V76": "?V49",
+        "?V77": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V121)",
+        "(clear ?V49)",
+        "(clear b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(?V121)",
+        "unstack(?V49, c)",
+        "put-down(?V49)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V49 != b",
+          "?V49 != c",
+          "i am holding(?V49)",
+          "is clear(b)",
+          "is on top of(c, ?V41)",
+          "is right above(?V49, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V121)",
+        "unstack ?b1 from ?b2(?V76, ?V77)",
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V76": "?V49",
+        "?V77": "c",
+        "?V121": "?V49"
+      },
+      "subgoal_predicates": [
+        "(holding ?V49)",
+        "(clear b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(?V49)",
+        "unstack(?V49, c)",
+        "put-down(?V49)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V49 != b",
+          "?V49 != c",
+          "i am holding(b)",
+          "is clear(?V49)",
+          "is on top of(c, ?V41)",
+          "is right above(?V49, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V121)",
+        "unstack ?b1 from ?b2(?V76, ?V77)",
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V76": "?V49",
+        "?V77": "c",
+        "?V121": "b"
+      },
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear ?V49)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(b)",
+        "unstack(?V49, c)",
+        "put-down(?V49)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V123 != b",
+          "?V49 != ?V123",
+          "?V49 != b",
+          "?V49 != c",
+          "i am holding(?V122)",
+          "is clear(?V123)",
+          "is clear(?V49)",
+          "is clear(b)",
+          "is on top of(c, ?V41)",
+          "is right above(?V49, c)"
+        ]
+      },
+      "action_raw": [
+        "stack ?b1 right above ?b2(?V122, ?V123)",
+        "unstack ?b1 from ?b2(?V76, ?V77)",
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V76": "?V49",
+        "?V77": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V122)",
+        "(clear ?V123)",
+        "(clear ?V49)",
+        "(clear b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "stack(?V122, ?V123)",
+        "unstack(?V49, c)",
+        "put-down(?V49)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V49 != c",
+          "i am holding(?V127)",
+          "is clear(?V49)",
+          "is clear(c)",
+          "is on top of(?V49, b)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V127)",
+        "unstack ?b1 from ?b2(?V76, ?V77)",
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V76": "?V49",
+        "?V77": "b"
+      },
+      "subgoal_predicates": [
+        "(holding ?V127)",
+        "(clear ?V49)",
+        "(clear c)",
+        "(on ?V49 b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(?V127)",
+        "unstack(?V49, b)",
+        "put-down(?V49)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V49 != c",
+          "i am holding(?V49)",
+          "is clear(c)",
+          "is on top of(?V49, b)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V127)",
+        "unstack ?b1 from ?b2(?V76, ?V77)",
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V76": "?V49",
+        "?V77": "b",
+        "?V127": "?V49"
+      },
+      "subgoal_predicates": [
+        "(holding ?V49)",
+        "(clear c)",
+        "(on ?V49 b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(?V49)",
+        "unstack(?V49, b)",
+        "put-down(?V49)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V49 != c",
+          "i am holding(c)",
+          "is clear(?V49)",
+          "is on top of(?V49, b)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V127)",
+        "unstack ?b1 from ?b2(?V76, ?V77)",
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V76": "?V49",
+        "?V77": "b",
+        "?V127": "c"
+      },
+      "subgoal_predicates": [
+        "(holding c)",
+        "(clear ?V49)",
+        "(on ?V49 b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(c)",
+        "unstack(?V49, b)",
+        "put-down(?V49)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V129 != c",
+          "?V49 != ?V129",
+          "?V49 != c",
+          "i am holding(?V128)",
+          "is clear(?V129)",
+          "is clear(?V49)",
+          "is clear(c)",
+          "is on top of(?V49, b)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "action_raw": [
+        "stack ?b1 right above ?b2(?V128, ?V129)",
+        "unstack ?b1 from ?b2(?V76, ?V77)",
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V76": "?V49",
+        "?V77": "b"
+      },
+      "subgoal_predicates": [
+        "(holding ?V128)",
+        "(clear ?V129)",
+        "(clear ?V49)",
+        "(clear c)",
+        "(on ?V49 b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "stack(?V128, ?V129)",
+        "unstack(?V49, b)",
+        "put-down(?V49)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V41 != ?V49",
+          "?V49 != c",
+          "i am holding(c)",
+          "is clear(?V41)",
+          "is clear(?V49)",
+          "is on top of(?V49, b)"
+        ]
+      },
+      "action_raw": [
+        "stack ?b1 right above ?b2(?V128, ?V129)",
+        "unstack ?b1 from ?b2(?V76, ?V77)",
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V76": "?V49",
+        "?V77": "b",
+        "?V129": "?V41",
+        "?V128": "c"
+      },
+      "subgoal_predicates": [
+        "(holding c)",
+        "(clear ?V41)",
+        "(clear ?V49)",
+        "(on ?V49 b)"
+      ],
+      "action": [
+        "stack(c, ?V41)",
+        "unstack(?V49, b)",
+        "put-down(?V49)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(?V133)",
+          "is clear(b)",
+          "is on top of(c, ?V41)",
+          "is right above(b, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V133)",
+        "unstack ?b1 from ?b2(?V82, ?V83)",
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V49": "b",
+        "?V82": "b",
+        "?V83": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V133)",
+        "(clear b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(?V133)",
+        "unstack(b, c)",
+        "put-down(b)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "i am holding(b)",
+          "is on top of(c, ?V41)",
+          "is right above(b, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V133)",
+        "unstack ?b1 from ?b2(?V82, ?V83)",
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V49": "b",
+        "?V82": "b",
+        "?V83": "c",
+        "?V133": "b"
+      },
+      "subgoal_predicates": [
+        "(holding b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(b)",
+        "unstack(b, c)",
+        "put-down(b)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V135 != b",
+          "i am holding(?V134)",
+          "is clear(?V135)",
+          "is clear(b)",
+          "is on top of(c, ?V41)",
+          "is right above(b, c)"
+        ]
+      },
+      "action_raw": [
+        "stack ?b1 right above ?b2(?V134, ?V135)",
+        "unstack ?b1 from ?b2(?V82, ?V83)",
+        "put down ?b(?V49)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V49": "b",
+        "?V82": "b",
+        "?V83": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V134)",
+        "(clear ?V135)",
+        "(clear b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "stack(?V134, ?V135)",
+        "unstack(b, c)",
+        "put-down(b)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V50 != ?V51",
+          "?V50 != b",
+          "?V50 != c",
+          "?V51 != b",
+          "?V51 != c",
+          "i am holding(?V139)",
+          "is clear(?V50)",
+          "is clear(?V51)",
+          "is clear(b)",
+          "is on top of(c, ?V41)",
+          "is right above(?V50, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V139)",
+        "unstack ?b1 from ?b2(?V88, ?V89)",
+        "stack ?b1 right above ?b2(?V50, ?V51)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V88": "?V50",
+        "?V89": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V139)",
+        "(clear ?V50)",
+        "(clear ?V51)",
+        "(clear b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(?V139)",
+        "unstack(?V50, c)",
+        "stack(?V50, ?V51)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V50 != ?V51",
+          "?V50 != b",
+          "?V50 != c",
+          "?V51 != b",
+          "?V51 != c",
+          "i am holding(?V50)",
+          "is clear(?V51)",
+          "is clear(b)",
+          "is on top of(c, ?V41)",
+          "is right above(?V50, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V139)",
+        "unstack ?b1 from ?b2(?V88, ?V89)",
+        "stack ?b1 right above ?b2(?V50, ?V51)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V88": "?V50",
+        "?V89": "c",
+        "?V139": "?V50"
+      },
+      "subgoal_predicates": [
+        "(holding ?V50)",
+        "(clear ?V51)",
+        "(clear b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(?V50)",
+        "unstack(?V50, c)",
+        "stack(?V50, ?V51)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V50 != ?V51",
+          "?V50 != b",
+          "?V50 != c",
+          "?V51 != b",
+          "?V51 != c",
+          "i am holding(?V51)",
+          "is clear(?V50)",
+          "is clear(b)",
+          "is on top of(c, ?V41)",
+          "is right above(?V50, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V139)",
+        "unstack ?b1 from ?b2(?V88, ?V89)",
+        "stack ?b1 right above ?b2(?V50, ?V51)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V88": "?V50",
+        "?V89": "c",
+        "?V139": "?V51"
+      },
+      "subgoal_predicates": [
+        "(holding ?V51)",
+        "(clear ?V50)",
+        "(clear b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(?V51)",
+        "unstack(?V50, c)",
+        "stack(?V50, ?V51)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V50 != ?V51",
+          "?V50 != b",
+          "?V50 != c",
+          "?V51 != b",
+          "?V51 != c",
+          "i am holding(b)",
+          "is clear(?V50)",
+          "is clear(?V51)",
+          "is on top of(c, ?V41)",
+          "is right above(?V50, c)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V139)",
+        "unstack ?b1 from ?b2(?V88, ?V89)",
+        "stack ?b1 right above ?b2(?V50, ?V51)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V88": "?V50",
+        "?V89": "c",
+        "?V139": "b"
+      },
+      "subgoal_predicates": [
+        "(holding b)",
+        "(clear ?V50)",
+        "(clear ?V51)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(b)",
+        "unstack(?V50, c)",
+        "stack(?V50, ?V51)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V141 != b",
+          "?V50 != ?V141",
+          "?V50 != ?V51",
+          "?V50 != b",
+          "?V50 != c",
+          "?V51 != ?V141",
+          "?V51 != b",
+          "?V51 != c",
+          "i am holding(?V140)",
+          "is clear(?V141)",
+          "is clear(?V50)",
+          "is clear(?V51)",
+          "is clear(b)",
+          "is on top of(c, ?V41)",
+          "is right above(?V50, c)"
+        ]
+      },
+      "action_raw": [
+        "stack ?b1 right above ?b2(?V140, ?V141)",
+        "unstack ?b1 from ?b2(?V88, ?V89)",
+        "stack ?b1 right above ?b2(?V50, ?V51)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V88": "?V50",
+        "?V89": "c"
+      },
+      "subgoal_predicates": [
+        "(holding ?V140)",
+        "(clear ?V141)",
+        "(clear ?V50)",
+        "(clear ?V51)",
+        "(clear b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "stack(?V140, ?V141)",
+        "unstack(?V50, c)",
+        "stack(?V50, ?V51)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V50 != ?V51",
+          "?V50 != c",
+          "?V51 != b",
+          "?V51 != c",
+          "i am holding(?V145)",
+          "is clear(?V50)",
+          "is clear(?V51)",
+          "is clear(c)",
+          "is on top of(?V50, b)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V145)",
+        "unstack ?b1 from ?b2(?V88, ?V89)",
+        "stack ?b1 right above ?b2(?V50, ?V51)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V88": "?V50",
+        "?V89": "b"
+      },
+      "subgoal_predicates": [
+        "(holding ?V145)",
+        "(clear ?V50)",
+        "(clear ?V51)",
+        "(clear c)",
+        "(on ?V50 b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(?V145)",
+        "unstack(?V50, b)",
+        "stack(?V50, ?V51)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V50 != ?V51",
+          "?V50 != c",
+          "?V51 != b",
+          "?V51 != c",
+          "i am holding(?V50)",
+          "is clear(?V51)",
+          "is clear(c)",
+          "is on top of(?V50, b)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V145)",
+        "unstack ?b1 from ?b2(?V88, ?V89)",
+        "stack ?b1 right above ?b2(?V50, ?V51)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V88": "?V50",
+        "?V89": "b",
+        "?V145": "?V50"
+      },
+      "subgoal_predicates": [
+        "(holding ?V50)",
+        "(clear ?V51)",
+        "(clear c)",
+        "(on ?V50 b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(?V50)",
+        "unstack(?V50, b)",
+        "stack(?V50, ?V51)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V50 != ?V51",
+          "?V50 != c",
+          "?V51 != b",
+          "?V51 != c",
+          "i am holding(?V51)",
+          "is clear(?V50)",
+          "is clear(c)",
+          "is on top of(?V50, b)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V145)",
+        "unstack ?b1 from ?b2(?V88, ?V89)",
+        "stack ?b1 right above ?b2(?V50, ?V51)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V88": "?V50",
+        "?V89": "b",
+        "?V145": "?V51"
+      },
+      "subgoal_predicates": [
+        "(holding ?V51)",
+        "(clear ?V50)",
+        "(clear c)",
+        "(on ?V50 b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(?V51)",
+        "unstack(?V50, b)",
+        "stack(?V50, ?V51)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V50 != ?V51",
+          "?V50 != c",
+          "?V51 != b",
+          "?V51 != c",
+          "i am holding(c)",
+          "is clear(?V50)",
+          "is clear(?V51)",
+          "is on top of(?V50, b)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "action_raw": [
+        "put down ?b(?V145)",
+        "unstack ?b1 from ?b2(?V88, ?V89)",
+        "stack ?b1 right above ?b2(?V50, ?V51)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V88": "?V50",
+        "?V89": "b",
+        "?V145": "c"
+      },
+      "subgoal_predicates": [
+        "(holding c)",
+        "(clear ?V50)",
+        "(clear ?V51)",
+        "(on ?V50 b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "put-down(c)",
+        "unstack(?V50, b)",
+        "stack(?V50, ?V51)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V147 != c",
+          "?V50 != ?V147",
+          "?V50 != ?V51",
+          "?V50 != c",
+          "?V51 != ?V147",
+          "?V51 != b",
+          "?V51 != c",
+          "i am holding(?V146)",
+          "is clear(?V147)",
+          "is clear(?V50)",
+          "is clear(?V51)",
+          "is clear(c)",
+          "is on top of(?V50, b)",
+          "is on top of(c, ?V41)"
+        ]
+      },
+      "action_raw": [
+        "stack ?b1 right above ?b2(?V146, ?V147)",
+        "unstack ?b1 from ?b2(?V88, ?V89)",
+        "stack ?b1 right above ?b2(?V50, ?V51)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V88": "?V50",
+        "?V89": "b"
+      },
+      "subgoal_predicates": [
+        "(holding ?V146)",
+        "(clear ?V147)",
+        "(clear ?V50)",
+        "(clear ?V51)",
+        "(clear c)",
+        "(on ?V50 b)",
+        "(on c ?V41)"
+      ],
+      "action": [
+        "stack(?V146, ?V147)",
+        "unstack(?V50, b)",
+        "stack(?V50, ?V51)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    },
+    {
+      "subgoal_raw": {
+        "disjoint": [
+          "?V41 != ?V50",
+          "?V41 != ?V51",
+          "?V50 != ?V51",
+          "?V50 != c",
+          "?V51 != b",
+          "?V51 != c",
+          "i am holding(c)",
+          "is clear(?V41)",
+          "is clear(?V50)",
+          "is clear(?V51)",
+          "is on top of(?V50, b)"
+        ]
+      },
+      "action_raw": [
+        "stack ?b1 right above ?b2(?V146, ?V147)",
+        "unstack ?b1 from ?b2(?V88, ?V89)",
+        "stack ?b1 right above ?b2(?V50, ?V51)",
+        "unstack ?b1 from ?b2(?V40, ?V41)",
+        "stack ?b1 right above ?b2(?V32, ?V33)"
+      ],
+      "substitution": {
+        "?V32": "c",
+        "?V33": "b",
+        "?V40": "c",
+        "?V88": "?V50",
+        "?V89": "b",
+        "?V147": "?V41",
+        "?V146": "c"
+      },
+      "subgoal_predicates": [
+        "(holding c)",
+        "(clear ?V41)",
+        "(clear ?V50)",
+        "(clear ?V51)",
+        "(on ?V50 b)"
+      ],
+      "action": [
+        "stack(c, ?V41)",
+        "unstack(?V50, b)",
+        "stack(?V50, ?V51)",
+        "unstack(c, ?V41)",
+        "stack(c, b)"
+      ]
+    }
+  ]
+}
