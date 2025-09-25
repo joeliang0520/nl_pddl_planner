@@ -91,6 +91,8 @@ Basic run:
 python run_alfworld_VLM.py
 ```
 
+For aligned domain, load `alfworld_domain_original.json`. For misaligned domain, load `alfworld_domain.json`
+
 Resume/rerun only failed episodes from progress file:
 ```bash
 python run_alfworld_VLM.py --use-failed --progress-file progress_vlm.json

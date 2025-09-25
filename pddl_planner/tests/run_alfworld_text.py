@@ -1,3 +1,4 @@
+import argparse
 import time
 import json
 import os
@@ -8,6 +9,12 @@ from pddl_planner.logic.nl_parser import NLParser
 from pddl_planner.logic.formula import DisjunctiveFormula
 
 if __name__ == "__main__":
+    # parse the arguments
+    parser = argparse.ArgumentParser(description="Run a regression planner over a PDDL domain & problem")
+    parser.add_argument("--max_depth", type=int, default=10, help="The maximum depth of the regression planner")
+    args = parser.parse_args()
+    max_depth = args.max_depth
+
     # load the domain from the file
     with open('files/alfworld_text_with_misalignment/alfworld_text_with_misalignment_model.json', 'r') as f:
         domain = json.load(f)
@@ -18,9 +25,6 @@ if __name__ == "__main__":
 
     # create a directory to store the results
     current_dir = os.path.dirname(os.path.abspath(__file__))
-
-    # initialize the planner
-    max_depth = 10
 
     # save path
     save_folder_path = os.path.join(current_dir, f'results/alfworld_text_with_misalignment_results_depth{max_depth}')
