@@ -26,6 +26,7 @@ Scripts are provided to run NL-PDDL on:
 - **ALFWorld (Vision)**
 - **ALFWorld (Text)**
 - **Blocksworld** (including challenging variants with naming “mystery/randomized” and newly introduced varient "Misalignment Blockworld")
+- Customizable NL description of action models and goal
 
 ### Key features
 - NL → Logic conversion with typed predicates and SSA support  
