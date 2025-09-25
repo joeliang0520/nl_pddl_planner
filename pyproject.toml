@@ -9,7 +9,6 @@ dependencies = [
   "pddl==0.4.0",
   "openai",
   "pyyaml",
-  "alfworld",
   "opencv-python",
   "pyDatalog",
   "google-genai",

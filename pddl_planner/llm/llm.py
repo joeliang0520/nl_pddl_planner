@@ -29,7 +29,7 @@ class LLM:
         self._api_key = api_key
         self._cache_path = cache_path
         self._cache = self._load_cache()
-        self.client = openai.OpenAI(api_key=api_key)
+        self.client = openai.OpenAI(api_key=api_key) if api_key is not None else openai.OpenAI(api_key='placeholder')
         self._n_iter = 5 # number of iterations for the entailment check for self consistency check
         self._operations = Operations()
         self._verbose = verbose
@@ -285,7 +285,6 @@ class LLM:
             background_predicates_str = "\n ".join([f"- {pred.nl_description}" for pred in background_predicates[1] 
             if pred.nl_description != pred_str and pred.nl_description != target_str])
             # avoid leaking the target or candidate predicate as background predicates to LLM
-        
         examples_block = ""
         if include_examples:
             examples_block = """

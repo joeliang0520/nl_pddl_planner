@@ -390,8 +390,8 @@ class LLM:
                 - If information is unknown, be conservative and answer NO unless it's very likely.
 
                 Input:
-                - Target term types: {target_types}
-                - Candidate term types: {pred_types}
+                - Target term types: {pred_types} 
+                - Candidate term types: {target_types}
 
                 Output format:
                 - Line 1: exactly YES or NO.

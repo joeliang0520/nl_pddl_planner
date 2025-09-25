@@ -39,7 +39,7 @@ class NLPlanner():
 
 class NLFOLRegressionPlanner(NLPlanner):
     def __init__(self, nl_domain: str, nl_problem: str, nl_init: str|None, max_depth: int = 16, 
-    llm_model: str = "gpt-4o-mini", llm_api_key: str = os.getenv("OPENAI_API_KEY"), verbose: bool = True, 
+    llm_model: str = "gpt-4o-mini", llm_api_key: str = None, verbose: bool = True, 
     log_path: str|None = None, time_limit: int|None = None, cache_path: str|None = None) -> None:
         """
         Initialize a FOL-RegressionPlanner based on First-Order Logic (FOL) and uses SSA from Situation Calculus.
@@ -60,6 +60,11 @@ class NLFOLRegressionPlanner(NLPlanner):
         self._ssa = self.create_SSA()
         self._verbose = verbose
         self._time_limit = time_limit
+        if llm_api_key is None:
+            try:
+                llm_api_key = os.getenv("OPENAI_API_KEY")
+            except:
+                print("OPENAI_API_KEY is not set")
         self._llm = LLM(model_name=llm_model, api_key=llm_api_key, verbose=False, cache_path=cache_path)
         # if verbose and log_path is not None:
         #     log = open(log_path, "w")
