@@ -1,0 +1,44 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Python virtual environments
+venv/
+.venv/
+env/
+ENV/
+myenv/
+
+# Optional: local environment files
+.env
+.env.local
+nl_pddl/
+# Python cache and build artifacts
+__pycache__/
+*.py[cod]
+*.so
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.env
+.venv/
+venv/
+
+# Test and coverage artefacts
+.pytest_cache/
+.coverage
+
+# IDE and OS files
+.vscode/
+.DS_Store
+
+# Local configuration
+.env.local
+
+.*cache.json
+
+out_check/
+out_val/
+tmp

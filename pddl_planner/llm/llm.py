@@ -33,9 +33,14 @@ class LLM:
         self._n_iter = 5 # number of iterations for the entailment check for self consistency check
         self._operations = Operations()
         self._verbose = verbose
+        # Track total entailment checks (including cache-served)
+        self.call_count = 0
+        # Track sample-level counts
+        self.cache_call_count = 0  # number of cached responses consumed
+        self.api_call_count = 0    # number of API sample queries (excludes per-attempt retries)
 
     def entailment(self, predicate: NLPredicate, predicates: List[NLPredicate], background_predicates: Tuple[Action, List[NLPredicate]] = (None, []),
-                    domain_predicates: bool = False) -> NLPredicate|None:
+                    domain_predicates: bool = False, flag = True) -> NLPredicate|None:
         """
         Determine whether a target NL predicate is entailed by any predicate schema in a list.
 
@@ -95,6 +100,7 @@ class LLM:
                         target_str,
                         background_predicates,
                         target_predicate_name=pred_copy.name,
+                        flag=flag,
                     )
                 else:
                     # conduct entailment check
@@ -103,6 +109,7 @@ class LLM:
                         pred_str,
                         background_predicates,
                         target_predicate_name=predicate_copy.name,
+                        flag=flag,
                     )
 
                 if entailment_result:
@@ -132,7 +139,7 @@ class LLM:
             return None
 
     def _entailment_check(self, target_str: str, pred_str: str, background_predicates: Tuple[Action, List[NLPredicate]] = (None, []), 
-    target_predicate_name: Optional[str] = None) -> Tuple[bool, str]:
+    target_predicate_name: Optional[str] = None, flag: bool = True) -> Tuple[bool, str]:
         """
         Check if the target description is entailed by the candidate description, with caching and self-consistency.
 
@@ -146,19 +153,27 @@ class LLM:
             Tuple[bool, str]: (decision, representative_raw_text)
         """
 
+        # Count every entailment check (regardless of cache hit/miss)
+        if flag: self.call_count += 1
+
         # Check cache first, then complete to n_iter with LLM calls and decide by self-consistency
 
         # 1) Parse cached responses (if any), then complete to n_iter using LLM, then decide
         cached_texts = self._get_cached_llm_responses(target_str, pred_str) or []
         normal_results: List[Tuple[Optional[bool], str]] = []
         # Parse existing cached responses (up to n_iter)
-        for t in cached_texts[: self._n_iter]:
+        used_cached = cached_texts[: self._n_iter]
+        # count cached samples used
+        if flag: self.cache_call_count += 1
+        for t in used_cached:
             decision, _ = self._parse_yes_no_response(t)
             normal_results.append((decision, t))
         # If we have fewer than n_iter cached, complete by querying LLM and updating cache
         missing = max(0, self._n_iter - len(cached_texts))
         last_text = ""
         for _ in range(missing):
+            # count one API sample query (regardless of internal retries)
+            if flag: self.api_call_count += 1
             decision, text = self._get_llm_responses(target_str, pred_str, background_predicates, target_predicate_name=target_predicate_name)
             if text is not None:
                 self._update_cache_llm_response(target_str, pred_str, text, predicate_name=target_predicate_name)

@@ -124,6 +124,15 @@ def main() -> None:
         end_time = time.time()
         print(f"Time taken: {end_time - start_time} seconds")
 
+        # Append LLM call counts to a per-depth file inside results folder
+        calls_file_path = os.path.join(output_dir, "llm_calls.txt")
+        cache_calls = getattr(planner._llm, "cache_call_count", 0)
+        api_calls = getattr(planner._llm, "api_call_count", 0)
+        total_calls = cache_calls + api_calls
+        with open(calls_file_path, "a") as cf:
+            # dataset(prefix inferred from model), depth, problem_index, cache, api, total
+            cf.write(f"{result_prefix},{max_depth-1},{i},{cache_calls},{api_calls},{total_calls}\n")
+
 
 if __name__ == "__main__":
     main()

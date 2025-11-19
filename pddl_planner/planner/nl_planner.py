@@ -422,7 +422,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                 # Do not need to check entailment if the target predicate is already in the goal
                 if target.name in goal_predicate_names:
                     return True
-                entailed_predicate = self._llm.entailment(copy.deepcopy(pred), [copy.deepcopy(target)])
+                entailed_predicate = self._llm.entailment(copy.deepcopy(pred), [copy.deepcopy(target)], flag=False)
                 if entailed_predicate is not None and entailed_predicate.entailed.name == target.name:
                     #print(f'[Checking Entailment Back to the Goal] "{target.nl_description}" entails the goal "{pred.nl_description}"') if self._verbose else None
                     return True
@@ -601,5 +601,12 @@ class NLFOLRegressionPlanner(NLPlanner):
                         if save_file_path is not None and len(plan) > 0:
                             plan_counter = save_plan(plan, save_file_path, plan_counter)
         if self._verbose:
+            try:
+                cache_calls = getattr(self._llm, 'cache_call_count', 0)
+                api_calls = getattr(self._llm, 'api_call_count', 0)
+                total_calls = cache_calls + api_calls
+                print(f"[LLM calls] cache={cache_calls} api={api_calls} total={total_calls}", file = self._log_file, flush=True)
+            except Exception:
+                pass
             print("")
         return plan
