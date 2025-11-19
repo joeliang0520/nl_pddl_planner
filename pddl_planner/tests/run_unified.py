@@ -167,7 +167,7 @@ def main() -> None:
         calls_file_path = os.path.join(save_folder_path, "llm_calls.txt")
         cache_calls = getattr(planner._llm, "cache_call_count", 0)
         api_calls = getattr(planner._llm, "api_call_count", 0)
-        total_calls = cache_calls + api_calls
+        total_calls = getattr(planner._llm, "call_count", 0)
         with open(calls_file_path, "a") as cf:
             # dataset, depth, problem_index, cache, api, total
             cf.write(f"{config['result_prefix']},{max_depth-1},{i},{cache_calls},{api_calls},{total_calls}\n")

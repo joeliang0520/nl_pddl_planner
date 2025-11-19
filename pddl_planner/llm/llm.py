@@ -139,7 +139,7 @@ class LLM:
             return None
 
     def _entailment_check(self, target_str: str, pred_str: str, background_predicates: Tuple[Action, List[NLPredicate]] = (None, []), 
-    target_predicate_name: Optional[str] = None, flag: bool = True) -> Tuple[bool, str]:
+        target_predicate_name: Optional[str] = None, flag: bool = True) -> Tuple[bool, str]:
         """
         Check if the target description is entailed by the candidate description, with caching and self-consistency.
 
@@ -157,7 +157,6 @@ class LLM:
         if flag: self.call_count += 1
 
         # Check cache first, then complete to n_iter with LLM calls and decide by self-consistency
-
         # 1) Parse cached responses (if any), then complete to n_iter using LLM, then decide
         cached_texts = self._get_cached_llm_responses(target_str, pred_str) or []
         normal_results: List[Tuple[Optional[bool], str]] = []
@@ -171,9 +170,9 @@ class LLM:
         # If we have fewer than n_iter cached, complete by querying LLM and updating cache
         missing = max(0, self._n_iter - len(cached_texts))
         last_text = ""
+        if flag and missing > 0: self.api_call_count += 1
         for _ in range(missing):
             # count one API sample query (regardless of internal retries)
-            if flag: self.api_call_count += 1
             decision, text = self._get_llm_responses(target_str, pred_str, background_predicates, target_predicate_name=target_predicate_name)
             if text is not None:
                 self._update_cache_llm_response(target_str, pred_str, text, predicate_name=target_predicate_name)
