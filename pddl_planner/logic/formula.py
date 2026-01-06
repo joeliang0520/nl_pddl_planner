@@ -787,6 +787,7 @@ class ConjunctiveFormula(Formula):
             return (FalseFormula(), equality_subst)
         # if len(unique) == 1:
         #     return (unique[0], equality_subst)
+
         return (ConjunctiveFormula(*unique), equality_subst)
         
     def implies(self, other: "ConjunctiveFormula") -> bool:

@@ -1,32 +1,29 @@
 import copy
-import time
-import os
-import sys
+import heapq
 from dataclasses import dataclass
 from typing import Dict, List, Tuple, Optional, Union
-from pddl_planner.pddl_core.nl_domain import NLDomain
-from pddl_planner.pddl_core.nl_instance import NLInstance
+from pddl_planner.pddl_core.domain import Domain
+from pddl_planner.pddl_core.instance import Instance
 from pddl_planner.logic.operation import Operations
-from pddl_planner.logic.nl_formula import NLPredicate
 from pddl_planner.logic.formula import Substitution, Formula, Predicate, DisjunctiveFormula, ConjunctiveFormula, Term, Equality, FalseFormula
-from pddl_planner.pddl_core.action import Action         
-from pddl_planner.llm.llm import LLM
-    
-class NLPlanner():
-    def __init__(self, nl_domain: str, nl_problem: str, nl_init: str|None) -> None:
+from pddl_planner.pddl_core.action import Action
+
+class Planner():
+    def __init__(self, pddl_domain: str, pddl_problem: str) -> None:
         """
         Initializes a Planner instance.
 
         Args:
-            nl_domain (str): The domain PDDL file path.
-            nl_problem (str): The problem PDDL file path.
+            pddl_domain (str): The domain PDDL file path.
+            pddl_problem (str): The problem PDDL file path.
 
         Returns:
             None
         """
-        self._domain = NLDomain(nl_domain)
-        self._instance = NLInstance(nl_problem, nl_init, self._domain)
+        self._domain = Domain(pddl_domain)
+        self._instance = Instance(pddl_problem, self._domain)
         self._operations = Operations()
+
 
     def plan(self):
         """
@@ -37,38 +34,22 @@ class NLPlanner():
         """
         pass
 
-class NLFOLRegressionPlanner(NLPlanner):
-    def __init__(self, nl_domain: str, nl_problem: str, nl_init: str|None, max_depth: int = 16, 
-    llm_model: str = "gpt-4o-mini", llm_api_key: str = None, verbose: bool = True, 
-    log_path: str|None = None, time_limit: int|None = None, cache_path: str|None = None) -> None:
+    
+class FOLRegressionPlanner(Planner):
+    def __init__(self, pddl_domain: str, pddl_problem: str, max_depth: int = 10) -> None:
         """
-        Initialize a FOL-RegressionPlanner based on First-Order Logic (FOL) and uses SSA from Situation Calculus.
+        Initialize a FOL-RegressionPlanner as proposed by us. This planner is based on First-Order Logic (FOL) and uses SSA from Situation Calculus.
 
         Args:
-            nl_domain (str): The NL domain file path.
-            nl_problem (str): The NL problem file path.
+            pddl_domain (str): The domain PDDL file path.
+            pddl_problem (str): The problem PDDL file path.
             max_depth (int, optional): The maximum depth of the plan tree. Defaults to 10.
-            llm_model (str, optional): The model name of the LLM. Defaults to "gpt-4o-mini".
-            llm_api_key (str, optional): The API key of the LLM. Defaults to os.getenv("OPENAI_API_KEY").
-            cache_path (str, optional): The path to the cache file. Defaults to None.
-            log_path (str, optional): The path to the log file. Defaults to None.
-            time_limit (int, optional): The time limit for the planner. Defaults to None.
+            simplify_mode (tuple, optional): Simplification mode (DNF_subsumption, Equality_simplification, Typing_simplification). Defaults to (True, True, True).
         """
-        super().__init__(nl_domain, nl_problem, nl_init)
+        super().__init__(pddl_domain, pddl_problem)
         self._max_depth = max_depth
-        self._log_file = open(log_path, "w") if log_path is not None else sys.stdout
         self._ssa = self.create_SSA()
-        self._verbose = verbose
-        self._time_limit = time_limit
-        if llm_api_key is None:
-            try:
-                llm_api_key = os.getenv("OPENAI_API_KEY")
-            except:
-                print("OPENAI_API_KEY is not set")
-        self._llm = LLM(model_name=llm_model, api_key=llm_api_key, verbose=False, cache_path=cache_path)
-        # if verbose and log_path is not None:
-        #     log = open(log_path, "w")
-        #     sys.stdout = log
+
     @dataclass
     class SSA_Node:
         """
@@ -89,7 +70,7 @@ class NLFOLRegressionPlanner(NLPlanner):
         ssa: Union[Predicate, DisjunctiveFormula]
 
     class PlanNode():
-        def __init__(self, action: Action, sub_goal: Formula, parent: Optional["NLFOLRegressionPlanner.PlanNode"] = None, depth: int = 0, substitution: Substitution = Substitution()) -> None:
+        def __init__(self, action: Action, sub_goal: Formula, parent: Optional["RegressionPlanner.PlanNode"] = None, depth: int = 0, substitution: Substitution = Substitution()) -> None:
             """
             Initializes a PlanNode. PlanNode is used to represent the planning tree.
 
@@ -103,15 +84,14 @@ class NLFOLRegressionPlanner(NLPlanner):
             Returns:
                 None
             """
-            
             self.action = action
             self.sub_goal = copy.deepcopy(sub_goal)
             self.parent = parent
-            self.children: List["NLFOLRegressionPlanner.PlanNode"] = []
+            self.children: List["FOLRegressionPlanner.PlanNode"] = []
             self.depth = depth
             self.substitution = substitution
         
-        def add_child(self, child_node: "NLFOLRegressionPlanner.PlanNode") -> None:
+        def add_child(self, child_node: "FOLRegressionPlanner.PlanNode") -> None:
             """
             Adds a child node.
 
@@ -123,7 +103,7 @@ class NLFOLRegressionPlanner(NLPlanner):
             """
             self.children.append(child_node)
 
-    def extract_plan(self, node: "NLFOLRegressionPlanner.PlanNode") -> List[Action]:
+    def extract_plan(self, node: "FOLRegressionPlanner.PlanNode") -> List[Action]:
         """
         Extract the plan from the plan tree.
 
@@ -135,13 +115,15 @@ class NLFOLRegressionPlanner(NLPlanner):
         """
         plan: List[Action] = []
         while node.parent is not None:
-            plan.append(node.action)
+            substitution = node.substitution
+            action = node.action.substitute(substitution)
+            plan.append(action)
             node = node.parent
         plan.reverse()
         return plan
 
 
-    def create_SSA(self, predicates: List[Predicate] = None) -> Dict[str, Dict[str, SSA_Node]]:
+    def create_SSA(self) -> Dict[str, Dict[str, SSA_Node]]:
         """
         Construct SSA from the domain's action schema for each predicate.
         
@@ -188,12 +170,9 @@ class NLFOLRegressionPlanner(NLPlanner):
                 return (negative_effect_axiom, substitution)
             return (None, Substitution())
 
-        all_ssa: Dict[str, Dict[str, NLFOLRegressionPlanner.SSA_Node]] = {}
-        if predicates is None:
-            predicates = self._domain.predicates
-        for pred in predicates:
-            print(f"Processing predicate: {pred.name}", file = self._log_file, flush=True)
-            pred_ssa: Dict[str, NLFOLRegressionPlanner.SSA_Node] = {}
+        all_ssa: Dict[str, Dict[str, FOLRegressionPlanner.SSA_Node]] = {}
+        for pred in self._domain.predicates:
+            pred_ssa: Dict[str, FOLRegressionPlanner.SSA_Node] = {}
             for action in self._domain.actions:
                 standardized_action = action.standardize(self._operations)
                 (positive_effect_axiom, substitution) = get_positive_effect_axiom(standardized_action, pred)
@@ -213,9 +192,10 @@ class NLFOLRegressionPlanner(NLPlanner):
                     ssa = ConjunctiveFormula(negative_effect_axiom.get_negation(), pred).simplify().distribute_and_over_or()
                 else:
                     # No effect exists
+                    # SSA = pred
                     ssa = DisjunctiveFormula(pred).distribute_and_over_or()
 
-                pred_ssa[standardized_action.name] = NLFOLRegressionPlanner.SSA_Node(
+                pred_ssa[standardized_action.name] = FOLRegressionPlanner.SSA_Node(
                         pred.name,
                         pred.terms,
                         standardized_action.name,
@@ -224,25 +204,8 @@ class NLFOLRegressionPlanner(NLPlanner):
                         ssa)
             all_ssa[pred.name] = pred_ssa
         return all_ssa
-
-    def create_SSA_as_itself(self, predicate: Predicate) -> Dict[str, SSA_Node]:
-        """
-        Create SSA as itself.
-        """
-        pred_ssa: Dict[str, NLFOLRegressionPlanner.SSA_Node] = {}
-        for action in self._domain.actions:
-            standardized_action = action.standardize(self._operations)
-            ssa = DisjunctiveFormula(predicate).distribute_and_over_or()
-            pred_ssa[standardized_action.name] = NLFOLRegressionPlanner.SSA_Node(
-                predicate.name,
-                predicate.terms,
-                standardized_action.name, 
-                standardized_action.parameters, 
-                Substitution(), ssa)
-        return pred_ssa
-                
     
-    def regress_pred(self, predicate: NLPredicate, action: Action) -> DisjunctiveFormula:
+    def regress_pred(self, predicate: Predicate, action: Action) -> DisjunctiveFormula:
         """
         Regress a predicate through an action via the stored SSA substitution.
 
@@ -260,94 +223,24 @@ class NLFOLRegressionPlanner(NLPlanner):
         Returns:
             DisjunctiveFormula: The regressed formula with variables substituted according to the SSA_Node.
         """
-        # check if the predicate is in domain predicates
-        if predicate.name in self._ssa:
-            ssa_node = self._ssa[predicate.name][action.name]
-        else:
-            # check if the predicate can be entailed as a domain predicate
-            print(f'Failing to find "{predicate.nl_description}" with name "{predicate.name}" in domain predicates, attempting to entail it to a domain predicate',file = self._log_file, flush=True) if self._verbose else None
-            background_predicates = (copy.deepcopy(action), [clause for clause in self._instance.goal.clauses if isinstance(clause, NLPredicate)])
-            #print(['Predicates in domain: ', self._domain.predicates])
-            entailed_pred = self._llm.entailment(predicate, self._domain.predicates, 
-                                                    background_predicates=background_predicates, domain_predicates=True)
-
-            if entailed_pred is not None:
-                if isinstance(entailed_pred.entailed, list):
-                    ssa_node = []
-                    for pred in entailed_pred.entailed:
-                        ssa_node.append(self._ssa[pred.name][action.name])
-                    #ssa_node = DisjunctiveFormula(*ssa_node_lst).distribute_and_over_or() if not predicate.is_neg else ConjunctiveFormula(*ssa_node_lst).distribute_and_over_or()
-                else:
-                    ssa_node = self._ssa[entailed_pred.entailed.name][action.name]
-                # update the predicate names and string representation as the entailed predicate
-                #predicate = entailed_pred
-            else:
-                # create a new ssa node with postive and negative effects as none
-                print(f'Failing to entail "{predicate.name}" in domain predicates, creating a new ssa node with postive and negative effects as none', file = self._log_file, flush=True) if self._verbose else None
-                self._ssa[predicate.name] = self.create_SSA_as_itself(predicate)
-                ssa_node = self._ssa[predicate.name][action.name]
+        ssa_node = self._ssa[predicate.name][action.name]
         # Build a substitution:
         # Map the stored predicate parameters to the input predicate's terms.
-        if not isinstance(ssa_node, List):
-            substitution = Substitution()
-            # Honor recorded entailment permutation (if any) between predicate vars
-            recorded = predicate.entailed_substitutions.get(ssa_node.predicate_name)
-            inv_name_map = {}
-            if recorded is not None:
-                for k, v in recorded.items():
-                    inv_name_map[v.name] = k.name
-            target_name_to_term = {getattr(t, 'name', str(t)): t for t in predicate.terms}
-            for idx, stored_pred_var in enumerate(ssa_node.predicate_params):
-                mapped_target_name = inv_name_map.get(getattr(stored_pred_var, 'name', str(stored_pred_var)))
-                if mapped_target_name is not None and mapped_target_name in target_name_to_term:
-                    substitution[stored_pred_var] = target_name_to_term[mapped_target_name]
-                else:
-                    if idx < len(predicate.terms):
-                        substitution[stored_pred_var] = predicate.terms[idx]
-            # Map the stored action parameters to the input action's parameters.
-            for stored_act_var, input_act_var in zip(ssa_node.action_params, action.parameters):
-                substitution[stored_act_var] = input_act_var
-        
-            returned_ssa = copy.deepcopy(ssa_node.ssa)
-            
-            # if predicate.term_type_dict is not None and ssa_node.ssa.term_type_dict is not None:
-            #     returned_ssa.term_type_dict.update(predicate.term_type_dict)
-            # Substitute over the stored SSA formula
-            # print(f'ssa_node: {ssa_node.predicate_params} action: {ssa_node.action_params} predicate: {predicate.terms}')
-            # print(f'substitution: {substitution}')
-            # print(f'returned_ssa: {ssa_node.ssa.clauses} for action "{action.name}" and predicate "{predicate.name}"')
-            return returned_ssa.substitute(substitution)
-        else:
-            # ssa_node is a list of SSA_Nodes (entailed to multiple domain predicates)
-            print(f'[Multiple Entailment] Found multiple domain predicates that entail "{predicate.name}"', file = self._log_file, flush=True) if self._verbose else None
-            substituted_ssas: List[Formula] = []
-            for node in ssa_node:
-                node_sub = Substitution()
-                # Honor recorded entailment permutation per entailed predicate name
-                recorded = None
-                recorded = predicate.entailed_substitutions.get(node.predicate_name)
-                inv_name_map = {}
-                if recorded is not None:
-                    for k, v in recorded.items():
-                        inv_name_map[v.name] = k.name
-                target_name_to_term = {getattr(t, 'name', str(t)): t for t in predicate.terms}
-                for idx, stored_pred_var in enumerate(node.predicate_params):
-                    mapped_target_name = inv_name_map.get(getattr(stored_pred_var, 'name', str(stored_pred_var)))
-                    if mapped_target_name is not None and mapped_target_name in target_name_to_term:
-                        node_sub[stored_pred_var] = target_name_to_term[mapped_target_name]
-                    else:
-                        if idx < len(predicate.terms):
-                            node_sub[stored_pred_var] = predicate.terms[idx]
-                for stored_act_var, input_act_var in zip(node.action_params, action.parameters):
-                    node_sub[stored_act_var] = input_act_var
-                node_ssa = copy.deepcopy(node.ssa).substitute(node_sub)
-                substituted_ssas.append(node_ssa)
+        substitution = Substitution()
+        for stored_pred_var, input_pred_var in zip(ssa_node.predicate_params, predicate.terms):
+            substitution[stored_pred_var] = input_pred_var
+        # Map the stored action parameters to the input action's parameters.
+        for stored_act_var, input_act_var in zip(ssa_node.action_params, action.parameters):
+            substitution[stored_act_var] = input_act_var
 
-            if not predicate.is_neg:
-                combined = DisjunctiveFormula(*substituted_ssas).distribute_and_over_or()
-            else:
-                combined = ConjunctiveFormula(*substituted_ssas).distribute_and_over_or()
-            return combined
+        returned_ssa = copy.deepcopy(ssa_node.ssa)
+        
+        # if predicate.term_type_dict is not None and ssa_node.ssa.term_type_dict is not None:
+        #     returned_ssa.term_type_dict.update(predicate.term_type_dict)
+        # Substitute over the stored SSA formula
+
+        return returned_ssa.substitute(substitution)
+         
 
     def regress(self, goal: DisjunctiveFormula, action: Action) -> DisjunctiveFormula:
         """
@@ -369,27 +262,25 @@ class NLFOLRegressionPlanner(NLPlanner):
         if not isinstance(goal, DisjunctiveFormula):
             raise ValueError(f"Goal must be a DisjunctiveFormula, but got {type(goal)}")
         regressed_disjunct_list = []
-
         for conjunct in goal.clauses:
             if not isinstance(conjunct, ConjunctiveFormula):
                 raise ValueError(f"Each conjunct must be a ConjunctiveFormula, but got {type(conjunct)}")
             
             regressed_conjunct_list = []
             for clause in conjunct.clauses:
-                if isinstance(clause, NLPredicate):
+                if isinstance(clause, Predicate):
                     # Regress the predicate clause using regress_pred
                     regressed_clause = self.regress_pred(clause, action)
                 else:
                     regressed_clause = clause
                 regressed_conjunct_list.append(regressed_clause)
-            # Combine the regressed clauses and convert to DN
+            # Combine the regressed clauses and convert to DNF
             regressed_disjunct_list.append(ConjunctiveFormula(*regressed_conjunct_list).distribute_and_over_or())
+        
         # Return a flattened regressed goal  in DNF
-        flattened_regressed_goal = DisjunctiveFormula(*regressed_disjunct_list).distribute_and_over_or()
-        return flattened_regressed_goal
+        return DisjunctiveFormula(*regressed_disjunct_list).distribute_and_over_or()
     
-    def regress_plan(self, simplify_equality: bool = True, simplify_contradiction: bool = True, 
-    simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True, save_file_path: Optional[str] = None) -> List[Tuple[Formula, List[Action]]]:
+    def regress_plan(self, simplify_equality: bool = True, simplify_contradiction: bool = True, simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True) -> List[Tuple[Formula, List[Action]]]:
         """
         Generate a regressed plan by iteratively regressing the goal through applicable actions.
 
@@ -402,58 +293,14 @@ class NLFOLRegressionPlanner(NLPlanner):
                 - A subgoal (Formula) that represents a regressed goal state.
                 - A list of actions (List[Action]) that form the plan to achieve that subgoal.
         """
-        # Pre-compute goal predicate names for entailment gating
-        goal_predicate_names = set()
-        def _collect_goal_predicates(formula: Formula) -> None:
-            if isinstance(formula, NLPredicate):
-                goal_predicate_names.add(formula.name)
-                return
-            if hasattr(formula, 'clauses') and isinstance(getattr(formula, 'clauses'), list):
-                for cl in formula.clauses:
-                    _collect_goal_predicates(cl)
-
-        _collect_goal_predicates(self._instance.goal)
-        # A LLM-backed entailment checker for predciates in the actions back to the goal
-        def _entailment_checker(target: NLPredicate, pred: NLPredicate) -> bool:
-            try:
-                # Only attempt entailment if the candidate predicate name appears in the goal
-                if pred.name not in goal_predicate_names:
-                    return False
-                # Do not need to check entailment if the target predicate is already in the goal
-                if target.name in goal_predicate_names:
-                    return True
-                entailed_predicate = self._llm.entailment(copy.deepcopy(pred), [copy.deepcopy(target)], flag=False)
-                if entailed_predicate is not None and entailed_predicate.entailed.name == target.name:
-                    #print(f'[Checking Entailment Back to the Goal] "{target.nl_description}" entails the goal "{pred.nl_description}"') if self._verbose else None
-                    return True
-            except Exception:
-                return False
-        NLPredicate.set_entailment_checker(_entailment_checker)
-
         plan = []
         goal = self._instance.goal.distribute_and_over_or()
+
+
         if not isinstance(goal, DisjunctiveFormula):
             raise ValueError(f"Goal must be a DisjunctiveFormula, but got {type(goal)}")
-        frontier = [NLFOLRegressionPlanner.PlanNode(None, goal)]
-        start_time = time.time()
+        frontier = [FOLRegressionPlanner.PlanNode(None, goal)]
         plan.append((frontier[0].sub_goal, [], Substitution()))
-        
-        def save_plan(plan: List[Tuple[Formula, List[Action], Substitution]], save_file_path: str, count: int = 0):
-            last_plan = plan[-1]
-            with open(save_file_path, 'a') as f:
-                f.write(f"Subgoal S{count}:\n")
-                f.write(str(last_plan[0]) + '\n')
-                reversed_plan = copy.deepcopy(last_plan[1])
-                reversed_plan.reverse()
-                actions = [p.substitute(last_plan[2]) for p in reversed_plan]
-                f.write(str(actions) + '\n')
-                f.write(str(last_plan[2]) + '\n')
-                f.write("--------------------\n")
-            count += 1
-            return count
-
-        plan_counter = 0
-        plan_counter = save_plan(plan, save_file_path, plan_counter)
 
         visited_goal = []
 
@@ -462,32 +309,21 @@ class NLFOLRegressionPlanner(NLPlanner):
                 visited_goal.append(clause)
 
         while frontier:
-            current_node: NLFOLRegressionPlanner.PlanNode = frontier.pop(0)
+            current_node: FOLRegressionPlanner.PlanNode = frontier.pop(0)
             current_goal: Formula = current_node.sub_goal
-            if self._verbose:
-                bar_len = 20
-                filled = int((current_node.depth / max(1, self._max_depth)) * bar_len)
-                bar = "[" + "#" * filled + "-" * (bar_len - filled) + "]"
-                elapsed = time.time() - start_time
-                print(f"[Depth] {current_node.depth}/{self._max_depth} {bar} | {elapsed:.2f}s | {len(frontier)} nodes in frontier", file = self._log_file, flush=True)
             if current_node.depth >= self._max_depth:
                 # exit if max depth is reached
-                print(f'max depth reached: {current_node.depth}', file = self._log_file, flush=True) if self._verbose else None
                 continue
-            if self._time_limit is not None and time.time() - start_time > self._time_limit:
-                # exit if time limit is reached
-                print(f'time limit reached: {time.time() - start_time}', file = self._log_file, flush=True) if self._verbose else None
-                continue
+                
             for action in self._domain.actions:
                 standardized_action = action.standardize(self._operations)
-                regressed_goal = self.regress(current_goal, standardized_action)
+                regressed_goal = self.regress(current_goal, standardized_action).simplify() if simplify_contradiction else self.regress(current_goal, standardized_action)
                 if simplify_contradiction:
                     regressed_goal = regressed_goal.simplify()
-                
+
                 if isinstance(regressed_goal, Predicate):
                     continue
-                # print('--------------------------------', file = self._log_file, flush=True) if self._verbose else None
-                # print(f'regressed_goal: {regressed_goal}', file = self._log_file, flush=True) if self._verbose else None
+            
                 if simplify_equality:
                     per_conjunct_results = []
                     subst_map: Dict[str, Substitution] = {}
@@ -499,7 +335,7 @@ class NLFOLRegressionPlanner(NLPlanner):
                                 DisjunctiveFormula(clause_simplified)
                                 .substitute(clause_sub)
                             )
-                            per_conj = self._operations.replace_domain_with_goal_fluents(per_conj, self._instance.goal)
+
                             if simplify_contradiction:
                                 per_conj = per_conj.simplify_plan().distribute_and_over_or()
                             else:
@@ -518,19 +354,19 @@ class NLFOLRegressionPlanner(NLPlanner):
                             for conj in df.clauses if isinstance(df, DisjunctiveFormula) else [df]:
                                 if isinstance(conj, ConjunctiveFormula):
                                     subst_map[str(conj)] = Substitution()
-
+                        
                     # Recombine per-conjunct processed results
                     regressed_goal = DisjunctiveFormula(*per_conjunct_results).distribute_and_over_or()
-                    
                 else:
                     # No equality processing; create an empty mapping for child substitutions
                     subst_map = {}
-                regressed_goal = self._operations.replace_domain_with_goal_fluents(regressed_goal, self._instance.goal)
+                regressed_goal = DisjunctiveFormula(*per_conjunct_results).distribute_and_over_or()
                 regressed_goal = self._operations.simplify_by_domain_axiom(regressed_goal, self._instance.init)
                 
                 if (simplify_typing and self._domain.has_type_conflict(regressed_goal)) or isinstance(regressed_goal, FalseFormula):
                     # skip if there is a type conflict or the formula simplifes to false
                     continue
+
                 # remove any conjuncts in the regressed goal that implies the seen subgoal
                 regressed_goal_list = []
                 if simplify_dnf or dup_detection:
@@ -556,10 +392,12 @@ class NLFOLRegressionPlanner(NLPlanner):
                             #             break
                             #print(f'drop this conjunct due to implies or duplicate: {conjunct}') if self._verbose else None
                     regressed_goal = DisjunctiveFormula(*regressed_goal_list).simplify().distribute_and_over_or() if simplify_contradiction else DisjunctiveFormula(*regressed_goal_list).distribute_and_over_or()
-                 
-               # If regressed_goal contains multiple conjuncts, split only if there are non-empty per-conjunct substitutions
+              
+                # If regressed_goal contains multiple conjuncts, split only if there are non-empty per-conjunct substitutions
                 regressed_conjuncts = [c for c in regressed_goal.clauses if isinstance(c, ConjunctiveFormula)]
-
+                
+                # Check if any conjunct has a substitution
+                
                 has_any_subst = any(
                 bool(subst_map.get(str(conj), Substitution()))
                 for conj in regressed_conjuncts
@@ -570,10 +408,8 @@ class NLFOLRegressionPlanner(NLPlanner):
                     for conj in regressed_conjuncts:
                         split_goal = DisjunctiveFormula(conj).distribute_and_over_or()
                         conj_sub = subst_map.get(str(conj), Substitution())
-                        # print(f'conj: {conj}', file = self._log_file, flush=True) if self._verbose else None
-                        # print(f'conj_sub: {conj_sub}', file = self._log_file, flush=True) if self._verbose else None
                         child_subst = {**current_node.substitution, **conj_sub}
-                        child_node = NLFOLRegressionPlanner.PlanNode(standardized_action, split_goal, current_node, current_node.depth + 1, child_subst)
+                        child_node = FOLRegressionPlanner.PlanNode(standardized_action, split_goal, current_node, current_node.depth + 1, child_subst)
                         if not isinstance(child_node.sub_goal, FalseFormula):
                             for c in child_node.sub_goal.clauses:
                                 if isinstance(c, ConjunctiveFormula):
@@ -581,13 +417,11 @@ class NLFOLRegressionPlanner(NLPlanner):
                             frontier.append(child_node)
                             plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
 
-                            if save_file_path is not None and len(plan) > 0:
-                                plan_counter = save_plan(plan, save_file_path, plan_counter)
                 else:
                     conj = regressed_conjuncts[0] if regressed_conjuncts else None
                     conj_sub = subst_map.get(str(conj), Substitution()) if conj is not None and 'subst_map' in locals() else Substitution()
                     child_subst = {**current_node.substitution, **conj_sub}
-                    child_node = NLFOLRegressionPlanner.PlanNode(standardized_action, regressed_goal, current_node, current_node.depth + 1, child_subst)
+                    child_node = FOLRegressionPlanner.PlanNode(standardized_action, regressed_goal, current_node, current_node.depth + 1, child_subst)
                     # add to the frontier and plan if the subgoal hasn't visited before
                     if not isinstance(child_node.sub_goal, FalseFormula):
                         for conjunct in child_node.sub_goal.clauses:
@@ -597,16 +431,6 @@ class NLFOLRegressionPlanner(NLPlanner):
                                 print(f"Not a conjunctive formula: {conjunct}", file = self._log_file, flush=True) if self._verbose else None
                         frontier.append(child_node)
                         plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
-                
-                        if save_file_path is not None and len(plan) > 0:
-                            plan_counter = save_plan(plan, save_file_path, plan_counter)
-        if self._verbose:
-            try:
-                cache_calls = getattr(self._llm, 'cache_call_count', 0)
-                api_calls = getattr(self._llm, 'api_call_count', 0)
-                total_calls = cache_calls + api_calls
-                print(f"[LLM calls] cache={cache_calls} api={api_calls} total={total_calls}", file = self._log_file, flush=True)
-            except Exception:
-                pass
-            print("")
+                            
+    
         return plan
