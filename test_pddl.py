@@ -4,8 +4,8 @@ from pddl_planner.planner.planner import FOLRegressionPlanner
 
 if __name__ == '__main__':
     # regression planner
-    pddl_domain = pddl.parse_domain('files/pddl/blocks.pddl')
-    pddl_problem = pddl.parse_problem('files/pddl/blocks_problem1.pddl')
+    pddl_domain = pddl.parse_domain('files/pddl/hh/hh_domain.pddl')
+    pddl_problem = pddl.parse_problem('files/pddl/hh/hh_p1.pddl')
 
     planner = FOLRegressionPlanner(pddl_domain, pddl_problem, max_depth=2)
     regressed_plans = planner.regress_plan()

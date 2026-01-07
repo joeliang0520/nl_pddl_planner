@@ -19,7 +19,7 @@ class Action:
         self._preconditions = preconditions
         self._effects = effects
         self._parameters = parameters
-
+        
     def substitute(self, substitution: Substitution) -> "Action":
         """Substitute the variables in the action.
         The variables in the preconditions and effects are substituted with the values in the substitution.
@@ -46,7 +46,8 @@ class Action:
         sub = Substitution()
         standardized_parameters = []
         for parameter in self._parameters:
-            sub[parameter] = operations.get_new_var()
+
+            sub[parameter] = operations.get_new_var(parameter._type)
             standardized_parameters.append(sub[parameter])
 
         standardized_preconditions = self._preconditions.substitute(sub)
@@ -112,4 +113,4 @@ class Action:
         Returns:
             str: The string representation of the action.
         """
-        return f"{type(self).__name__}({repr(self.name)}({repr(self.parameters)}))"
+        return f"{type(self).__name__}({repr(self.name)}({', '.join(repr(param) for param in self.parameters)}))"

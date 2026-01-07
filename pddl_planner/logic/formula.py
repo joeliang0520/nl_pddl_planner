@@ -13,7 +13,7 @@ class Logic:
     _free_var_idx: int = 0
 
     @classmethod
-    def get_new_var(cls) -> "Variable":
+    def get_new_var(cls, term_type=None) -> "Variable":
         """Get a new unused variable.
 
         The variable is named in the form 'V<int>' where <int> is the index, then incremented,
@@ -22,7 +22,7 @@ class Logic:
         Returns:
             Variable: A new unused variable.
         """
-        var = Variable(f"V{cls._free_var_idx}")
+        var = Variable(f"V{cls._free_var_idx}", term_type)
         cls._used_vars.add(var)
         cls._free_var_idx += 1
         return var
@@ -1161,11 +1161,11 @@ class Variable(Term):
         
     def __str__(self) -> str:
         """Get the string representation."""
-        return f"?{self._name}"
+        return f"?{self._name}"+":"+str(self._type)
     
     def __repr__(self) -> str:
         """Get the string representation."""
-        return f"?{self._name}"
+        return f"?{self._name}"+":"+str(self._type)
     
     def __eq__(self, other) -> bool:
         """Compare with another object."""
@@ -1182,11 +1182,11 @@ class Constant(Term):
     "Constant in a formula"
     def __str__(self) -> str:
         """Get the string representation."""
-        return self._name
+        return self._name+":"+str(self._type)
     
     def __repr__(self) -> str:
         """Get the string representation."""
-        return self._name
+        return self._name+":"+str(self._type)
     
     def __eq__(self, other) -> bool:
         """Compare with another object."""
@@ -1433,7 +1433,7 @@ class Predicate(Atomic):
     def __len__(self):
         return len(str(self))
 
-class   Substitution(dict):
+class Substitution(dict):
     """Represents a set of substitutions mapping Variables to Terms.
 
     This class extends the built-in dictionary and performs an initial check to ensure all keys
