@@ -8,18 +8,19 @@
   )
 
   (:init
-    (at-location loc-start)
-    ;(door-at d-heaven loc-door1)
-    ;(door-at d-hell loc-door2)
-    ;(priest-at p1 loc-priest)
-    ;(is-heaven d-heaven)
-    ;(is-hell d-hell)
-    ;(has-answer p1)
+    (k-at-location loc-start)
+    (k-door-at d-heaven loc-door1)
+    (k-door-at d-hell loc-door2)
+    (k-priest-at p1 loc-priest)
+
+    (k-is-heaven d-heaven)
+    (k-is-hell d-hell)
+
+    (k-has-answer p1)
   )
 
   (:goal (and
-    ;(k-is-heaven d-heaven)
-    ;(k-in-heaven)
-    (k-at-location loc-priest)
+    ;(k-at-location loc-priest)
+    (k-in-heaven)
   ))
 )

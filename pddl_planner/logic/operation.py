@@ -217,7 +217,7 @@ class Operations(Logic):
                             if name not in count_dict:
                                 count_dict[name] = 0
                             count_dict[name] += 1
-                if 'k-at-location' in count_dict and count_dict['k-at-location'] > 10:
+                if 'k-at-location' in count_dict and count_dict['k-at-location'] > 2:
                     # cannot hold more than one object at a time
                     # drop this conjunct
                     print("Drop conjunct: ", clause)

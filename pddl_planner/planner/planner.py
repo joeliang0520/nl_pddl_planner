@@ -177,7 +177,6 @@ class FOLRegressionPlanner(Planner):
                 standardized_action = action.standardize(self._operations)
                 (positive_effect_axiom, substitution) = get_positive_effect_axiom(standardized_action, pred)
                 (negative_effect_axiom, _) = get_negative_effect_axiom(standardized_action, pred)
-
                 if positive_effect_axiom is not None and negative_effect_axiom is not None:
                     # Both positive and negative effects exist, ssa takes the form
                     # SSA = (positive_effect) ∨ (pred ∧ ¬negative_effect)
@@ -320,141 +319,189 @@ class FOLRegressionPlanner(Planner):
             for action in self._domain.actions:
                 standardized_action = action.standardize(self._operations)
                 regressed_goal = self.regress(current_goal, standardized_action).simplify() if simplify_contradiction else self.regress(current_goal, standardized_action)
-
-                # if str(regressed_goal) == str(current_goal):
-                #     print("current_goal:", current_goal)
-                #     print("standardized_action:", standardized_action)
-                #     print("regressed_goal:", regressed_goal)
-                #     print("----------------")
-                #     continue
-
                 
-                if simplify_contradiction:
-                    regressed_goal = regressed_goal.simplify()
+                # print("current_goal: ", current_goal)
+                # print("standardized_action: ", standardized_action)
+                # print("regressed_goal: ", regressed_goal)
+                # print("----------------")
 
-                if isinstance(regressed_goal, Predicate):
-                    continue
-            
-                if simplify_equality:
-                    per_conjunct_results = []
-                    subst_map: Dict[str, Substitution] = {}
-                    for clause in regressed_goal.clauses:
-                        if isinstance(clause, ConjunctiveFormula):
-                            # Build substitution from equality for this conjunct only
-                            clause_simplified, clause_sub = clause.simplify_equality(current_goal)
-                            per_conj = (
-                                DisjunctiveFormula(clause_simplified)
-                                .substitute(clause_sub)
-                            )
-
-                            if simplify_contradiction:
-                                per_conj = per_conj.simplify_plan().distribute_and_over_or()
-                            else:
-                                per_conj = per_conj.distribute_and_over_or()
-                            per_conjunct_results.append(per_conj)
-                            # Record substitution for each resulting conjunct
-                            for conj in per_conj.clauses:
-                                if isinstance(conj, ConjunctiveFormula):
-                                    subst_map[str(conj)] = clause_sub
-                            # print(f'regressed_goal: {regressed_goal}', file = self._log_file, flush=True) if self._verbose else None
-                            # print(f'subst_map: {clause_sub}', file = self._log_file, flush=True) if self._verbose else None
-                        else:
-                            df = clause if isinstance(clause, DisjunctiveFormula) else DisjunctiveFormula(clause)
-                            per_conjunct_results.append(df)
-                            # Map empty substitution for non-processed clauses
-                            for conj in df.clauses if isinstance(df, DisjunctiveFormula) else [df]:
-                                if isinstance(conj, ConjunctiveFormula):
-                                    subst_map[str(conj)] = Substitution()
-                        
-                    # Recombine per-conjunct processed results
-                    regressed_goal = DisjunctiveFormula(*per_conjunct_results).distribute_and_over_or()
-
-                    # print("regressed_goal: ") 
-                    # print(regressed_goal)
-                else:
-                    # No equality processing; create an empty mapping for child substitutions
-                    subst_map = {}
-                regressed_goal = DisjunctiveFormula(*per_conjunct_results).distribute_and_over_or()
                 regressed_goal = self._operations.simplify_by_domain_axiom(regressed_goal, self._instance.init)
-                
-                if (simplify_typing and self._domain.has_type_conflict(regressed_goal)) or isinstance(regressed_goal, FalseFormula):
-                    # skip if there is a type conflict or the formula simplifes to false
-                    continue
-                
-                regressed_goal_list = []
-                if dup_detection:
-                    for conjunct in regressed_goal.clauses:
-                        if isinstance(conjunct, ConjunctiveFormula):
-                            noop_found = any(str(conjunct) == str(formula) for formula in visited_goal)
-                            if not noop_found:
-                                regressed_goal_list.append(conjunct)
-                                visited_goal.append(conjunct)
-                    regressed_goal = DisjunctiveFormula(*regressed_goal_list).simplify().distribute_and_over_or() if simplify_contradiction else DisjunctiveFormula(*regressed_goal_list).distribute_and_over_or()
 
-                # # remove any conjuncts in the regressed goal that implies the seen subgoal
-                # regressed_goal_list = []
-                # if simplify_dnf or dup_detection:
-                #     for conjunct in regressed_goal.clauses:
-                #         if isinstance(conjunct, ConjunctiveFormula):
-                #             implies_found = any(conjunct.implies(formula) for formula in visited_goal) if simplify_dnf else False
-                #             duplicate_found = any(conjunct.is_duplicate(formula) for formula in visited_goal) if dup_detection else False
-                #             if not implies_found and not duplicate_found:
-                #                 regressed_goal_list.append(conjunct)
-                #                 visited_goal.append(conjunct)
-                #             # else:
-                #             #     for formula in visited_goal:
-                #             #         if conjunct.implies(formula):
-                #             #             print(f'drop {conjunct} due to implies', file = self._log_file, flush=True) if self._verbose else None
-                #             #             print(f'{formula}', file = self._log_file, flush=True) if self._verbose else None
-                #             #             print('--------------------------------', file = self._log_file, flush=True) if self._verbose else None
-                #             #             break
-                #             #     for formula in visited_goal:
-                #             #         if conjunct.is_duplicate(formula):
-                #             #             print(f'drop {conjunct} due to duplicate', file = self._log_file, flush=True) if self._verbose else None
-                #             #             print(f'{formula}', file = self._log_file, flush=True) if self._verbose else None
-                #             #             print('--------------------------------', file = self._log_file, flush=True) if self._verbose else None
-                #             #             break
-                #             #print(f'drop this conjunct due to implies or duplicate: {conjunct}') if self._verbose else None
-                #     regressed_goal = DisjunctiveFormula(*regressed_goal_list).simplify().distribute_and_over_or() if simplify_contradiction else DisjunctiveFormula(*regressed_goal_list).distribute_and_over_or()
-              
-                # If regressed_goal contains multiple conjuncts, split only if there are non-empty per-conjunct substitutions
+
                 regressed_conjuncts = [c for c in regressed_goal.clauses if isinstance(c, ConjunctiveFormula)]
-                
-                # Check if any conjunct has a substitution
-                
-                has_any_subst = any(
-                bool(subst_map.get(str(conj), Substitution()))
-                for conj in regressed_conjuncts
-                    ) if 'subst_map' in locals() else False
-                
-                if len(regressed_conjuncts) > 1 and has_any_subst:
-                    # Additional dup detection per conjunct when splitting
-                    for conj in regressed_conjuncts:
-                        split_goal = DisjunctiveFormula(conj).distribute_and_over_or()
-                        conj_sub = subst_map.get(str(conj), Substitution())
-                        child_subst = {**current_node.substitution, **conj_sub}
-                        child_node = FOLRegressionPlanner.PlanNode(standardized_action, split_goal, current_node, current_node.depth + 1, child_subst)
-                        if not isinstance(child_node.sub_goal, FalseFormula):
-                            for c in child_node.sub_goal.clauses:
-                                if isinstance(c, ConjunctiveFormula):
-                                    visited_goal.append(c)
-                            frontier.append(child_node)
-                            plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
 
-                else:
-                    conj = regressed_conjuncts[0] if regressed_conjuncts else None
-                    conj_sub = subst_map.get(str(conj), Substitution()) if conj is not None and 'subst_map' in locals() else Substitution()
-                    child_subst = {**current_node.substitution, **conj_sub}
-                    child_node = FOLRegressionPlanner.PlanNode(standardized_action, regressed_goal, current_node, current_node.depth + 1, child_subst)
-                    # add to the frontier and plan if the subgoal hasn't visited before
+                for conjunct in regressed_conjuncts:
+                    
+                    clause_simplified, clause_sub = conjunct.simplify_equality(conjunct)
+
+                    
+
+
+                    new_subgoal = DisjunctiveFormula(clause_simplified)
+
+
+                    regressed_goal = self._operations.simplify_by_domain_axiom(regressed_goal, self._instance.init)
+                    action = standardized_action.substitute(clause_sub)
+
+                    # if str(new_subgoal) == str(current_goal):
+                    #     print("current_goal:", current_goal)
+                    #     print("standardized_action:", standardized_action)
+                    #     print("regressed_goal:", regressed_goal)
+                    #     print("----------------")
+                    #     continue
+
+
+                    
+                    child_node = FOLRegressionPlanner.PlanNode(action, new_subgoal, current_node, current_node.depth + 1, clause_sub)
                     if not isinstance(child_node.sub_goal, FalseFormula):
                         for conjunct in child_node.sub_goal.clauses:
                             if isinstance(conjunct, ConjunctiveFormula):
                                 visited_goal.append(conjunct)
-                            else:
-                                print(f"Not a conjunctive formula: {conjunct}", file = self._log_file, flush=True) if self._verbose else None
                         frontier.append(child_node)
                         plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
+        return plan
+
+                    # print("action: ", action)
+                    # print("clause_simplified: ", clause_simplified)
+                    # print("clause_sub: ", clause_sub)
+                    # print("----------------")
+                    
+
+                
+        #         # if str(regressed_goal) == str(current_goal):
+        #         #     print("current_goal:", current_goal)
+        #         #     print("standardized_action:", standardized_action)
+        #         #     print("regressed_goal:", regressed_goal)
+        #         #     print("----------------")
+        #         #     continue
+
+                
+        #         if simplify_contradiction:
+        #             regressed_goal = regressed_goal.simplify()
+
+        #         if isinstance(regressed_goal, Predicate):
+        #             continue
+            
+        #         if simplify_equality:
+        #             per_conjunct_results = []
+        #             subst_map: Dict[str, Substitution] = {}
+        #             for clause in regressed_goal.clauses:
+        #                 if isinstance(clause, ConjunctiveFormula):
+        #                     # Build substitution from equality for this conjunct only
+        #                     clause_simplified, clause_sub = clause.simplify_equality(current_goal)
+        #                     per_conj = (
+        #                         DisjunctiveFormula(clause_simplified)
+        #                         .substitute(clause_sub)
+        #                     )
+
+        #                     if simplify_contradiction:
+        #                         per_conj = per_conj.simplify_plan().distribute_and_over_or()
+        #                     else:
+        #                         per_conj = per_conj.distribute_and_over_or()
+        #                     per_conjunct_results.append(per_conj)
+        #                     # Record substitution for each resulting conjunct
+        #                     for conj in per_conj.clauses:
+        #                         if isinstance(conj, ConjunctiveFormula):
+        #                             subst_map[str(conj)] = clause_sub
+        #                     # print(f'regressed_goal: {regressed_goal}', file = self._log_file, flush=True) if self._verbose else None
+        #                     # print(f'subst_map: {clause_sub}', file = self._log_file, flush=True) if self._verbose else None
+        #                 else:
+        #                     df = clause if isinstance(clause, DisjunctiveFormula) else DisjunctiveFormula(clause)
+        #                     per_conjunct_results.append(df)
+        #                     # Map empty substitution for non-processed clauses
+        #                     for conj in df.clauses if isinstance(df, DisjunctiveFormula) else [df]:
+        #                         if isinstance(conj, ConjunctiveFormula):
+        #                             subst_map[str(conj)] = Substitution()
+                        
+        #             # Recombine per-conjunct processed results
+        #             regressed_goal = DisjunctiveFormula(*per_conjunct_results).distribute_and_over_or()
+
+        #             # print("regressed_goal: ") 
+        #             # print(regressed_goal)
+        #         else:
+        #             # No equality processing; create an empty mapping for child substitutions
+        #             subst_map = {}
+        #         regressed_goal = DisjunctiveFormula(*per_conjunct_results).distribute_and_over_or()
+        #         regressed_goal = self._operations.simplify_by_domain_axiom(regressed_goal, self._instance.init)
+                
+        #         if (simplify_typing and self._domain.has_type_conflict(regressed_goal)) or isinstance(regressed_goal, FalseFormula):
+        #             # skip if there is a type conflict or the formula simplifes to false
+        #             continue
+                
+        #         regressed_goal_list = []
+        #         if dup_detection:
+        #             for conjunct in regressed_goal.clauses:
+        #                 if isinstance(conjunct, ConjunctiveFormula):
+        #                     noop_found = any(str(conjunct) == str(formula) for formula in visited_goal)
+        #                     if not noop_found:
+        #                         regressed_goal_list.append(conjunct)
+        #                         visited_goal.append(conjunct)
+        #             regressed_goal = DisjunctiveFormula(*regressed_goal_list).simplify().distribute_and_over_or() if simplify_contradiction else DisjunctiveFormula(*regressed_goal_list).distribute_and_over_or()
+
+        #         # # remove any conjuncts in the regressed goal that implies the seen subgoal
+        #         # regressed_goal_list = []
+        #         # if simplify_dnf or dup_detection:
+        #         #     for conjunct in regressed_goal.clauses:
+        #         #         if isinstance(conjunct, ConjunctiveFormula):
+        #         #             implies_found = any(conjunct.implies(formula) for formula in visited_goal) if simplify_dnf else False
+        #         #             duplicate_found = any(conjunct.is_duplicate(formula) for formula in visited_goal) if dup_detection else False
+        #         #             if not implies_found and not duplicate_found:
+        #         #                 regressed_goal_list.append(conjunct)
+        #         #                 visited_goal.append(conjunct)
+        #         #             # else:
+        #         #             #     for formula in visited_goal:
+        #         #             #         if conjunct.implies(formula):
+        #         #             #             print(f'drop {conjunct} due to implies', file = self._log_file, flush=True) if self._verbose else None
+        #         #             #             print(f'{formula}', file = self._log_file, flush=True) if self._verbose else None
+        #         #             #             print('--------------------------------', file = self._log_file, flush=True) if self._verbose else None
+        #         #             #             break
+        #         #             #     for formula in visited_goal:
+        #         #             #         if conjunct.is_duplicate(formula):
+        #         #             #             print(f'drop {conjunct} due to duplicate', file = self._log_file, flush=True) if self._verbose else None
+        #         #             #             print(f'{formula}', file = self._log_file, flush=True) if self._verbose else None
+        #         #             #             print('--------------------------------', file = self._log_file, flush=True) if self._verbose else None
+        #         #             #             break
+        #         #             #print(f'drop this conjunct due to implies or duplicate: {conjunct}') if self._verbose else None
+        #         #     regressed_goal = DisjunctiveFormula(*regressed_goal_list).simplify().distribute_and_over_or() if simplify_contradiction else DisjunctiveFormula(*regressed_goal_list).distribute_and_over_or()
+              
+        #         # If regressed_goal contains multiple conjuncts, split only if there are non-empty per-conjunct substitutions
+        #         regressed_conjuncts = [c for c in regressed_goal.clauses if isinstance(c, ConjunctiveFormula)]
+                
+        #         # Check if any conjunct has a substitution
+                
+        #         has_any_subst = any(
+        #         bool(subst_map.get(str(conj), Substitution()))
+        #         for conj in regressed_conjuncts
+        #             ) if 'subst_map' in locals() else False
+                
+        #         if len(regressed_conjuncts) > 1 and has_any_subst:
+        #             # Additional dup detection per conjunct when splitting
+        #             for conj in regressed_conjuncts:
+        #                 split_goal = DisjunctiveFormula(conj).distribute_and_over_or()
+        #                 conj_sub = subst_map.get(str(conj), Substitution())
+        #                 child_subst = {**current_node.substitution, **conj_sub}
+        #                 child_node = FOLRegressionPlanner.PlanNode(standardized_action, split_goal, current_node, current_node.depth + 1, child_subst)
+        #                 if not isinstance(child_node.sub_goal, FalseFormula):
+        #                     for c in child_node.sub_goal.clauses:
+        #                         if isinstance(c, ConjunctiveFormula):
+        #                             visited_goal.append(c)
+        #                     frontier.append(child_node)
+        #                     plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
+
+        #         else:
+        #             conj = regressed_conjuncts[0] if regressed_conjuncts else None
+        #             conj_sub = subst_map.get(str(conj), Substitution()) if conj is not None and 'subst_map' in locals() else Substitution()
+        #             child_subst = {**current_node.substitution, **conj_sub}
+        #             child_node = FOLRegressionPlanner.PlanNode(standardized_action, regressed_goal, current_node, current_node.depth + 1, child_subst)
+        #             # add to the frontier and plan if the subgoal hasn't visited before
+        #             if not isinstance(child_node.sub_goal, FalseFormula):
+        #                 for conjunct in child_node.sub_goal.clauses:
+        #                     if isinstance(conjunct, ConjunctiveFormula):
+        #                         visited_goal.append(conjunct)
+        #                     else:
+        #                         print(f"Not a conjunctive formula: {conjunct}", file = self._log_file, flush=True) if self._verbose else None
+        #                 frontier.append(child_node)
+        #                 plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
                             
     
-        return plan
+        # return plan
