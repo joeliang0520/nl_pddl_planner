@@ -1,6 +1,6 @@
 import copy
 from typing import List
-from pddl_planner.logic.formula import Logic, Substitution, Formula, Predicate, ConjunctiveFormula, DisjunctiveFormula, Variable, Constant
+from pddl_planner.logic.formula import Logic, Substitution, Formula, Equality, Predicate, ConjunctiveFormula, DisjunctiveFormula, Variable, Constant
 from pddl_planner.logic.nl_formula import NLPredicate
 
 class Operations(Logic):
@@ -217,7 +217,7 @@ class Operations(Logic):
                             if name not in count_dict:
                                 count_dict[name] = 0
                             count_dict[name] += 1
-                if 'k-at-location' in count_dict and count_dict['k-at-location'] > 2:
+                if 'k-at-location' in count_dict and count_dict['k-at-location'] > 1:
                     # cannot hold more than one object at a time
                     # drop this conjunct
                     print("Drop conjunct: ", clause)
@@ -240,4 +240,34 @@ class Operations(Logic):
         return self.simplify_by_domain_axiom(formula)
     def simpl_domain_axmoin(self, formula: "DisjunctiveFormula") -> "DisjunctiveFormula":
         return self.simplify_by_domain_axiom(formula)
+
+    def has_conflicting_domain_axioms(self, formula: "ConjunctiveFormula") -> bool:
+        conflicting_predicates = []
+        equalities = []
+        for p in formula.clauses:
+            if isinstance(p, Equality) and p.is_neq:
+                equalities.append((str(p.term1), str(p.term2)))
+            elif isinstance(p, Predicate):
+                if p.name == 'k-at-location' and not p.is_neg:
+                    conflicting_predicates.append(p)
+
+        for i in range(len(conflicting_predicates)):
+            source_pred = conflicting_predicates[i]
+            for j in range(i + 1, len(conflicting_predicates)):
+                target_pred = conflicting_predicates[j]
+                pair_1 = (str(source_pred.terms[0]), str(target_pred.terms[0]))
+                pair_2 = (str(target_pred.terms[0]), str(source_pred.terms[0]))
+                if pair_1 in equalities or pair_2 in equalities:
+                    return True        
+
+        return False
+    
+    def has_repeating_actions(self, action1, action2) -> bool:
+        if action1 is None or action2 is None:
+            return False
+        if action1.name == action2.name:
+            return True
+        return False
+
+        
 

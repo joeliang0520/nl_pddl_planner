@@ -280,8 +280,8 @@ class FOLRegressionPlanner(Planner):
         
         # Return a flattened regressed goal  in DNF
         return DisjunctiveFormula(*regressed_disjunct_list).distribute_and_over_or()
-    
-    def regress_plan(self, simplify_equality: bool = True, simplify_contradiction: bool = True, simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True) -> List[Tuple[Formula, List[Action]]]:
+
+    def regress_plan_test(self, simplify_equality: bool = True, simplify_contradiction: bool = True, simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True) -> List[Tuple[Formula, List[Action]]]:
         """
         Generate a regressed plan by iteratively regressing the goal through applicable actions.
 
@@ -308,6 +308,81 @@ class FOLRegressionPlanner(Planner):
         for clause in goal.clauses:
             if isinstance(clause, ConjunctiveFormula):
                 visited_goal.append(clause)
+
+        actions = self._domain.actions
+
+        goto_action = [i for i in actions if i.name == 'goto-location'][0]
+        open_action = [i for i in actions if i.name == 'open-door-heaven'][0]
+        ask_action = [i for i in actions if i.name == 'ask-priest-heaven'][0]
+
+        goal_node = frontier.pop(0)
+
+        actions_seq = [open_action.standardize(self._operations), goto_action.standardize(self._operations), ask_action.standardize(self._operations), goto_action.standardize(self._operations)]
+
+        
+        print("First action: ")
+        action1 = actions_seq[0]
+        regressed_goal = self.regress(goal_node.sub_goal, action1).simplify()
+        branch1 = regressed_conjuncts = [c for c in regressed_goal.clauses if isinstance(c, ConjunctiveFormula)][0]
+        branch1, subst = branch1.simplify_equality(branch1)
+        branch1 = DisjunctiveFormula(branch1)
+        action1 = actions_seq[0].substitute(subst)
+        for i in [c for c in regressed_goal.clauses if isinstance(c, ConjunctiveFormula)]:
+            branch4 = i
+            branch4, subst = branch4.simplify_equality(branch4)
+            branch4 = DisjunctiveFormula(branch4)
+            action4 = actions_seq[0].substitute(subst)
+            print("action4: ", action4)
+            print("branch4: ", branch4)
+            print('......................')
+            
+        print("action1: ", action1)
+        print("branch1: ", branch1)
+        print('----------------')
+
+        print("Second action: ")
+        action2 = actions_seq[1]
+        regressed_goal = self.regress(branch1, action2).simplify()
+        print(regressed_goal)
+        branch2 = regressed_conjuncts = [c for c in regressed_goal.clauses if isinstance(c, ConjunctiveFormula)][1]
+        branch2, subst = branch2.simplify_equality(branch2)
+        branch2 = DisjunctiveFormula(branch2)
+        action2 = actions_seq[1].substitute(subst)
+        print("action2: ", action2)
+        print("branch2: ", branch2)
+        print('----------------')
+
+        print("Third action: ")
+        action3 = actions_seq[2]
+        regressed_goal = self.regress(branch2, action3).simplify()
+        print(regressed_goal)
+        branch3 = regressed_conjuncts = [c for c in regressed_goal.clauses if isinstance(c, ConjunctiveFormula)][0]
+        branch3, subst = branch3.simplify_equality(branch3)
+        branch3 = DisjunctiveFormula(branch3)
+        action3 = actions_seq[2].substitute(subst)
+        print("action3: ", action3)
+        print("branch3: ", branch3)
+        print('----------------')
+
+        print("Fourth action: ")
+        action4 = actions_seq[3]
+        regressed_goal = self.regress(branch3, action4).simplify()
+        print(regressed_goal)
+ 
+        
+        regressed_conjuncts = [c for c in regressed_goal.clauses if isinstance(c, ConjunctiveFormula)]
+        for i in regressed_conjuncts:
+            branch4 = i
+            branch4, subst = branch4.simplify_equality(branch4)
+            branch4 = DisjunctiveFormula(branch4)
+            action4 = actions_seq[3].substitute(subst)
+            print("action4: ", action4)
+            print("branch4: ", branch4)
+            print('......................')
+
+        raise ValueError
+
+        
 
         while frontier:
             current_node: FOLRegressionPlanner.PlanNode = frontier.pop(0)
@@ -352,6 +427,85 @@ class FOLRegressionPlanner(Planner):
 
 
                     
+                    child_node = FOLRegressionPlanner.PlanNode(action, new_subgoal, current_node, current_node.depth + 1, clause_sub)
+                    if not isinstance(child_node.sub_goal, FalseFormula):
+                        for conjunct in child_node.sub_goal.clauses:
+                            if isinstance(conjunct, ConjunctiveFormula):
+                                visited_goal.append(conjunct)
+                        frontier.append(child_node)
+                        plan.append((child_node.sub_goal, self.extract_plan(child_node), child_node.substitution))
+        return plan
+    
+    def regress_plan(self, simplify_equality: bool = True, simplify_contradiction: bool = True, simplify_typing: bool = True, simplify_dnf: bool = True, dup_detection: bool = True) -> List[Tuple[Formula, List[Action]]]:
+        """
+        Generate a regressed plan by iteratively regressing the goal through applicable actions.
+
+        This method starts with the instance goal (converted to Disjunctive Normal Form if needed)
+        and then iteratively regresses it using the available actions up to a maximum depth.
+        At each regression step, it creates new plan tree nodes and tracks visited subgoals to avoid duplication.
+        
+        Returns:
+            List[Tuple[Formula, List[Action]]]: A list of tuples where each tuple contains:
+                - A subgoal (Formula) that represents a regressed goal state.
+                - A list of actions (List[Action]) that form the plan to achieve that subgoal.
+        """
+        plan = []
+        goal = self._instance.goal.distribute_and_over_or()
+
+
+        if not isinstance(goal, DisjunctiveFormula):
+            raise ValueError(f"Goal must be a DisjunctiveFormula, but got {type(goal)}")
+        frontier = [FOLRegressionPlanner.PlanNode(None, goal)]
+        plan.append((frontier[0].sub_goal, [], Substitution()))
+
+        visited_goal = []
+
+        for clause in goal.clauses:
+            if isinstance(clause, ConjunctiveFormula):
+                visited_goal.append(clause)
+
+        while frontier:
+            current_node: FOLRegressionPlanner.PlanNode = frontier.pop(0)
+            current_goal: Formula = current_node.sub_goal
+            if current_node.depth >= self._max_depth:
+                # exit if max depth is reached
+                continue
+                
+            for action in self._domain.actions:
+                standardized_action = action.standardize(self._operations)
+                regressed_goal = self.regress(current_goal, standardized_action).simplify() if simplify_contradiction else self.regress(current_goal, standardized_action)
+                regressed_conjuncts = [c for c in regressed_goal.clauses if isinstance(c, ConjunctiveFormula)]
+
+                for conjunct in regressed_conjuncts:
+                    
+                    clause_simplified, clause_sub = conjunct.simplify_equality(conjunct)
+
+                    # check for imply conflicts
+                    if clause_simplified.check_implies(current_goal):
+                        print(clause_simplified)
+                        print(current_goal)
+                        print('......................')
+                        continue
+
+                    # check for domain axioms conflicts
+                    if self._operations.has_conflicting_domain_axioms(clause_simplified):
+                        continue
+
+                    # check for action conflicts
+                    action1 = current_node.action
+                    action2 = standardized_action
+                    if self._operations.has_repeating_actions(action1, action2):
+                        continue
+
+                    new_subgoal = DisjunctiveFormula(clause_simplified)
+
+                    # check for noop
+                    if new_subgoal == current_goal:
+                        continue
+
+                    # regressed_goal = self._operations.simplify_by_domain_axiom(regressed_goal, self._instance.init)
+                    action = standardized_action.substitute(clause_sub)
+
                     child_node = FOLRegressionPlanner.PlanNode(action, new_subgoal, current_node, current_node.depth + 1, clause_sub)
                     if not isinstance(child_node.sub_goal, FalseFormula):
                         for conjunct in child_node.sub_goal.clauses:

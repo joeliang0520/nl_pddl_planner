@@ -38,19 +38,14 @@ if __name__ == '__main__':
     #                 subgoal_count += 1
                 
     for plan in regressed_plans:
-        # if 'has-' in str(plan[0]):
         plan_names = [str(p.name) for p in plan[1]]
-        # goto_count = len([str(p) for p in plan_names if 'goto' in plan_names])
-        # ask_count = len([str(p) for p in plan_names if 'ask' in plan_names])
-        # open_count = len([str(p) for p in plan_names if 'open' in plan_names])
-
-        plan_list = ['goto-location', 'ask-priest-heaven', 'goto-location', 'open-door-heaven']
-        plan_list.reverse()
-        if plan_names == plan_list and 'answer' in str(plan[0]):
-            print("Subgoal: ", subgoal_count)
-            pprint(plan[0])
-            reversed_plan = plan[1]
-            reversed_plan.reverse()
-            pprint(reversed_plan)
-            print("--------------------")
-            subgoal_count += 1
+        print("Subgoal: ", subgoal_count)
+        pprint(plan[0])
+        reversed_plan = plan[1]
+        reversed_plan.reverse()
+        subst = plan[2]
+        reversed_plan = [p.substitute(subst) for p in reversed_plan]
+        pprint(reversed_plan)
+        pprint(plan[2])
+        print("--------------------")
+        subgoal_count += 1

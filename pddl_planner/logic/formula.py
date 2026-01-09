@@ -824,6 +824,27 @@ class ConjunctiveFormula(Formula):
                 # if other_clause is not a duplicate of any clause in self, return False
                 return False
         return True
+    
+    def check_implies(self, other: "ConjunctiveFormula") -> bool:
+        """Check if this formula implies another formula.
+
+        Args:
+            other (ConjunctiveFormula): The formula to check against.
+
+        Returns:
+            bool: True if this formula implies the other, False otherwise.
+        """
+
+        self_clauses = self.clauses
+        other_clauses = [p for p in other.clauses][0]
+        other_clauses = other_clauses.clauses
+
+
+        for other_clause in other_clauses:
+            if other_clause not in self_clauses:
+                return False
+
+        return True
 
 
 class DisjunctiveFormula(Formula):

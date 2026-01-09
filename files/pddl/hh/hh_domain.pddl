@@ -29,6 +29,7 @@
     :parameters (?loc1 - location ?loc2 - location)
     :precondition (and
       (k-at-location ?loc1)
+      ;(not (k-at-location ?loc2))
     )
     :effect (and
       (not (k-at-location ?loc1))
@@ -57,6 +58,17 @@
     )
     :effect (and
       (k-is-heaven ?d)
+    )
+  )
+  
+    (:action ask-preist-knows-true
+    :parameters (?p - priest ?loc - location)
+    :precondition (and
+        (k-at-location ?loc)
+        (k-priest-at ?p ?loc)
+    )
+    :effect (and 
+        (k-has-answer ?p)
     )
   )
 )
