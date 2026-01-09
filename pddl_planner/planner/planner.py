@@ -482,13 +482,14 @@ class FOLRegressionPlanner(Planner):
 
                     # check for imply conflicts
                     if clause_simplified.check_implies(current_goal):
-                        print(clause_simplified)
-                        print(current_goal)
-                        print('......................')
                         continue
 
                     # check for domain axioms conflicts
                     if self._operations.has_conflicting_domain_axioms(clause_simplified):
+                        continue
+
+                    # check for onehot conflicts
+                    if self._operations.has_conflicting_onehot(clause_simplified):
                         continue
 
                     # check for action conflicts

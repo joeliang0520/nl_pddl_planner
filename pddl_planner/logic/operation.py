@@ -262,6 +262,19 @@ class Operations(Logic):
 
         return False
     
+    def has_conflicting_onehot(self, formula: "ConjunctiveFormula") -> bool:
+        predicates = [str(p) for p in formula.clauses]
+
+        for i in range(len(predicates)):
+            source_pred = predicates[i]
+            source_pred_neg = 'k-not-' + '-'.join(source_pred.split('-')[1:])
+            print("Source pred: ", source_pred)
+            print("Source pred neg: ", source_pred_neg)
+            if source_pred_neg in predicates:
+                return True
+        return False
+
+
     def has_repeating_actions(self, action1, action2) -> bool:
         if action1 is None or action2 is None:
             return False
