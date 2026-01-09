@@ -212,13 +212,15 @@ class Operations(Logic):
                 for c in clause.clauses:
                     if isinstance(c, Predicate):
                         name = getattr(c, 'name', '').lower()
-                        if name == 'i am holding' or name == 'the hand is empty':
+                        is_neg = getattr(c, 'is_neg', False)
+                        if name == 'k-at-location' and not is_neg:
                             if name not in count_dict:
                                 count_dict[name] = 0
                             count_dict[name] += 1
-                if 'i am holding' in count_dict and count_dict['i am holding'] > 1:
+                if 'k-at-location' in count_dict and count_dict['k-at-location'] > 10:
                     # cannot hold more than one object at a time
                     # drop this conjunct
+                    print("Drop conjunct: ", clause)
                     continue
                 if 'the hand is empty' in count_dict and 'i am holding' in count_dict and count_dict['the hand is empty'] >= 1 and count_dict['i am holding'] >= 1:
                     # cannot hold and the hand is empty at the same time

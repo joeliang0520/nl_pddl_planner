@@ -372,6 +372,9 @@ class Formula(Logic):
 
         mapping: Dict["Term", "Term"] = {}
         return self._equals_helper(other, mapping)
+        # if str(self) == str(other):
+        #     print("check if "+ f"{self} is duplicate of {other}")
+        # return str(self) == str(other)
 
     def _equals_helper(self, other: "Formula", mapping: Dict["Term", "Term"], check_var_constant_consistency: bool = True) -> bool:
         """Helper method to check equality between formulas using a mapping for variables.
@@ -611,6 +614,11 @@ class ConjunctiveFormula(Formula):
             return FalseFormula()
         # if len(unique) == 1:
         #     return unique[0]
+
+        def substitute_equality(formula: "Formula", substitution: "Substitution") -> "Formula":
+            if isinstance(formula, Equality):
+                return formula.substitute(substitution)
+            return ConjunctiveFormula(*[substitute_equality(clause, substitution) for clause in formula.clauses])
 
         ret_formula = ConjunctiveFormula(*unique)
         self._combine_and_propagate_type_dict(ret_formula)
@@ -1420,7 +1428,7 @@ class Predicate(Atomic):
         """
         terms_str = ", ".join(str(term) for term in self._terms)
 
-        return f"{self.name}({terms_str})" if not self._is_neg else f"not {self.name}({terms_str})"
+        return f"{self.name}({terms_str})" if not self._is_neg else f"¬ {self.name}({terms_str})"
 
     def __hash__(self) -> int:
         """Compute the hash of the predicate.
