@@ -39,17 +39,19 @@
       (k-at-location ?loc1)
     )
     :effect (and
-      (k-not-at-location ?loc1)
+      ;(k-not-at-location ?loc1)
+      (not (k-at-location ?loc1))
       (k-at-location ?loc2)
     )
   )
 
+
   (:action open-door-heaven
-    :parameters (?door - door ?loc - location)
+    :parameters (?d - door ?loc - location)
     :precondition (and
       (k-at-location ?loc)
-      (k-door-at ?door ?loc)
-      (k-is-heaven ?door)
+      (k-door-at ?d ?loc)
+      (k-is-heaven ?d)   
     )
     :effect (and
       (k-in-heaven)
@@ -57,7 +59,7 @@
   )
 
   (:action ask-priest-heaven
-    :parameters (?p - priest ?loc - location)
+    :parameters (?p - priest ?d - door ?loc - location)
     :precondition (and
       (k-at-location ?loc)
       (k-priest-at ?p ?loc)
@@ -67,7 +69,6 @@
       (k-is-heaven ?d)
     )
   )
-
 
   (:action ask-preist-knows-true
     :parameters (?p - priest ?loc - location)
@@ -80,6 +81,8 @@
         (k-has-answer ?p)
     )
   )
+
+
 
 
 )

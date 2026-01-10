@@ -121,11 +121,125 @@ class Operations(Logic):
         standardized_formulas = [formula.substitute(substitution) for formula in formulas]
         return standardized_formulas
 
-    # # Backward-compatibility alias for varied naming in call sites
-    # def _simplify_by_domian_axiom(self, formula: "DisjunctiveFormula") -> "DisjunctiveFormula":
-    #     return self.simplify_by_domain_axiom(formula)
-    # def simpl_domain_axmoin(self, formula: "DisjunctiveFormula") -> "DisjunctiveFormula":
-    #     return self.simplify_by_domain_axiom(formula)
+    def replace_domain_with_goal_fluents(self, formula: "DisjunctiveFormula", goal: "Formula") -> "DisjunctiveFormula":
+        """
+        Replace predicate names in a formula with matching goal fluent names while preserving terms.
+
+        Matching uses entailment-aware equality via Formula._equals_helper when available (e.g., NLPredicate).
+
+        Args:
+            formula (DisjunctiveFormula): The formula whose predicate names may be replaced.
+            goal (Formula): The overall goal formula from which to collect goal fluents (predicates).
+
+        Returns:
+            DisjunctiveFormula: A new DisjunctiveFormula with predicate names replaced where matches are found.
+        """
+
+        # Gather all goal predicates
+        goal_preds: List[Predicate] = []
+
+        def _gather_preds(f: "Formula") -> None:
+            if isinstance(f, Predicate):
+                goal_preds.append(f)
+                return
+            if hasattr(f, 'clauses') and isinstance(getattr(f, 'clauses'), list):
+                for cl in f.clauses:
+                    _gather_preds(cl)
+
+        _gather_preds(goal)
+
+        def _match_and_replace(pred: Predicate) -> Predicate:
+            # Try match against any goal predicate using entailment-aware equality when available.
+            for gpred in goal_preds:
+                if pred._equals_helper(gpred, {}, check_var_constant_consistency=False):
+                    if pred.name == gpred.name:
+                        return pred
+                    gpred_copy = copy.deepcopy(gpred)
+                    pred_copy = copy.deepcopy(pred)
+                    # Unify the terms of the predicates, ignoring name
+                    # substitution = self.unify_with_different_name(pred_copy, gpred_copy, Substitution())
+                    # if substitution is not None:
+                    #     #pred = pred.substitute(substitution)
+                    #     gpred_copy = gpred_copy.substitute(substitution)
+                    # Prefer preserving NLPredicate fields when present
+                    return NLPredicate(
+                        gpred_copy.name,
+                        pred.nl_description,
+                        pred.is_neg,
+                        *pred.terms,
+                        term_type_dict=pred.term_type_dict,
+                        inital_terms=getattr(gpred_copy, '_inital_terms'),
+                        inital_str=getattr(gpred_copy, '_inital_str_represntation'),
+                    )
+            return pred
+
+        def _replace_in_formula(f: "Formula") -> "Formula":
+            if isinstance(f, Predicate):
+                return _match_and_replace(f)
+            if isinstance(f, ConjunctiveFormula):
+                replaced_children = [_replace_in_formula(cl) for cl in f.clauses]
+                ret = ConjunctiveFormula(*replaced_children)
+                formula._combine_and_propagate_type_dict(ret)  # reuse helper
+                return ret
+            if isinstance(f, DisjunctiveFormula):
+                replaced_children = [_replace_in_formula(cl) for cl in f.clauses]
+                ret = DisjunctiveFormula(*replaced_children)
+                formula._combine_and_propagate_type_dict(ret)
+                return ret
+            return f
+
+        replaced = _replace_in_formula(formula)
+        if isinstance(replaced, DisjunctiveFormula):
+            return replaced
+        return DisjunctiveFormula(replaced)
+
+    def simplify_by_domain_axiom(self, formula: "DisjunctiveFormula", init: Formula|None = None) -> "DisjunctiveFormula":
+        """
+        Domain-axiom simplification for regressed goals.
+
+        Args:
+            formula (DisjunctiveFormula): The regressed goal in DNF.
+
+        Returns:
+            DisjunctiveFormula: A filtered disjunction with invalid conjuncts removed.
+        """
+        if not isinstance(formula, DisjunctiveFormula):
+            return formula
+        kept_clauses: List[Formula] = []
+        for clause in formula.clauses:
+            if isinstance(clause, ConjunctiveFormula):
+                count_dict = {}
+                for c in clause.clauses:
+                    if isinstance(c, Predicate):
+                        name = getattr(c, 'name', '').lower()
+                        is_neg = getattr(c, 'is_neg', False)
+                        if name == 'k-at-location' and not is_neg:
+                            if name not in count_dict:
+                                count_dict[name] = 0
+                            count_dict[name] += 1
+                if 'k-at-location' in count_dict and count_dict['k-at-location'] > 1:
+                    # cannot hold more than one object at a time
+                    # drop this conjunct
+                    print("Drop conjunct: ", clause)
+                    continue
+                if 'the hand is empty' in count_dict and 'i am holding' in count_dict and count_dict['the hand is empty'] >= 1 and count_dict['i am holding'] >= 1:
+                    # cannot hold and the hand is empty at the same time
+                    # drop this conjunct
+                    continue
+                kept_clauses.append(clause)
+            else:
+                kept_clauses.append(clause)
+
+        result = DisjunctiveFormula(*kept_clauses)
+        # propagate type dicts
+        formula._combine_and_propagate_type_dict(result)
+        return result
+
+    # Backward-compatibility alias for varied naming in call sites
+    def _simplify_by_domian_axiom(self, formula: "DisjunctiveFormula") -> "DisjunctiveFormula":
+        return self.simplify_by_domain_axiom(formula)
+    def simpl_domain_axmoin(self, formula: "DisjunctiveFormula") -> "DisjunctiveFormula":
+        return self.simplify_by_domain_axiom(formula)
 
     def has_conflicting_domain_axioms(self, formula: "ConjunctiveFormula") -> bool:
         conflicting_predicates = []
@@ -172,24 +286,6 @@ class Operations(Logic):
                     return True
 
         return False
-    
-    def simplify_by_domain_axiom(self, curr_subgoal: "Formula", prev_subgoal: "Formula") -> "Formula":
-        prev_locations = [p for p in prev_subgoal.collect_preds() if p.name == 'k-at-location' ]
-        curr_locations = [p for p in curr_subgoal.collect_preds() if p.name == 'k-at-location' ]
-
-        if len(prev_locations) == 1 and len(curr_locations) == 2:
-            
-            sust = Substitution()
-            prev_location = prev_locations[0]
-            for l in curr_locations:
-                sust = self.unify(l, prev_location, sust)
-        else:
-            return curr_subgoal, None
-        
-        curr_subgoal = curr_subgoal.substitute(sust)
-
-        return curr_subgoal, sust
-        
 
 
     def has_repeating_actions(self, action1, action2) -> bool:
