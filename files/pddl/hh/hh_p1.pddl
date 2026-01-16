@@ -21,6 +21,7 @@
 
   (:goal (and
     ;(k-at-location loc-priest)
-    (k-in-heaven)
+    ;(k-in-heaven)
+    (k-has-answer p1)
   ))
 )

@@ -40,7 +40,7 @@ if __name__ == '__main__':
     pddl_domain = pddl.parse_domain('files/pddl/hh/hh_domain.pddl')
     pddl_problem = pddl.parse_problem('files/pddl/hh/hh_p1.pddl')
 
-    planner = FOLRegressionPlanner(pddl_domain, pddl_problem, max_depth=6)
+    planner = FOLRegressionPlanner(pddl_domain, pddl_problem, max_depth=2)
     regressed_plans = planner.regress_plan()
     print("Regressed goals:")
     num_subgoals = 0 

@@ -52,6 +52,7 @@ class Formula(Logic):
         self._clauses: List["Formula"] = sorted(set(clauses), key=lambda c: repr(c))
         self._check_clauses_are_formulas()
         self._term_type_dict = self._get_combined_type_dict(term_type_dict)
+        self._value = None
 
     def add_clause(self, clause: "Formula") -> None:
         """Add a clause to the formula.

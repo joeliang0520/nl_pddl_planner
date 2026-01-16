@@ -31,16 +31,21 @@
     (k-at-location ?loc - location)
     (k-not-at-location ?loc - location)
     (u-at-location ?loc - location)
+
+    (k-quried ?p - priest)
+    (k-not-quried ?p - priest)
+    (u-quried ?p - priest)
   )
 
   (:action goto-location
     :parameters (?loc1 - location ?loc2 - location)
     :precondition (and
       (k-at-location ?loc1)
+      ;(k-not-at-location ?loc2)
     )
     :effect (and
-      ;(k-not-at-location ?loc1)
-      (not (k-at-location ?loc1))
+      (k-not-at-location ?loc1)
+      ;(not (k-at-location ?loc1))
       (k-at-location ?loc2)
     )
   )
@@ -75,6 +80,7 @@
     :precondition (and
         (k-at-location ?loc)
         (k-priest-at ?p ?loc)
+        (u-quried ?p)
         (u-has-answer ?p)
     )
     :effect (and 
@@ -82,7 +88,18 @@
     )
   )
 
-
+    (:action ask-preist-knows-false
+    :parameters (?p - priest ?loc - location)
+    :precondition (and
+        (k-at-location ?loc)
+        (k-priest-at ?p ?loc)
+        (u-quried ?p)
+        (u-has-answer ?p)
+    )
+    :effect (and 
+        (k-not-has-answer ?p)
+    )
+  )
 
 
 )

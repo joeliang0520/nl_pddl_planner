@@ -242,6 +242,9 @@ class FOLRegressionPlanner(Planner):
         #     returned_ssa.term_type_dict.update(predicate.term_type_dict)
         # Substitute over the stored SSA formula
 
+        if predicate.name == 'k-has-answer':
+            print(returned_ssa.substitute(substitution))
+
         return returned_ssa.substitute(substitution)
          
 
