@@ -61,18 +61,18 @@ pddl_solver/
 │   │   ├── llm.py          # Entailment via cache + LLM
 │   │   └── llm_with_type.py# Entailment with type checking
 │   │
-│   ├── test/                              # Test Script for Completed Datasets
-│   │   ├── run_unified.py                      # Unified Runner across all datasets
-│   │   ├── run_blockworld.py                      # Blockworld dataset
-│   │   ├── run_alfworld_text.py                     # ALFWorld Text dataset
-│   │   ├── run_randomized_blockworld.py                    # ALFWorld Text dataset
-│   │   ├── run_mystery_blockworld.py                    # ALFWorld Text dataset
-│   │   ├── run_alfworld_text_with_misalignment.py   # ALFWorld Text w/ misalignment
-│   │   ├── run_blockworld.py                      # Blockworld dataset
-│   │   └── run_misalignment_blockworld.py           # Misalignment Blockworld dataset
+│   ├── test/                                       # Test Script for Completed Datasets
+│   │   ├── run_unified.py                          # Unified Runner across all datasets
+│   │   ├── run_blockworld.py                       # Blockworld dataset
+│   │   ├── run_alfworld_text.py                    # ALFWorld Text dataset
+│   │   ├── run_randomized_blockworld.py            # ALFWorld Text dataset
+│   │   ├── run_mystery_blockworld.py               # ALFWorld Text dataset
+│   │   ├── run_alfworld_text_with_misalignment.py  # ALFWorld Text w/ misalignment
+│   │   ├── run_blockworld.py                       # Blockworld dataset
+│   │   └── run_misalignment_blockworld.py          # Misalignment Blockworld dataset
 │   │
 │   ├── scripts/
-│   │   └── run_nl_pddl.py           # Configurable NL-PDDL Runner
+│   │   └── run_nl_pddl.py              # Configurable NL-PDDL Runner
 │
 ├── file/                               # Datasets in JSON-format
 │   ├── alfworld_text_with_misalignment/
@@ -97,7 +97,7 @@ pddl_solver/
 │   │
 │   └── misalignment_blockworld/
 │       ├── misalignment_blockworld_model.json
-│       └── blockworld_goal.json # same goal but misaligned actions
+│       └── blockworld_goal.json  # Same goal but misaligned actions
 │
 ├── validator/                    # Additional support codes for validation of Regressed Plan in Blockworld and ALFworld
 │   ├── alfworld_exp              # Validation for alfworld Text / Plan Generation and Validation for ALFWorld Vision
@@ -105,7 +105,7 @@ pddl_solver/
 │       └── run_alfworld_VLM.py   # ALFWorld Vision
 │   ├── block_test_repo           # Validator for Blockworlds
 │
-└── README.md                               # This file
+└── README.md                     # This file
 ```
 
 ## Quick start
