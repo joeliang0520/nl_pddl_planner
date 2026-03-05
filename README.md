@@ -356,3 +356,18 @@ For closed-world domains where the initial state is fully known, it is optional 
 	•	Effects are split into "Positive" (add) and "Negative" (delete).
 
 ---
+
+## Citation
+
+If you find our work useful, please consider giving a 🌟 to our repo and citing our paper.
+
+```text
+@inproceedings{
+liu2026natural,
+title={Natural Language {PDDL} ({NL}-{PDDL}) for Open-world Goal-oriented Commonsense Regression Planning in Embodied {AI}},
+author={Xiaotian Liu and Armin Toroghi and Jiazhou Liang and David Courtis and Ruiwen Li and Ali Pesaranghader and Jaehong Kim and Tanmana Sadhu and Hyejeong Jeon and Scott Sanner},
+booktitle={The Fourteenth International Conference on Learning Representations},
+year={2026},
+url={https://openreview.net/forum?id=kWCNhRdcDI}
+}
+```
