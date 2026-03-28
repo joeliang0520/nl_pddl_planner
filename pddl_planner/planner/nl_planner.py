@@ -68,26 +68,31 @@ class NLFOLRegressionPlanner(NLPlanner):
 
         # Configure planner logger level based on verbose flag
         from pddl_planner import make_colored_handler
-        if verbose and not logger.handlers:
-            logger.addHandler(make_colored_handler())
-            logger.setLevel(logging.DEBUG)
-        elif not verbose:
-            logger.setLevel(logging.WARNING)
-
-        # Configure LLM logger level based on llm_verbose flag
         llm_logger = logging.getLogger("pddl_planner.llm")
-        if llm_verbose and not llm_logger.handlers:
-            llm_logger.addHandler(make_colored_handler())
-            llm_logger.setLevel(logging.DEBUG)
-        elif not llm_verbose:
-            llm_logger.setLevel(logging.WARNING)
+        self._log_path = log_path
 
-        # File handler: if log_path is set, both loggers write to that file too
         if log_path is not None:
+            # When log_path is set, send all logs to file only (no console output)
             file_handler = logging.FileHandler(log_path, mode="w")
             file_handler.setFormatter(logging.Formatter("%(asctime)s | %(name)s | %(levelname)s | %(message)s"))
-            logger.addHandler(file_handler)
-            llm_logger.addHandler(file_handler)
+            if not logger.handlers:
+                logger.addHandler(file_handler)
+                logger.setLevel(logging.DEBUG)
+            if not llm_logger.handlers:
+                llm_logger.addHandler(file_handler)
+                llm_logger.setLevel(logging.DEBUG)
+        else:
+            if verbose and not logger.handlers:
+                logger.addHandler(make_colored_handler())
+                logger.setLevel(logging.DEBUG)
+            elif not verbose:
+                logger.setLevel(logging.WARNING)
+
+            if llm_verbose and not llm_logger.handlers:
+                llm_logger.addHandler(make_colored_handler())
+                llm_logger.setLevel(logging.DEBUG)
+            elif not llm_verbose:
+                llm_logger.setLevel(logging.WARNING)
 
         self._ssa = self.create_SSA()
 
@@ -485,6 +490,10 @@ class NLFOLRegressionPlanner(NLPlanner):
             if isinstance(clause, ConjunctiveFormula):
                 visited_goal.append(clause)
 
+        if self._log_path:
+            print(f"Starting regression | max_depth={self._max_depth} | "
+                  f"time_limit={self._time_limit} | {len(self._domain.actions)} actions in domain")
+            print(f"Logs are being written to: {self._log_path}")
         logger.info("Starting regression | max_depth=%d | time_limit=%s | %d actions in domain",
                      self._max_depth, self._time_limit, len(self._domain.actions))
 
@@ -619,4 +628,12 @@ class NLFOLRegressionPlanner(NLPlanner):
             avg_lat = lat_sum / max(1, lat_cnt)
             logger.info("LLM stats: %d API calls | avg latency %.4fs | %d cache hits",
                         getattr(self._llm, 'api_call_count', 0), avg_lat, getattr(self._llm, 'cache_call_count', 0))
+        if self._log_path:
+            print(f"Regression complete | {elapsed:.2f}s | {len(plan)} subgoals | "
+                  f"{missing} missing-predicate lookups")
+            if lat_cnt > 0:
+                print(f"LLM stats: {getattr(self._llm, 'api_call_count', 0)} API calls | "
+                      f"avg latency {lat_sum / max(1, lat_cnt):.4f}s | "
+                      f"{getattr(self._llm, 'cache_call_count', 0)} cache hits")
+            print(f"Full log saved to: {self._log_path}")
         return plan
