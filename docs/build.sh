@@ -52,7 +52,7 @@ print('  Notebook patched (front-matter, rules, image refs)')
 "
 
 echo "=== Generating tree viewer demo HTML ==="
-RESULT_FILE="${1:-$REPO_ROOT/pddl_planner/tests/results/misalignment_blockworld_results_depth4/misalignment_blockworld_results_1.txt}"
+RESULT_FILE="${1:-$DOCS/_assets/demo_result.txt}"
 python -m pddl_planner.plan_viewer "$RESULT_FILE" \
     -o "$DOCS/_assets/plan_viewer_demo.html" --no-open
 
