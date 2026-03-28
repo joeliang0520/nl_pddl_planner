@@ -10,12 +10,16 @@ import copy
 import time
 import random
 import itertools
+import os
+import logging
+
+logger = logging.getLogger("pddl_planner.llm")
 
 class LLM:
     """
     A class to intilize and interact with the LLM for various task in the regression planner.
     """
-    
+
     def __init__(self, model_name: str, api_key: str, cache_path: str|None ='cache.json', verbose: bool = True):
         """
         Initialize the LLM.
@@ -29,7 +33,7 @@ class LLM:
         self._api_key = api_key
         self._cache_path = cache_path
         self._cache = self._load_cache()
-        self.client = openai.OpenAI(api_key=api_key) if api_key is not None else openai.OpenAI(api_key='placeholder')
+        self.client = openai.OpenAI(api_key=api_key)
         self._n_iter = 5 # number of iterations for the entailment check for self consistency check
         self._operations = Operations()
         self._verbose = verbose
@@ -38,6 +42,9 @@ class LLM:
         # Track sample-level counts
         self.cache_call_count = 0  # number of cached responses consumed
         self.api_call_count = 0    # number of API sample queries (excludes per-attempt retries)
+        # Track API latency (successful request durations only)
+        self.api_latency_sum = 0.0
+        self.api_latency_count = 0
 
     def entailment(self, predicate: NLPredicate, predicates: List[NLPredicate], background_predicates: Tuple[Action, List[NLPredicate]] = (None, []),
                     domain_predicates: bool = False, flag = True) -> NLPredicate|None:
@@ -56,20 +63,20 @@ class LLM:
         """
         # update current cache
         self._cache = self._load_cache()
-        print(f'[Info] Checking entailment via cache/LLM for "{predicate.nl_description}"') if self._verbose else None
+        logger.info('Checking entailment for "%s"', predicate.nl_description)
         entailed_preds = []
         for pred in predicates:
             # Create deep copies to prevent modifications to original objects
             predicate_copy = copy.deepcopy(predicate)
             pred_copy = copy.deepcopy(pred)
-            
+
             # Find proper substitution between the target predicate and the current predicate
             # Use unify_with_different_name for entailment tasks to allow different predicate names
             substitution = self._operations.unify_with_different_name(pred_copy, predicate_copy,  Substitution())
             if substitution is None:
                 continue
-            print(f'[Substitution] Existing substitution: {substitution} between "{str(predicate_copy)}" and "{str(pred_copy)}"') if self._verbose else None
-    
+            logger.debug('Substitution: %s between "%s" and "%s"', substitution, str(predicate_copy), str(pred_copy))
+
             # Build and try all permutations of value assignments if multiple variables are present
             keys = list(substitution.keys())
             values = list(substitution.values())
@@ -77,12 +84,12 @@ class LLM:
             if len(values) > 1:
                 # Deduplicate permutations in case of repeated values
                 permuted_values_list = list({tuple(p) for p in itertools.permutations(values, len(values))})
-                print(f"[Substitution] Trying {len(permuted_values_list)} permutations for substitution keys {keys}") if self._verbose else None
+                logger.debug("Trying %d substitution permutations for keys %s", len(permuted_values_list), keys)
 
             entailed_for_this_pred = False
             winning_perm_sub = None
             for perm_vals in permuted_values_list:
-                print(f'[Substitution] Permutation: {perm_vals} for substitution keys {keys}') if self._verbose else None
+                logger.debug('Permutation: %s for keys %s', perm_vals, keys)
                 perm_sub = Substitution({k: v for k, v in zip(keys, perm_vals)})
 
                 # Apply substitution on fresh copies to avoid cross-permutation side effects
@@ -118,7 +125,7 @@ class LLM:
                     break
 
             if entailed_for_this_pred:
-                print(f"[Success] Predicate {str(predicate)} is entailed by {pred.name} from LLM") if self._verbose else None
+                logger.info('Entailment found: "%s" -> "%s"', str(predicate), pred.name)
                 entailed_preds.append(perm_pred)
                 # Record the substitution used for entailment for later SSA alignment
                 try:
@@ -135,11 +142,11 @@ class LLM:
             return predicate
         else:
             # if there are no entailed predicates, return None
-            print(f"[No Entailment] Failed: Predicate {predicate.nl_description} is not entailed by any of the predicates") if self._verbose else None
+            logger.warning('No entailment found for "%s" against %d candidates', predicate.nl_description, len(predicates))
             return None
 
-    def _entailment_check(self, target_str: str, pred_str: str, background_predicates: Tuple[Action, List[NLPredicate]] = (None, []), 
-        target_predicate_name: Optional[str] = None, flag: bool = True) -> Tuple[bool, str]:
+    def _entailment_check(self, target_str: str, pred_str: str, background_predicates: Tuple[Action, List[NLPredicate]] = (None, []),
+target_predicate_name: Optional[str] = None, flag: bool = True) -> Tuple[bool, str]:
         """
         Check if the target description is entailed by the candidate description, with caching and self-consistency.
 
@@ -167,10 +174,14 @@ class LLM:
         for t in used_cached:
             decision, _ = self._parse_yes_no_response(t)
             normal_results.append((decision, t))
+        if used_cached:
+            logger.debug("Cache hit: %d/%d samples for \"%s\" vs \"%s\"", len(used_cached), self._n_iter, target_str, pred_str)
         # If we have fewer than n_iter cached, complete by querying LLM and updating cache
         missing = max(0, self._n_iter - len(cached_texts))
         last_text = ""
         if flag and missing > 0: self.api_call_count += 1
+        if missing > 0:
+            logger.debug("Querying LLM for %d additional samples", missing)
         for _ in range(missing):
             # count one API sample query (regardless of internal retries)
             decision, text = self._get_llm_responses(target_str, pred_str, background_predicates, target_predicate_name=target_predicate_name)
@@ -178,7 +189,10 @@ class LLM:
                 self._update_cache_llm_response(target_str, pred_str, text, predicate_name=target_predicate_name)
                 last_text = text or last_text
             normal_results.append((decision, text or ""))
-        print(f'[LLM Response] is "{target_str}" entailed by "{pred_str}" ?: {[result[0] for result in normal_results]}') if self._verbose else None
+        votes = [result[0] for result in normal_results]
+        yes_count = sum(1 for v in votes if v is True)
+        no_count = sum(1 for v in votes if v is False)
+        logger.info('Entailment vote: "%s" entailed by "%s"? %d/%d yes (%s)', target_str, pred_str, yes_count, len(votes), votes)
         majority_decision, majority_text = self._self_consistent_decision(normal_results)
         if majority_decision is not None:
             return bool(majority_decision), (majority_text or last_text)
@@ -237,7 +251,7 @@ class LLM:
         Returns:
             Tuple[Optional[bool], str]: (decision, raw_text) where decision can be True/False/None on parse failure.
         """
-        
+
         prompt = self._build_entailment_prompt(
             target_str,
             pred_str,
@@ -250,17 +264,26 @@ class LLM:
         for attempt in range(max_retries):
             try:
                 client = self.client.with_options(timeout=timeout)
+                t0 = time.time()
                 response = client.chat.completions.create(
                     model=self.model_name,
                     messages=[{"role": "user", "content": prompt}],
                 )
+                latency = time.time() - t0
+                try:
+                    self.api_latency_sum += latency
+                    self.api_latency_count += 1
+                except Exception:
+                    self.api_latency_sum = latency
+                    self.api_latency_count = 1
+                logger.debug("API call completed in %.3fs (model=%s)", latency, self.model_name)
                 return self._parse_yes_no_response(response.choices[0].message.content.strip())
             except Exception as err:
                 last_error = err
                 wait_seconds = (2 ** attempt) + random.uniform(0, 0.5)
-                print(f"[Retry] LLM call failed (attempt {attempt + 1}/{max_retries}): {err}. Waiting {wait_seconds:.2f}s") if self._verbose else None
+                logger.warning("API call failed (attempt %d/%d): %s — retrying in %.2fs", attempt + 1, max_retries, err, wait_seconds)
                 time.sleep(wait_seconds)
-        print(f"[Error] LLM call failed after {max_retries} attempts: {last_error}") if self._verbose else None
+        logger.error("API call failed after %d attempts: %s", max_retries, last_error)
         return None, ""
 
     def _build_entailment_prompt(
@@ -286,59 +309,48 @@ class LLM:
         Returns:
             str: The full prompt string.
         """
+        from pddl_planner.llm.prompts import load_prompt
+
         action_description = ""
         if include_action and background_predicates and background_predicates[0] is not None:
             action = background_predicates[0]
-            action_description = f"""
-                {action.name} 
-                with the following preconditions: {[clause.nl_description for clause in action.preconditions.clauses if isinstance(clause, NLPredicate)]}
-                and the following effects: {[clause.nl_description for clause in action.effects.clauses if isinstance(clause, NLPredicate)]}
-                """
+            action_description = (
+                f"{action.name}\n"
+                f"with the following preconditions: {[clause.nl_description for clause in action.preconditions.clauses if isinstance(clause, NLPredicate)]}\n"
+                f"and the following effects: {[clause.nl_description for clause in action.effects.clauses if isinstance(clause, NLPredicate)]}"
+            )
+
         background_predicates_str = ""
         if include_background_predicates and background_predicates and len(background_predicates) > 1:
-            background_predicates_str = "\n ".join([f"- {pred.nl_description}" for pred in background_predicates[1] 
+            background_predicates_str = "\n ".join([f"- {pred.nl_description}" for pred in background_predicates[1]
             if pred.nl_description != pred_str and pred.nl_description != target_str])
-            # avoid leaking the target or candidate predicate as background predicates to LLM
+
         examples_block = ""
         if include_examples:
-            examples_block = """
-                Example of entailment:
-                - The agent possesses POTATO implies the agent holds POTATO
-                - POTATO is in the sink implies POTATO is in the sink
-                - POTATO is baked implies POTATO is cooked
-                """
+            examples_block = load_prompt("entailment_examples")
 
-        prompt = f"""
-                Role: You are a helper agent in a common household setting{ ' that currently doing the following action:' if action_description else ':'}
-                {action_description}
+        has_action = bool(action_description)
+        has_bg = bool(background_predicates_str)
 
-                Question: 
-                 - if you know Predicate 2 "{pred_str}" is true, can you imply Predicate 1 "{target_str}" is true { ' when doing the action' if action_description else ''}?.
-
-                - Respond with exactly "YES" if you think the statement is generally imply
-                - Respond with "NO" if you think the statement is generally false
-
-                Input:
-                - Predicate 1: "{target_str}"
-                - Predicate 2: "{pred_str}"
-                
-                Instructions:
-                1. Use the definition of the predicates to determine if Predicate 2 implies Predicate 1.
-                 { '2.You know following background to determine the sepcific information of the objects within Predicate 1 and Predicate 2.' if background_predicates_str else ''}
-                {background_predicates_str}
-                {'3.' if include_background_predicates else '2. '}. When determing the response, consider the meaning of the Predicate 1 and Predicate 2 with the type of the specific object each referring to{ ' in the context of the action' if action_description else ' in common contexts'}.
-                {'4.' if include_background_predicates else '3. '}. Be creative and think outside the box. If there just typo between the two predicates, you should say Yes.
-
-
-                Output format:
-                - Line 1: exactly YES or NO.
-                - Line 2: Reason.
-
-                {examples_block}
-
-                Response:"""
+        prompt = load_prompt(
+            "entailment",
+            target_str=target_str,
+            pred_str=pred_str,
+            action_description=action_description,
+            role_suffix=" that currently doing the following action:" if has_action else ":",
+            question_suffix=" when doing the action" if has_action else "",
+            background_instruction=(
+                "2.You know following background to determine the sepcific information of the objects within Predicate 1 and Predicate 2."
+                if has_bg else ""
+            ),
+            background_predicates_str=background_predicates_str,
+            step_consider="3." if include_background_predicates else "2.",
+            consider_suffix=" in the context of the action" if has_action else " in common contexts",
+            step_creative="4." if include_background_predicates else "3.",
+            examples_block=examples_block,
+        )
         return prompt
-    
+
     def _get_cached_llm_responses(self, target_str: str, candidate_pred_nl: str) -> Optional[List[str]]:
         """
         Retrieve cached raw LLM response texts (list) for the given NL pair if available.
@@ -360,7 +372,7 @@ class LLM:
                 # Backward-compat: single string stored before switch to list
                 return [val]
         return None
-    
+
     def _load_cache(self) -> Dict[str, str]:
         """
         Load the cache from the file.
@@ -383,7 +395,7 @@ class LLM:
             self._cache_path = 'cache.json'
             self._save_cache()
         return self._cache
-        
+
 
     def _load_cache_entailment(self, predicate: NLPredicate, predicates: List[NLPredicate]) -> Tuple[bool, NLPredicate|List[NLPredicate]|None]:
         """
@@ -394,7 +406,7 @@ class LLM:
             # check if the predicate string representation is in the cache of previous entailments
             predicate_str = predicate.nl_description
             if predicate_str in self._cache:
-                print(f'found the predicate "{predicate_str}" in the cache') if self._verbose else None
+                logger.debug('Cache hit for predicate "%s"', predicate_str)
                 cached_value = self._cache[predicate_str]
                 # New schema: dict of pred_name -> raw_response_text
                 if isinstance(cached_value, dict):
@@ -413,7 +425,7 @@ class LLM:
                 # Backward compatibility: old schema
                 entailed_pred_name = cached_value
                 if entailed_pred_name is None:
-                    return True, None 
+                    return True, None
                 if isinstance(entailed_pred_name, list):
                     entailed_preds = []
                     for entailed_pred in entailed_pred_name:
@@ -526,7 +538,7 @@ class LLM:
             return False, original_text
 
         return None, original_text
-    
+
     def _save_cache(self) -> None:
         """
         Save the cache to the file based on the provided cache path.
@@ -538,11 +550,11 @@ class LLM:
         """
         Replace the name of the target predicate with the name of the entailed predicate,
         while keeping all terms the same as the original target predicate.
-        
+
         Args:
             target_predicate (NLPredicate): The target predicate whose name will be replaced.
             entailed_predicate (NLPredicate): The entailed predicate whose name will be used.
-            
+
         Returns:
             NLPredicate: A new predicate with the entailed predicate's name but target predicate's terms.
         """
@@ -551,7 +563,7 @@ class LLM:
         entailed_predicate_copy = copy.deepcopy(entailed_predicate)
         # Get the original string representation
         original_str_rep = str(target_copy)
-        
+
         # Replace the target predicate name with the entailed predicate name in the string representation
         # This handles cases where the name might appear multiple times or in different contexts
         updated_str_rep = original_str_rep.replace(target_copy.name, entailed_predicate.name)
@@ -560,7 +572,7 @@ class LLM:
         substitution = self._operations.unify_with_different_name(target_copy, entailed_predicate_copy, Substitution())
         if substitution is not None:
             entailed_predicate_copy = entailed_predicate_copy.substitute(substitution)
-        
+
         # Create a new NLPredicate with the entailed predicate's name but target predicate's terms
         new_predicate = NLPredicate(
             entailed_predicate_copy.name,
@@ -570,5 +582,5 @@ class LLM:
             term_type_dict=entailed_predicate_copy.term_type_dict,
             entailed_by=entailed_predicate_copy
         )
-        
+
         return new_predicate

@@ -163,14 +163,12 @@ def main() -> None:
         end_time = time.time()
         print(f"Time taken: {end_time - start_time} seconds")
 
-        # Append LLM call counts to a per-depth file inside results folder
+        # Append missing predicate count to a per-depth file inside results folder
         calls_file_path = os.path.join(save_folder_path, "llm_calls.txt")
-        cache_calls = getattr(planner._llm, "cache_call_count", 0)
-        api_calls = getattr(planner._llm, "api_call_count", 0)
-        total_calls = getattr(planner._llm, "call_count", 0)
+        missing_count = getattr(planner, "_missing_name_count", 0)
         with open(calls_file_path, "a") as cf:
-            # dataset, depth, problem_index, cache, api, total
-            cf.write(f"{config['result_prefix']},{max_depth-1},{i},{cache_calls},{api_calls},{total_calls}\n")
+            # dataset, depth, problem_index, missing_predicate_count
+            cf.write(f"{config['result_prefix']},{max_depth-1},{i},{missing_count}\n")
 
 
 if __name__ == "__main__":

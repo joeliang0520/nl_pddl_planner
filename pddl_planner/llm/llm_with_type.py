@@ -10,6 +10,9 @@ import copy
 import time
 import random
 import itertools
+import logging
+
+logger = logging.getLogger("pddl_planner.llm")
 
 class LLM:
     """
@@ -58,7 +61,7 @@ class LLM:
         # update current caches
         self._cache = self._load_cache()
         self._type_cache = self._load_type_cache()
-        print(f'[Info] Checking entailment via cache/LLM for "{predicate.nl_description}"') if self._verbose else None
+        logger.info('Checking entailment for "%s"', predicate.nl_description)
         entailed_preds = []
         for pred in predicates:
             # Create deep copies to prevent modifications to original objects
@@ -71,7 +74,7 @@ class LLM:
             if substitution is None:
                 continue
 
-            print(f'[Substitution] Existing substitution: {substitution} between "{str(predicate_copy)}" and "{str(pred_copy)}"') if self._verbose else None
+            logger.debug('Substitution: %s between "%s" and "%s"', substitution, str(predicate_copy), str(pred_copy))
             
             # Build and try all permutations of value assignments if multiple variables are present
             keys = list(substitution.keys())
@@ -80,7 +83,7 @@ class LLM:
             if len(values) > 1:
                 # Deduplicate permutations in case of repeated values
                 permuted_values_list = list({tuple(p) for p in itertools.permutations(values, len(values))})
-                print(f"[Substitution] Trying {len(permuted_values_list)} permutations for substitution keys {keys}") if self._verbose else None
+                logger.debug("Trying %d substitution permutations for keys %s", len(permuted_values_list), keys)
                 
             entailed_for_this_pred = False
             winning_perm_sub = None
@@ -148,7 +151,7 @@ class LLM:
                     break
 
             if entailed_for_this_pred:
-                print(f"[Success] Predicate {str(predicate)} is entailed by {pred.name} from LLM") if self._verbose else None
+                logger.info('Entailment found: "%s" -> "%s"', str(predicate), pred.name)
                 entailed_preds.append(perm_pred)
                 # Record the substitution used for entailment for later SSA alignment
                 try:
@@ -165,7 +168,7 @@ class LLM:
             return predicate
         else:
             # if there are no entailed predicates, return None
-            print(f"[No Entailment] Failed: Predicate {predicate.nl_description} is not entailed by any of the predicates") if self._verbose else None
+            logger.warning('No entailment found for "%s" against %d candidates', predicate.nl_description, len(predicates))
             return None
 
     def _entailment_check(self, target_str: str, pred_str: str, background_predicates: Tuple[Action, List[NLPredicate]] = (None, []), 
@@ -205,7 +208,9 @@ class LLM:
                     self._update_cache_llm_response(target_str, pred_str, text, predicate_name=target_predicate_name)
                 last_text = text or last_text
             normal_results.append((decision, text or ""))
-        print(f'[LLM Response] ({mode}) is "{target_str}" entailed by "{pred_str}" ?: {[result[0] for result in normal_results]}') if self._verbose else None
+        votes = [result[0] for result in normal_results]
+        yes_count = sum(1 for v in votes if v is True)
+        logger.info('Entailment vote (%s): "%s" entailed by "%s"? %d/%d yes (%s)', mode, target_str, pred_str, yes_count, len(votes), votes)
         majority_decision, majority_text = self._self_consistent_decision(normal_results)
         if majority_decision is not None:
             return bool(majority_decision), (majority_text or last_text)
@@ -292,9 +297,9 @@ class LLM:
             except Exception as err:
                 last_error = err
                 wait_seconds = (2 ** attempt) + random.uniform(0, 0.5)
-                print(f"[Retry] LLM call failed (attempt {attempt + 1}/{max_retries}): {err}. Waiting {wait_seconds:.2f}s") if self._verbose else None
+                logger.warning("API call failed (attempt %d/%d): %s — retrying in %.2fs", attempt + 1, max_retries, err, wait_seconds)
                 time.sleep(wait_seconds)
-        print(f"[Error] LLM call failed after {max_retries} attempts: {last_error}") if self._verbose else None
+        logger.error("API call failed after %d attempts: %s", max_retries, last_error)
         return None, ""
 
     def _build_entailment_prompt(
@@ -320,58 +325,46 @@ class LLM:
         Returns:
             str: The full prompt string.
         """
+        from pddl_planner.llm.prompts import load_prompt
+
         action_description = ""
         if include_action and background_predicates and background_predicates[0] is not None:
             action = background_predicates[0]
-            action_description = f"""
-                {action.name} 
-                with the following preconditions: {[clause.nl_description for clause in action.preconditions.clauses if isinstance(clause, NLPredicate)]}
-                and the following effects: {[clause.nl_description for clause in action.effects.clauses if isinstance(clause, NLPredicate)]}
-                """
+            action_description = (
+                f"{action.name}\n"
+                f"with the following preconditions: {[clause.nl_description for clause in action.preconditions.clauses if isinstance(clause, NLPredicate)]}\n"
+                f"and the following effects: {[clause.nl_description for clause in action.effects.clauses if isinstance(clause, NLPredicate)]}"
+            )
+
         background_predicates_str = ""
         if include_background_predicates and background_predicates and len(background_predicates) > 1:
-            background_predicates_str = "\n ".join([f"- {pred.nl_description}" for pred in background_predicates[1] 
+            background_predicates_str = "\n ".join([f"- {pred.nl_description}" for pred in background_predicates[1]
             if pred.nl_description != pred_str and pred.nl_description != target_str])
-            # avoid leaking the target or candidate predicate as background predicates to LLM
-        
+
         examples_block = ""
         if include_examples:
-            examples_block = """
-                Example of entailment:
-                - The agent possesses POTATO implies the agent holds POTATO
-                - POTATO is in the sink implies POTATO is in the sink
-                - POTATO is baked implies POTATO is cooked
-                """
+            examples_block = load_prompt("entailment_examples")
 
-        prompt = f"""
-                Role: You are a helper agent in a common household setting{ ' that currently doing the following action:' if action_description else ':'}
-                {action_description}
+        has_action = bool(action_description)
+        has_bg = bool(background_predicates_str)
 
-                Question: 
-                 - if you know Predicate 2 "{pred_str}" is true, can you imply Predicate 1 "{target_str}" is true { ' when doing the action' if action_description else ''}?.
-
-                - Respond with exactly "YES" if you think the statement is generally imply
-                - Respond with "NO" if you think the statement is generally false
-
-                Input:
-                - Predicate 1: "{target_str}"
-                - Predicate 2: "{pred_str}"
-                
-                Instructions:
-                1. Use the definition of the predicates to determine if Predicate 2 implies Predicate 1.
-                 { '2.You know following background to determine the sepcific information of the objects within Predicate 1 and Predicate 2.' if background_predicates_str else ''}
-                {background_predicates_str}
-                {'3.' if include_background_predicates else '2. '}. When determing the response, consider the meaning of the Predicate 1 and Predicate 2 with the type of the specific object each referring to{ ' in the context of the action' if action_description else ' in common contexts'}.
-                {'4.' if include_background_predicates else '3. '}. Be creative and think outside the box. If there just typo between the two predicates, you should say Yes.
-
-
-                Output format:
-                - Line 1: exactly YES or NO.
-                - Line 2: Reason.
-
-                {examples_block}
-
-                Response:"""
+        prompt = load_prompt(
+            "entailment",
+            target_str=target_str,
+            pred_str=pred_str,
+            action_description=action_description,
+            role_suffix=" that currently doing the following action:" if has_action else ":",
+            question_suffix=" when doing the action" if has_action else "",
+            background_instruction=(
+                "2.You know following background to determine the sepcific information of the objects within Predicate 1 and Predicate 2."
+                if has_bg else ""
+            ),
+            background_predicates_str=background_predicates_str,
+            step_consider="3." if include_background_predicates else "2.",
+            consider_suffix=" in the context of the action" if has_action else " in common contexts",
+            step_creative="4." if include_background_predicates else "3.",
+            examples_block=examples_block,
+        )
         return prompt
     
     def _build_type_entailment_prompt(
@@ -382,23 +375,13 @@ class LLM:
         """
         Build a type entailment prompt: decide if candidate types imply target types per position.
         """
-        prompt = f"""
-                You are checking TYPE ENTAILMENT between two predicates' term types.
+        from pddl_planner.llm.prompts import load_prompt
 
-                - If the candidate's term type set implies or matches the target's term type set for each corresponding term, answer YES.
-                - Consider synonyms and common-sense subtype relations (e.g., 'vegetable' entails 'food').
-                - If information is unknown, be conservative and answer NO unless it's very likely.
-
-                Input:
-                - Target term types: {pred_types} 
-                - Candidate term types: {target_types}
-
-                Output format:
-                - Line 1: exactly YES or NO.
-                - Line 2: Reason.
-
-                Response:"""
-        return prompt
+        return load_prompt(
+            "type_entailment",
+            target_types=target_types,
+            pred_types=pred_types,
+        )
     
     def _get_cached_llm_responses(self, target_str: str, candidate_pred_nl: str) -> Optional[List[str]]:
         """
@@ -475,7 +458,7 @@ class LLM:
             # check if the predicate string representation is in the cache of previous entailments
             predicate_str = predicate.nl_description
             if predicate_str in self._cache:
-                print(f'found the predicate "{predicate_str}" in the cache') if self._verbose else None
+                logger.debug('Cache hit for predicate "%s"', predicate_str)
                 cached_value = self._cache[predicate_str]
                 # New schema: dict of pred_name -> raw_response_text
                 if isinstance(cached_value, dict):

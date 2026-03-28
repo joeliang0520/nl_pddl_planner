@@ -19,17 +19,19 @@ Model = Literal["gpt-4o","gpt-4", "gpt-3.5-turbo", "text-davinci-003"]
 
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
-# OPENAI API 
-# client = OpenAI(
-#     api_key = 'sk-qNYEJ2DgMqHhp1xqj5kMidEm7Sa8YRqdb-SMq4j1UTT3BlbkFJ_4Ewb-lq_ApI_8gZHx3NL6o7OZ_tjTjEcmq6iulx4A'
-# )
-
-# Azure API
-client = AzureOpenAI(
-  azure_endpoint = "https://ail-responsible-embodied-ai.openai.azure.com/",
-  api_key="1b62bfd691cc4afb94ec46eab47924ed",  
-  api_version="2024-02-01"
-)
+# Configure client from environment variables
+# Set OPENAI_API_KEY and optionally AZURE_OPENAI_ENDPOINT + AZURE_OPENAI_API_VERSION for Azure
+_azure_endpoint = os.getenv('AZURE_OPENAI_ENDPOINT')
+if _azure_endpoint:
+    client = AzureOpenAI(
+        azure_endpoint=_azure_endpoint,
+        api_key=os.getenv('AZURE_OPENAI_API_KEY', os.getenv('OPENAI_API_KEY', '')),
+        api_version=os.getenv('AZURE_OPENAI_API_VERSION', '2024-02-01'),
+    )
+else:
+    client = OpenAI(
+        api_key=os.getenv('OPENAI_API_KEY', ''),
+    )
 
 @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(6))
 def get_completion(prompt: str, temperature: float = 0.0, max_tokens: int = 256, stop_strs: Optional[List[str]] = None) -> str:

@@ -1,7 +1,10 @@
+import logging
 from pddl_planner.logic.nl_parser import NLParser
 from pddl_planner.pddl_core.nl_domain import NLDomain
 from pddl_planner.logic.formula import Predicate
 from typing import List
+
+logger = logging.getLogger("pddl_planner.domain")
 
 class NLInstance():
     def __init__(self, nl_problem: List[tuple], nl_init: List[tuple]|None, domain: NLDomain):
@@ -46,7 +49,7 @@ class NLInstance():
         Parse and construct the list of predicates in the init and store them in self._init.
         """
         init = self._parser.parse_goal(nl_problem)
-        print(init)
+        logger.debug("Parsed initial state: %s", init)
         self._init = init
 
     @property

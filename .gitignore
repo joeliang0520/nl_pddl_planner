@@ -39,6 +39,14 @@ venv/
 
 .*cache.json
 
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
 out_check/
 out_val/
 tmp
+
+#results
+results/
+logs/
+llm_cache/

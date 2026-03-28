@@ -1,7 +1,10 @@
+import logging
 from typing import List, Dict, Any
 from pddl_planner.pddl_core.action import Action
 from pddl_planner.logic.parser import Parser
 from pddl_planner.logic.formula import Predicate, Formula
+
+logger = logging.getLogger("pddl_planner.domain")
 
 class Domain:
     """
@@ -132,7 +135,7 @@ class Domain:
                             connected_types.append(term_type)
                             connected_types.append(other_type)
                 if len(connected_types) != len(types):
-                    print(f'type conflict: {formula.term_type_dict}')
+                    logger.debug("Type conflict detected: %s", formula.term_type_dict)
                     return True
         return False
 

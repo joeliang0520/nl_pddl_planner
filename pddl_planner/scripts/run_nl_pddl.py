@@ -1,5 +1,6 @@
 import argparse
 import json
+import logging
 import os
 import time
 from typing import Any, List, Tuple
@@ -9,6 +10,8 @@ from dotenv import load_dotenv
 from pddl_planner.planner.nl_planner import NLFOLRegressionPlanner
 from pddl_planner.logic.nl_parser import NLParser
 from pddl_planner.logic.formula import DisjunctiveFormula
+
+logger = logging.getLogger("pddl_planner.cli")
 
 
 def ensure_cache_file(cache_path: str) -> None:
@@ -29,11 +32,7 @@ def write_initial_state(save_file_path: str, init_state: Any) -> None:
                 type_tags.update(pred[1])
             init_formula = parser.parse_formula(init_state, term_type_dict=type_tags)
             init_formula = DisjunctiveFormula(init_formula).distribute_and_over_or()
-            print("Initial State:")
-            print(init_formula)
-            print("Actions:", [])
-            print("Substitution:", {})
-            print("--------------------")
+            logger.info("Initial state: %s", init_formula)
             f.write("Initial State:\n")
             f.write(str(init_formula) + '\n')
             f.write(str([]) + '\n')
@@ -67,8 +66,16 @@ def main() -> None:
     parser.add_argument("--cache_path", type=str, default=None, help="Path to LLM cache JSON (will be created if missing)")
     parser.add_argument("--output_dir", type=str, default=None, help="Directory to write results files")
     parser.add_argument("--log_dir", type=str, default=None, help="Directory to write log files")
+    parser.add_argument("--llm_verbose", action="store_true", help="Enable LLM entailment logs (cache, substitutions, responses)")
+    parser.add_argument("--quiet", action="store_true", help="Suppress planner progress logs (only show warnings/errors)")
     parser.add_argument("--limit", type=int, default=1, help="Number of problems to run (from index 0)")
     args = parser.parse_args()
+
+    # Configure root logging for CLI usage with colored output
+    from pddl_planner import make_colored_handler
+    root = logging.getLogger()
+    root.setLevel(logging.INFO)
+    root.addHandler(make_colored_handler())
 
     # Load model and goals
     with open(args.model, 'r') as f:
@@ -106,7 +113,7 @@ def main() -> None:
 
         write_initial_state(save_file_path, init_state)
 
-        print(f"Problem {goal} =========================================")
+        logger.info("Problem %d/%d: %s", i + 1, len(subset), goal)
         planner = NLFOLRegressionPlanner(
             domain.copy(),
             goal.copy(),
@@ -114,6 +121,8 @@ def main() -> None:
             max_depth=max_depth,
             llm_model=args.llm_model,
             llm_api_key=args.llm_api_key,
+            verbose=not args.quiet,
+            llm_verbose=args.llm_verbose,
             log_path=log_file_path,
             time_limit=time_limit,
             cache_path=cache_path,
@@ -121,20 +130,16 @@ def main() -> None:
 
         start_time = time.time()
         _ = planner.regress_plan(save_file_path=save_file_path)
-        end_time = time.time()
-        print(f"Time taken: {end_time - start_time} seconds")
+        elapsed = time.time() - start_time
+        logger.info("Problem %d completed in %.2fs", i + 1, elapsed)
 
-        # Append LLM call counts to a per-depth file inside results folder
+        # Append missing predicate count to a per-depth file inside results folder
         calls_file_path = os.path.join(output_dir, "llm_calls.txt")
-        cache_calls = getattr(planner._llm, "cache_call_count", 0)
-        api_calls = getattr(planner._llm, "api_call_count", 0)
-        total_calls = cache_calls + api_calls
+        missing_count = getattr(planner, "_missing_name_count", 0)
         with open(calls_file_path, "a") as cf:
-            # dataset(prefix inferred from model), depth, problem_index, cache, api, total
-            cf.write(f"{result_prefix},{max_depth-1},{i},{cache_calls},{api_calls},{total_calls}\n")
+            # dataset(prefix inferred from model), depth, problem_index, missing_predicate_count
+            cf.write(f"{result_prefix},{max_depth-1},{i},{missing_count}\n")
 
 
 if __name__ == "__main__":
     main()
-
-
